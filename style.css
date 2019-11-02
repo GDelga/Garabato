@@ -1,0 +1,47 @@
+* {
+    font-family: 'Lobster', cursive;
+    overflow: hidden;
+}
+
+.text-size {
+    font-size: 1.3rem;
+}
+
+.rem1 {
+    font-size: 1rem;
+}
+
+.bd-links {
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+    overflow-x: auto;
+    display: block !important;
+}
+
+.iconos {
+    height: 30px;
+    width: 30px;
+}
+
+.buscadorIcon {
+    height: 20px;
+    width: 20px;
+}
+
+.buscador {
+    display: inline;
+    width: 25%;
+}
+
+.formulario {
+    width: 100%;
+}
+
+.campoTexto {
+    min-height: calc(100vh - 19rem);
+}
+
+html,
+body {
+    height: 100%;
+}
