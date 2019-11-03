@@ -46,3 +46,34 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+.tituloMensaje {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    color: #212529;
+}
+
+.tituloMensaje:hover {
+    width: auto;
+    white-space: initial;
+    overflow: visible;
+    cursor: pointer;
+    color: #212529;
+    text-decoration:none;
+}
+
+.mensajes {
+    color: #212529;
+}
+
+.tituloSeccion:hover {
+    color: white;
+    text-decoration:none;
+}
+
+.tituloSeccion {
+    color: white;
+    text-decoration:none;
+}
