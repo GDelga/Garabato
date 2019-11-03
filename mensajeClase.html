@@ -344,16 +344,21 @@
             <form method="post" class="formulario pl-5 pr-4 pt-3 ">
                 <!--Campo para escribir el destinatario-->
                 <div class="row pt-2 align-items-center">
-                    <div class=" col-12 col-xl-2">Para:</div>
+                    <div class=" col-12 col-xl-2">Clase:</div>
                     <div class="col-12 col-xl-10">
-                        <input type="text" class="form-control" placeholder="Profesor" readonly>
+                        <select id="inputState" class="form-control">
+                            <option selected>1º A</option>
+                            <option>1º B</option>
+                            <option>2º A</option>
+                            <option>2º B</option>
+                        </select>
                     </div>
                 </div>
                 <!--Campo para escribir el asunto-->
                 <div class="row pt-2 pb-2 align-items-center">
                     <div class="col-12 col-xl-2">Asunto:</div>
                     <div class="col-12 col-xl-10">
-                        <input type="text" class="form-control" placeholder="Re: Falta de asistencia" readonly>
+                        <input type="text" class="form-control" placeholder="Excursión">
                     </div>
                 </div>
                 <!--Campo para escribir el mensaje-->

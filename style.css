@@ -76,4 +76,5 @@ body {
 .tituloSeccion {
     color: white;
     text-decoration:none;
+    display: block;
 }
