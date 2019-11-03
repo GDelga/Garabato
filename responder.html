@@ -13,6 +13,22 @@
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- include summernote css/js -->
+    <link href="summernote/summernote-bs4.css" rel="stylesheet">
+    <script src="summernote/summernote-bs4.js"></script>
+
 </head>
 
 <body>
@@ -40,7 +56,7 @@
             </div>
         </div>
     </nav>
-    <div class="d-flex flex-row">
+    <div>
         <!-- Zona de la izquierda-->
         <div class="w-50 float-left bd-links">
             <nav class="navbar navbar-expand-xl navbar-light bg-light sticky-top">
@@ -207,8 +223,8 @@
 
 
         <!--Pantalla de la DERECHA-->
-        <div class="ml-5 flex-grow-1 pr-4 pt-3 bd-links">
-            <form method="post" class="formulario d-flex flex-column">
+        <div class="bd-links">
+            <form method="post" class="formulario pl-5 pr-4 pt-3 ">
                 <!--Campo para escribir el destinatario-->
                 <div class="row pt-2 align-items-center">
                     <div class=" col-12 col-xl-2">Para:</div>
@@ -227,31 +243,23 @@
                 Mensaje:
                 <div class="row pt-1">
                     <div class="col-12 col-xl-12">
-                        <textarea class="form-control campoTexto">Hola.
-                     </textarea>
+                        <textarea rows=1 class="campoTexto" id="summernote" name="editordata"></textarea>
+                        <script>
+                            $('#summernote').summernote({
+                                placeholder: 'Hola',
+                                tabsize: 2,
+                                maxHeight: null,
+                                minHeight: "calc(100vh - 25rem)"
+                            });
+                        </script>
                     </div>
-                </div>
-                <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
-                <div class="align-self-end mt-3 mb-4">
+                    <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
+                    <div class="ml-auto pt-2 pb-2 pr-3">
                         <button type="submit" id="boton-enviar" class="btn btn-primary">Enviar</button>
-                </div>
+                    </div>
             </form>
         </div>
     </div>
-
-
-    
-    
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>

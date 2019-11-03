@@ -1,6 +1,5 @@
 * {
     font-family: 'Lobster', cursive;
-    overflow: hidden;
 }
 
 .text-size {
@@ -35,6 +34,7 @@
 
 .formulario {
     width: 100%;
+    overflow-x: hidden;
 }
 
 .campoTexto {
@@ -44,4 +44,5 @@
 html,
 body {
     height: 100%;
+    overflow: hidden;
 }
