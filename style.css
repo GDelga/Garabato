@@ -44,6 +44,9 @@
 html,
 body {
     height: 100%;
+}
+
+.quitarScroll {
     overflow: hidden;
 }
 
