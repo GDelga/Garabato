@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap-4.3.1.css">
+
+  <!-- Esto aparece como título de la ventana o pestaña en el navegador: cámbialo -->
+  <title>Plantilla añadir alumno nuevo</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+  <style>
+  h1{text-align: center; font-style:oblique;}
+  h2{text-align: center; font-style:oblique;}
+  .botonera{
+    text-align: left;
+  }
+  .formulario{
+    text-align: left;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-right: 2rem;
+    margin-left: 10rem;
+  }
+
+  </style>
+</head>
+
+<body>
+
+  <h1 class="display-1">GARABATOS</h1>
+  <h2 class="display-4">Crear Alumno</h2>
+
+  <!-- container-fluid expande el contenedor para que ocupe todo el espacio disponible -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="container">
+          <!-- <style>
+              *{
+                text-align: left;
+                margin-top: 0.7rem;
+                margin-bottom: 0.7rem;
+                margin-right: 2rem;
+                margin-left: 2rem;
+              }
+            </style> -->
+
+          <div class="form-row dni-datos formulario">
+            <div class="form-group col-md-4">
+              <label for="inputTitulo">DNI del alumno</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="inputTitulo">
+            </div>
+          </div>
+
+          <div class="form-row nombre-datos formulario">
+              <div class="form-group col-md-4">
+                <label for="inputTitulo">Nombre del alumno</label>
+              </div>
+              <div class="form-group col-md-6">
+                  <input type="text" class="form-control" id="inputTitulo">
+              </div>
+          </div>
+
+          <div class="form-row apellidos-datos formulario">
+              <div class="form-group col-md-4">
+                <label for="inputTitulo">Apellidos del alumno</label>
+              </div>
+              <div class="form-group col-md-6">
+                  <input type="text" class="form-control" id="inputTitulo">
+              </div>
+          </div>
+
+          <div class="form-row idclase-datos formulario">
+              <div class="form-group col-md-4">
+                <label for="inputTitulo">ID de la clase</label>
+              </div>
+              <div class="form-group col-md-6">
+                  <input type="text" class="form-control" id="inputTitulo">
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- botonera -->
+  <div class="form-row justify-content-center botonera">
+
+      <button id="boton-cancelar" class="btn">
+          <div class="img">
+            <img class="img-rounded" src="img/cancelar.png" height="50" width="50" alt="">
+          </div>
+      </button>
+
+      <button id="boton-guardar" class="btn">
+          <div class="img">
+            <img class="img-rounded" src="img/guardar.png" height="50" width="50" alt="">
+          </div>
+      </button>
+    </div>
+
+    
+
+</body>
+
+</html>
