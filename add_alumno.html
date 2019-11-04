@@ -2,8 +2,6 @@
 <html lang="en">
 
 <head>
-
-  <!-- Esto aparece como título de la ventana o pestaña en el navegador: cámbialo -->
   <title>Garabato: Alumnos</title>
 
   <!-- Required meta tags -->
@@ -54,11 +52,22 @@
     </div>
   </nav>
 
-  <!-- container-fluid expande el contenedor para que ocupe todo el espacio disponible -->
-  <div class="container">
-    <h2 class="display-4 text-center mt-3">Crear Alumno</h2>
+  <div class="container justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-6">
+        <h2 class="display-4 text-center mt-3">Añadir Alumno</h2>
+      </div>
+    </div>
     <div class="justify-content-center">
       <form method="post" class="pl-5 pr-4 pt-3">
+        <div class="row pt-2 align-items-center justify-content-center">
+          <div class="col-md-2">
+            <label for="inputID">ID:</label>
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control" id="inputID">
+          </div>
+        </div>
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
             <label for="inputNombre">Nombre:</label>
@@ -77,15 +86,7 @@
         </div>
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
-            <label for="inputDNI">DNI:</label>
-          </div>
-          <div class="col-md-4">
-            <input type="text" class="form-control" id="inputDNI">
-          </div>
-        </div>
-        <div class="row pt-2 align-items-center justify-content-center">
-          <div class="col-md-2">
-            <label for="inputClase">Clase</label>
+            <label for="inputClase">Clase:</label>
           </div>
           <div class="col-md-4">
             <input type="text" class="form-control" id="inputClase">
@@ -97,13 +98,13 @@
           <div class="col-md-6 text-right">
             <button id="boton-cancelar" class="btn">
               <div class="img">
-                <img class="img-rounded" src="img/cancelar.png" height="50" width="50" alt="">
+                <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
               </div>
             </button>
 
             <button id="boton-guardar" class="btn">
               <div class="img">
-                <img class="img-rounded" src="img/guardar.png" height="50" width="50" alt="">
+                <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
               </div>
             </button>
           </div>
