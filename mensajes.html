@@ -345,59 +345,7 @@
         </div>
 
         <!--Pantalla de la DERECHA-->
-        <div class="bd-links">
-            <form method="post" class="formulario pl-5 pr-4 pt-3 ">
-                <!--Campo para escribir el destinatario-->
-                <div class="row pt-2 align-items-center">
-                    <div class=" col-12 col-xl-2">Clase:</div>
-                    <div class="col-12 col-xl-10">
-                        <select id="inputClass" class="form-control">
-                            <option selected>1º A</option>
-                            <option>1º B</option>
-                            <option>2º A</option>
-                            <option>2º B</option>
-                        </select>
-                    </div>
-                </div>
-                <!--Campo para escribir el asunto-->
-                <div class="row pt-2 pb-2 align-items-center">
-                    <div class="col-12 col-xl-2">Asunto:</div>
-                    <div class="col-12 col-xl-10">
-                        <input type="text" class="form-control" placeholder="Excursión" id="inputAsunto">
-                    </div>
-                </div>
-                <!--Campo para escribir el mensaje-->
-                Mensaje:
-                <div class="row pt-1">
-                    <div class="col-12 col-xl-12">
-                        <textarea class="campoTexto" id="summernote" name="editordata"></textarea>
-                        <script>
-                            $('#summernote').summernote({
-                                placeholder: 'Hola',
-                                tabsize: 2,
-                                maxHeight: null,
-                                minHeight: "calc(100vh - 25rem)"
-                            });
-                        </script>
-                    </div>
-                    <!-- botón para enviar el formulario; justify-content-end no ha funcionado-->
-                    <div class="ml-auto pt-2 pb-2 pr-3">
-                        <button type="submit" id="boton-enviar" class="btn btn-primary">Enviar</button>
-                    </div>
-            </form>
-        </div>
     </div>
-    <script type="text/javascript">
-        $("#boton-enviar").click((e) => {
-                    let o = {
-                        asunto: $("#inputAsunto").val(),
-                        clase: $("#inputClase").val(),
-                        text: $("#summernote").val()
-                    };
-                    //LLamar a GB para meterlo en la lista de mensajes
-                    // Aqui es donde no sabemos como llamar a UPDATE()
-        })
-    </script>
 </body>
 
 </html>
