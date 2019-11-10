@@ -17,9 +17,7 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
@@ -28,9 +26,11 @@
     <!-- include summernote css/js -->
     <link href="summernote/summernote-bs4.css" rel="stylesheet">
     <script src="summernote/summernote-bs4.js"></script>
+    <!-- Funcionalidad -->
+    <script src="js/gb.js" type="module"></script>
 </head>
 
-<body class="quitarScroll">
+<body class="quitarScroll" onload="window.loadData()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand d-flex" href="#">
             <h1 class="d-inline align-self-start">Garabato </h1>
@@ -79,7 +79,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" onclick="window.loadMessage()">
                                 <img class="iconos" src="imagenes/bandeja entrada.png" alt="">
                             </a>
                         </li>
@@ -119,222 +119,224 @@
                 </div>
             </nav>
             <!-- Mensajes -->
-            <div class="card text-white bg-dark">
-                <div class="card-header">
-                    <a class="tituloSeccion" data-toggle="collapse" href="#collapseOne" role="button"
-                        aria-controls="collapseOne">
-                        Hoy
-                    </a>
+            <div id="mensajes">
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        <a class="tituloSeccion" data-toggle="collapse" href="#collapseOne" role="button"
+                            aria-controls="collapseOne">
+                            Hoy
+                        </a>
+                    </div>
+                    <div class="collapse show" id="collapseOne">
+                        <ul class="list-group list-group-flush mensajes bg-light">
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Excursión del Lunes 21
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/unread.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Calificación definitiva de la asignatura IU
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/unread.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Informe de matriculación del alumnado del Curso 2019/2020
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/read.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="collapse show" id="collapseOne">
-                    <ul class="list-group list-group-flush mensajes bg-light">
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Excursión del Lunes 21
-                                    </a>
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        <a class="tituloSeccion" data-toggle="collapse" href="#collapseThree" role="button"
+                            aria-controls="collapseThree">
+                            Ayer
+                        </a>
+                    </div>
+                    <div class="collapse show" id="collapseThree">
+                        <ul class="list-group list-group-flush mensajes bg-light">
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Falta de asistencia
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/read.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/unread.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Notificación de falta de entrega de documentación
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/read.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Calificación definitiva de la asignatura IU
-                                    </a>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Anulación clase del Viernes
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/read.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-activado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/unread.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Informe de matriculación del alumnado del Curso 2019/2020
-                                    </a>
-                                </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/read.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="card text-white bg-dark">
-                <div class="card-header">
-                    <a class="tituloSeccion" data-toggle="collapse" href="#collapseThree" role="button"
-                        aria-controls="collapseThree">
-                        Ayer
-                    </a>
-                </div>
-                <div class="collapse show" id="collapseThree">
-                    <ul class="list-group list-group-flush mensajes bg-light">
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Falta de asistencia
-                                    </a>
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        <a class="tituloSeccion" data-toggle="collapse" href="#collapseTwo" role="button"
+                            aria-controls="collapseTwo">
+                            La semana pasada
+                        </a>
+                    </div>
+                    <div class="collapse show" id="collapseTwo">
+                        <ul class="list-group list-group-flush mensajes bg-light">
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="" class="tituloMensaje">
+                                            Horario de Noviembre
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/read.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="responder.html">
+                                            <img class="iconos" src="imagenes/reply.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/no-archivados.png" alt="">
+                                        </a>
+                                        <a class="mr-2" href="#">
+                                            <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
+                                        </a>
+                                        <a class="" href="#">
+                                            <img class="iconos" src="imagenes/eliminar.png" alt="">
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/read.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Notificación de falta de entrega de documentación
-                                    </a>
-                                </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/read.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Anulación clase del Viernes
-                                    </a>
-                                </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/read.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-activado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card text-white bg-dark">
-                <div class="card-header">
-                    <a class="tituloSeccion" data-toggle="collapse" href="#collapseTwo" role="button"
-                        aria-controls="collapseTwo">
-                        La semana pasada
-                    </a>
-                </div>
-                <div class="collapse show" id="collapseTwo">
-                    <ul class="list-group list-group-flush mensajes bg-light">
-                        <li class="list-group-item bg-light">
-                            <div class="row">
-                                <div class="col-6">
-                                    <a href="" class="tituloMensaje">
-                                        Horario de Noviembre
-                                    </a>
-                                </div>
-                                <div class="col-6 d-flex flex-row justify-content-end flex-wrap">
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/read.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="responder.html">
-                                        <img class="iconos" src="imagenes/reply.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/no-archivados.png" alt="">
-                                    </a>
-                                    <a class="mr-2" href="#">
-                                        <img class="iconos" src="imagenes/favorito-desactivado.png" alt="">
-                                    </a>
-                                    <a class="" href="#">
-                                        <img class="iconos" src="imagenes/eliminar.png" alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -346,14 +348,15 @@
                 <div class="row pt-2 align-items-center">
                     <div class=" col-12 col-xl-2">Para:</div>
                     <div class="col-12 col-xl-10">
-                        <input type="text" class="form-control" placeholder="Profesor" readonly>
+                        <input type="text" id="inputTo" class="form-control" placeholder="Profesor" readonly>
                     </div>
                 </div>
                 <!--Campo para escribir el asunto-->
                 <div class="row pt-2 pb-2 align-items-center">
                     <div class="col-12 col-xl-2">Asunto:</div>
                     <div class="col-12 col-xl-10">
-                        <input type="text" class="form-control" placeholder="Re: Falta de asistencia" readonly>
+                        <input type="text" id="inputAsunto" class="form-control" placeholder="Re: Falta de asistencia"
+                            readonly>
                     </div>
                 </div>
                 <!--Campo para escribir el mensaje-->

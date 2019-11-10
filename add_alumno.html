@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <title>Garabato: Alumnos</title>
@@ -17,16 +17,16 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-  </script>
+  <script src="js/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
   </script>
   <script src="js/bootstrap.min.js"></script>
+  <!-- Funcionalidad -->
+  <script src="js/gb.js" type="module"></script>
 </head>
 
-<body>
+<body onload="window.loadClass('inputClaseAlumno')">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand d-flex" href="#">
       <h1 class="d-inline align-self-start">Garabato </h1>
@@ -62,34 +62,35 @@
       <form method="post" class="pl-5 pr-4 pt-3">
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
-            <label for="inputID">ID:</label>
+            <label for="inputIDAlumno">ID:</label>
           </div>
           <div class="col-md-4">
-            <input type="text" class="form-control" id="inputID">
+            <input type="text" class="form-control" id="inputIDAlumno">
           </div>
         </div>
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
-            <label for="inputNombre">Nombre:</label>
+            <label for="inputNombreAlumno">Nombre:</label>
           </div>
           <div class="col-md-4">
-            <input type="text" class="form-control" id="inputNombre">
+            <input type="text" class="form-control" id="inputNombreAlumno">
           </div>
         </div>
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
-            <label for="inputApellidos">Apellidos:</label>
+            <label for="inputApellidosAlumno">Apellidos:</label>
           </div>
           <div class="col-md-4">
-            <input type="text" class="form-control" id="inputApellidos">
+            <input type="text" class="form-control" id="inputApellidosAlumno">
           </div>
         </div>
         <div class="row pt-2 align-items-center justify-content-center">
           <div class="col-md-2">
-            <label for="inputClase">Clase:</label>
+            <label for="inputClaseAlumno">Clase:</label>
           </div>
           <div class="col-md-4">
-            <input type="text" class="form-control" id="inputClase">
+            <select id="inputClaseAlumno" class="form-control">
+            </select>
           </div>
         </div>
 
@@ -102,7 +103,7 @@
               </div>
             </button>
 
-            <button id="boton-guardar" class="btn">
+            <button id="boton-guardarAlumno" class="btn" onclick="window.crearAlumno()">
               <div class="img">
                 <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
               </div>
@@ -112,8 +113,6 @@
       </form>
     </div>
   </div>
-
-
 </body>
 
 </html>

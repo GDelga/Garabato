@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <title>Garabato: Responsables</title>
@@ -17,13 +17,13 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
     <script src="js/bootstrap.min.js"></script>
+    <!-- Funcionalidad -->
+    <script src="js/gb.js" type="module"></script>
 </head>
 
 <body>
@@ -54,7 +54,7 @@
     <div class="container justify-content-center align-items-center">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-8">
-                    <h2 class="display-4 text-center mt-3">Añadir Responsable</h2>
+                <h2 class="display-4 text-center mt-3">Añadir Responsable</h2>
             </div>
         </div>
         <div class="justify-content-center">
@@ -107,7 +107,7 @@
                             </div>
                         </button>
 
-                        <button id="boton-guardar" class="btn">
+                        <button id="boton-guardar" class="btn" onclick="window.crearResponsable()">
                             <div class="img">
                                 <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
                             </div>
@@ -118,5 +118,4 @@
         </div>
     </div>
 </body>
-
 </html>

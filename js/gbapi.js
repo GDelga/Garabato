@@ -79,11 +79,11 @@ const MessageLabels = {
  * Un mensaje
  */
 class Message {
-    constructor(msgid, from, date, order, to, labels, title, body) {
+    constructor(msgid, from, date, to, labels, title, body) {
         this.msgid = msgid;
         this.from = from;
         this.date = date || new Date();
-        this.order = order;
+        this.order = Util.transformDate(this.date);
         this.to = to;               // if array, contains UIDs. Otherwise, either a MSGID (=reply) or CID (=class)
         this.labels = labels || []; // of MessageLabels
         labels.forEach(label => Util.checkEnum(label, MessageLabels));
@@ -223,7 +223,6 @@ class Util {
             Util.randomString(),
             Util.randomChoice(users),
             date,
-            Util.transformDate(date),
             Util.fill(Util.randomInRange(1,5), () => Util.randomChoice(users)),
             Util.randomSample(Object.values(MessageLabels), Util.randomInRange(1,5)),
             Util.randomText(Util.randomInRange(3,7)),        
@@ -387,10 +386,8 @@ function set(id, value) {
 }
 
 function send(message) {
-    //console.log(message);
     getId(message.msgid, message);
     globalState.messages.push(message);
-    //console.log(globalState.messages);
 }
 
 // lists symbols that will be available outside this module

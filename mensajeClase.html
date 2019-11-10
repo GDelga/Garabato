@@ -17,9 +17,7 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
@@ -33,7 +31,7 @@
     <script src="js/gb.js" type="module"></script>
 </head>
 
-<body class="quitarScroll">
+<body class="quitarScroll" onload="window.loadClass('inputClaseMensaje')">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand d-flex" href="#">
             <h1 class="d-inline align-self-start">Garabato </h1>
@@ -62,7 +60,7 @@
         <!-- Zona de la izquierda-->
         <div class="w-50 float-left bd-links">
             <nav class="navbar navbar-expand-xl navbar-light bg-light sticky-top">
-                <a class="navbar-brand rem1 pr-1" href="mensajes.html">Bandeja de Entrada</a>
+                <a class="navbar-brand rem1 pr-1">Bandeja de Entrada</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -82,7 +80,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="bandeja">
+                            <a class="nav-link" href="#" id="bandeja" onclick="window.loadMessage()">
                                 <img class="iconos" src="imagenes/bandeja entrada.png" alt="">
                             </a>
                         </li>
@@ -351,11 +349,7 @@
                 <div class="row pt-2 align-items-center">
                     <div class=" col-12 col-xl-2">Clase:</div>
                     <div class="col-12 col-xl-10">
-                        <select id="inputClass" class="form-control">
-                            <option selected>1º A</option>
-                            <option>1º B</option>
-                            <option>2º A</option>
-                            <option>2º B</option>
+                        <select id="inputClaseMensaje" class="form-control">
                         </select>
                     </div>
                 </div>
@@ -382,22 +376,11 @@
                     </div>
                     <!-- botón para enviar el formulario; justify-content-end no ha funcionado-->
                     <div class="ml-auto pt-2 pb-2 pr-3">
-                        <button type="submit" id="boton-enviar" class="btn btn-primary">Enviar</button>
+                        <button type="submit" id="boton-enviar" class="btn btn-primary" onclick="window.enviarMensajeAClase()">Enviar</button>
                     </div>
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-        $("#boton-enviar").click((e) => {
-                    let o = {
-                        asunto: $("#inputAsunto").val(),
-                        clase: $("#inputClase").val(),
-                        text: $("#summernote").val()
-                    };
-                    //LLamar a GB para meterlo en la lista de mensajes
-                    // Aqui es donde no sabemos como llamar a UPDATE()
-        })
-    </script>
 </body>
 
 </html>
