@@ -2,6 +2,10 @@
     font-family: 'Lobster', cursive;
 }
 
+.big-title {
+    font-size: 8rem;
+}
+
 .text-size {
     font-size: 1.3rem;
 }
@@ -80,4 +84,15 @@ body {
     color: white;
     text-decoration:none;
     display: block;
+}
+
+.enlacesMenu {
+    color: #212529;
+    text-decoration:none;
+}
+
+.enlacesMenu:hover {
+    color: #1b1f24;
+    text-decoration:none;
+    cursor: pointer;
 }
