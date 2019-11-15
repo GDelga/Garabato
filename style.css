@@ -69,7 +69,7 @@ body {
     overflow: visible;
     cursor: pointer;
     color: #212529;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 .mensajes {
@@ -78,26 +78,25 @@ body {
 
 .tituloSeccion:hover {
     color: white;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 .tituloSeccion {
     color: white;
-    text-decoration:none;
+    text-decoration: none;
     display: block;
 }
 
 .enlacesMenu {
     color: #212529;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 .enlacesMenu:hover {
     color: #1b1f24;
-    text-decoration:none;
+    text-decoration: none;
     cursor: pointer;
 }
-
 .lineas{
     
     width: 100%;
@@ -111,3 +110,17 @@ body {
 .borderRojo{
     border: red solid 2px;
 }
+.headerTabla {
+    font-size: 1.5em;
+}
+
+/*.my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}*/
+

@@ -453,6 +453,7 @@ function logout(id) {
 
 // añade una nueva clase; alumnos y profes, si se especifican, deben existir
 function addClass(eclass) {
+    debugger;
     return go(serverApiUrl + serverToken + "/addclass", 'POST', eclass)
         .then(d => updateState(d));
 }

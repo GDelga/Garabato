@@ -29,8 +29,10 @@ const U = Gb.Util;
 //
 function inputClass() {
   let html = [];
-  for (let c in classIds) {
-    html.push('<option>', classIds[c], '</option>');
+  for (let c in Gb.globalState.classes) {
+    console.log("c es:")
+    console.log(c);
+    html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
   }
   return $(html.join(''));
 }
@@ -198,13 +200,26 @@ window.loadMessage = function loadMessage() {
   }
 }
 
-window.loadClass = function loadClass(id) {
+window.loadClass = function loadClass() {
   try {
     // vaciamos un contenedor
-    $("#" + id).empty();
+    $("#inputClaseMensaje").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#" + id).append(inputClass());
+    $("#inputClaseMensaje").append(inputClass());
     // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
+  } catch (e) {
+    console.log('Error actualizando', e);
+  }
+}
+
+window.crearClase = function crearClase() {
+  try {
+    debugger;
+    Gb.addClass({
+      cid: "1A Grupo6"
+    })
+    debugger;
+    window.loadClass();
   } catch (e) {
     console.log('Error actualizando', e);
   }
@@ -214,12 +229,10 @@ window.loadClass = function loadClass(id) {
 Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
 // ejemplo de login
-Gb.login("16337065G", "ZX05e").then(d => console.log("login ok!", d));
+Gb.login("1Cx5DQ", "SNhXAw").then(d => console.log("login ok!", d));
 
 // ejemplo de crear una clase, una vez logeados
-Gb.addClass({
-  cid: "1A"
-})
+window.crearClase();
 
 // ejemplo de crear un usuario, una vez logueados como admin (los no-admin no pueden hacer eso)
 Gb.addUser({

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Garabato: Alumnos</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Mis estilos-->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <!-- Editable table -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand d-flex" href="#">
+            <h1 class="d-inline align-self-start">Garabato </h1>
+            <h3 class="d-inline align-self-end pl-1"> Admin</h2>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Las diferentes opciones de la barra de menu-->
+        <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto mr-auto">
+                <a class="nav-item nav-link" href="#">Alumnos</a>
+                <a class="nav-item nav-link" href="#">Responsables</a>
+                <a class="nav-item nav-link active" href="#">Clases</a>
+                <a class="nav-item nav-link" href="#">Profesores</a>
+                <a class="nav-item nav-link">Mensajes</a>
+            </div>
+            <!--Boton para cerrar sesion-->
+            <div class="navbar-nav">
+                <button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Clases</h1>
+        <div class="card-body pt-0">
+            <div class="row d-flex justify-content-end">
+                <button id="boton-add" class="btn">
+                    <div class="img">
+                        <img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">
+                    </div>
+                </button>
+            </div>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" onkeyup="myFunction()" placeholder="Search">
+                <div class="input-group-append">
+                    <select class="bg-info text-white text-center" name="OS">
+                        <option value="DNI">ID</option>
+                        <option value="NOMBRE">Nº ALUMNOS</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <div id="table" class="table-editable">
+                    <table class="table table-bordered table-responsive-md table-striped table-dark text-center">
+                        <thead>
+                            <tr class="headerTabla">
+                                <th class="text-center">ID</th>
+                                <th class="text-center">Nº ALUMNOS</th>
+                                <th class="text-center">ELIMINAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="pt-3-half" contenteditable="true">1º A</td>
+                                <td class="pt-3-half">50</td>
+                                <td>
+                                    <div class="table-remove card text-white bg-danger">
+                                        <div class="card-header">
+                                            <a class="tituloSeccion" role="button">
+                                                Remove
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3-half" contenteditable="true">2º A</td>
+                                <td class="pt-3-half">32</td>
+                                <td>
+                                    <div class="table-remove card text-white bg-danger">
+                                        <div class="card-header">
+                                            <a class="tituloSeccion" role="button">
+                                                Remove
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- botonera -->
+            <div class="row mt-3 d-flex justify-content-end">
+                <div>
+                    <button id="boton-cancelar" class="btn">
+                        <div class="img">
+                            <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
+                        </div>
+                    </button>
+
+                    <button id="boton-exportar" class="btn" onclick="window.crearResponsable()">
+                        <div class="img">
+                            <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Editable table -->
+    <script>
+        const $tableID = $('#table');
+        const $BTN = $('#boton-exportar');
+        const $EXPORT = $('#export');
+
+        const newTr = `
+<tr class="hide">
+  <td class="pt-3-half" contenteditable="true">Example</td>
+  <td class="pt-3-half" contenteditable="true">Example</td>
+  <td class="pt-3-half" contenteditable="true">Example</td>
+  <td class="pt-3-half" contenteditable="true">Example</td>
+  <td class="pt-3-half" contenteditable="true">Example</td>
+  <td class="pt-3-half">
+    <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
+    <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
+  </td>
+  <td>
+    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>
+  </td>
+</tr>`;
+
+        $tableID.on('click', '.table-remove', function () {
+
+            $(this).parents('tr').detach();
+        });
+
+        // A few jQuery helpers for exporting only
+        jQuery.fn.pop = [].pop;
+        jQuery.fn.shift = [].shift;
+
+        $BTN.on('click', () => {
+            debugger;
+            const $rows = $tableID.find('tr:not(:hidden)');
+            const headers = [];
+            const data = [];
+
+            // Get the headers (add special header logic here)
+            $($rows.shift()).find('th:not(:empty)').each(function () {
+
+                headers.push($(this).text().toLowerCase());
+            });
+
+            // Turn all existing rows into a loopable array
+            $rows.each(function () {
+                const $td = $(this).find('td');
+                const h = {};
+
+                // Use the headers from earlier to name our hash keys
+                headers.forEach((header, i) => {
+
+                    h[header] = $td.eq(i).text();
+                });
+
+                data.push(h);
+            });
+
+            // Output the result
+            $EXPORT.text(JSON.stringify(data));
+        });
+    </script>
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
