@@ -25,196 +25,200 @@
 </head>
 
 <body>
-    <!-- Editable table -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand d-flex" href="#">
-            <h1 class="d-inline align-self-start">Garabato </h1>
-            <h3 class="d-inline align-self-end pl-1"> Admin</h2>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!--Las diferentes opciones de la barra de menu-->
-        <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
-            <div class="navbar-nav ml-auto mr-auto">
-                <a class="nav-item nav-link active" href="#">Alumnos</a>
-                <a class="nav-item nav-link" href="#">Responsables</a>
-                <a class="nav-item nav-link" href="#">Clases</a>
-                <a class="nav-item nav-link" href="#">Profesores</a>
-                <a class="nav-item nav-link">Mensajes</a>
+    <div id="contenido">
+        <!-- Editable table -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand d-flex" href="#">
+                <h1 class="d-inline align-self-start">Garabato </h1>
+                <h3 class="d-inline align-self-end pl-1"> Admin</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Las diferentes opciones de la barra de menu-->
+            <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav ml-auto mr-auto">
+                    <a class="nav-item nav-link active" href="#">Alumnos</a>
+                    <a class="nav-item nav-link" href="#">Responsables</a>
+                    <a class="nav-item nav-link" href="#">Clases</a>
+                    <a class="nav-item nav-link" href="#">Profesores</a>
+                    <a class="nav-item nav-link">Mensajes</a>
+                </div>
+                <!--Boton para cerrar sesion-->
+                <div class="navbar-nav">
+                    <button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>
+                </div>
             </div>
-            <!--Boton para cerrar sesion-->
-            <div class="navbar-nav">
-                <button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Alumnos</h1>
-        <div class="card-body pt-0">
-            <div class="row d-flex justify-content-end">
-                <button id="boton-add" class="btn">
-                    <div class="img">
-                        <img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">
+        </nav>
+        <div class="container">
+            <h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Alumnos</h1>
+            <div class="card-body pt-0">
+                <div class="row d-flex justify-content-end">
+                    <button id="boton-add" class="btn">
+                        <div class="img">
+                            <img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">
+                        </div>
+                    </button>
+                </div>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" onkeyup="myFunction()" placeholder="Search">
+                    <div class="input-group-append">
+                        <select class="bg-info text-white text-center" name="OS">
+                            <option value="DNI">DNI</option>
+                            <option value="NOMBRE">NOMBRE</option>
+                            <option value="APELLIDOS">APELLIDOS</option>
+                            <option value="CLASE">CLASE</option>
+                        </select>
                     </div>
-                </button>
-            </div>
-            <div class="input-group mb-2">
-                <input type="text" class="form-control" onkeyup="myFunction()" placeholder="Search">
-                <div class="input-group-append">
-                    <select class="bg-info text-white text-center" name="OS">
-                        <option value="DNI">DNI</option>
-                        <option value="NOMBRE">NOMBRE</option>
-                        <option value="APELLIDOS">APELLIDOS</option>
-                        <option value="CLASE">CLASE</option>
-                    </select>
                 </div>
-            </div>
-            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                <div id="table" class="table-editable">
-                    <table class="table table-bordered table-responsive-md table-striped table-dark text-center">
-                        <thead>
-                            <tr class="headerTabla">
-                                <th class="text-center">DNI</th>
-                                <th class="text-center">NOMBRE</th>
-                                <th class="text-center">APELLIDOS</th>
-                                <th class="text-center">CLASE</th>
-                                <th class="text-center">RESPONSABLES</th>
-                                <th class="text-center">ELIMINAR</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="pt-3-half" contenteditable="true">12345678A</td>
-                                <td class="pt-3-half" contenteditable="true">Juana</td>
-                                <td class="pt-3-half" contenteditable="true">Lopez</td>
-                                <td class="pt-3-half" contenteditable="true">1A</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-xl-8">
-                                            <div class="card text-white bg-dark">
-                                                <div class="card-header">
-                                                    <a class="tituloSeccion" data-toggle="collapse" href="#collapseOne"
-                                                        role="button" aria-controls="collapseOne">
-                                                        Ver Responsables
-                                                    </a>
-                                                </div>
-                                                <div class="collapse" id="collapseOne">
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="card text-white bg-info">
-                                                <div class="card-header">
-                                                    <a class="tituloSeccion" role="button">
-                                                        Editar
-                                                    </a>
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <div id="table" class="table-editable">
+                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center">
+                            <thead>
+                                <tr class="headerTabla">
+                                    <th class="text-center">DNI</th>
+                                    <th class="text-center">NOMBRE</th>
+                                    <th class="text-center">APELLIDOS</th>
+                                    <th class="text-center">CLASE</th>
+                                    <th class="text-center">RESPONSABLES</th>
+                                    <th class="text-center">ELIMINAR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pt-3-half" contenteditable="true">12345678A</td>
+                                    <td class="pt-3-half" contenteditable="true">Juana</td>
+                                    <td class="pt-3-half" contenteditable="true">Lopez</td>
+                                    <td class="pt-3-half" contenteditable="true">1A</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-xl-8">
+                                                <div class="card text-white bg-dark">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" data-toggle="collapse"
+                                                            href="#collapseOne" role="button"
+                                                            aria-controls="collapseOne">
+                                                            Ver Responsables
+                                                        </a>
+                                                    </div>
+                                                    <div class="collapse" id="collapseOne">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                </td>
-                                <td>
-                                    <div class="table-remove card text-white bg-danger">
-                                        <div class="card-header">
-                                            <a class="tituloSeccion" role="button">
-                                                Remove
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="pt-3-half" contenteditable="true">12345678A</td>
-                                <td class="pt-3-half" contenteditable="true">Juana</td>
-                                <td class="pt-3-half" contenteditable="true">Lopez</td>
-                                <td class="pt-3-half" contenteditable="true">1A</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-xl-8">
-                                            <div class="card text-white bg-dark">
-                                                <div class="card-header">
-                                                    <a class="tituloSeccion" data-toggle="collapse" href="#collapseOne"
-                                                        role="button" aria-controls="collapseOne">
-                                                        Ver Responsables
-                                                    </a>
-                                                </div>
-                                                <div class="collapse" id="collapseOne">
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item bg-dark">
-                                                            <div class="row">
-                                                                Juanjo
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                            <div class="col-xl-4">
+                                                <div class="card text-white bg-info">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" role="button">
+                                                            Editar
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="card text-white bg-info">
-                                                <div class="card-header">
-                                                    <a class="tituloSeccion" role="button">
-                                                        Editar
-                                                    </a>
-                                                </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-remove card text-white bg-danger">
+                                            <div class="card-header">
+                                                <a class="tituloSeccion" role="button">
+                                                    Remove
+                                                </a>
                                             </div>
                                         </div>
-                                </td>
-                                <td>
-                                    <div class="table-remove card text-white bg-danger">
-                                        <div class="card-header">
-                                            <a class="tituloSeccion" role="button">
-                                                Remove
-                                            </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt-3-half" contenteditable="true">12345678A</td>
+                                    <td class="pt-3-half" contenteditable="true">Juana</td>
+                                    <td class="pt-3-half" contenteditable="true">Lopez</td>
+                                    <td class="pt-3-half" contenteditable="true">1A</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-xl-8">
+                                                <div class="card text-white bg-dark">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" data-toggle="collapse"
+                                                            href="#collapseOne" role="button"
+                                                            aria-controls="collapseOne">
+                                                            Ver Responsables
+                                                        </a>
+                                                    </div>
+                                                    <div class="collapse" id="collapseOne">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card text-white bg-info">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" role="button">
+                                                            Editar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-remove card text-white bg-danger">
+                                            <div class="card-header">
+                                                <a class="tituloSeccion" role="button">
+                                                    Remove
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <!-- botonera -->
-            <div class="row mt-3 d-flex justify-content-end">
-                <div>
-                    <button id="boton-cancelar" class="btn">
-                        <div class="img">
-                            <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
-                        </div>
-                    </button>
+                <!-- botonera -->
+                <div class="row mt-3 d-flex justify-content-end">
+                    <div>
+                        <button id="boton-cancelar" class="btn">
+                            <div class="img">
+                                <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
+                            </div>
+                        </button>
 
-                    <button id="boton-exportar" class="btn" onclick="window.crearResponsable()">
-                        <div class="img">
-                            <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
-                        </div>
-                    </button>
+                        <button id="boton-exportar" class="btn" onclick="window.crearResponsable()">
+                            <div class="img">
+                                <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

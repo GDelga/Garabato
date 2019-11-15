@@ -37,6 +37,50 @@ function inputClass() {
   return $(html.join(''));
 }
 
+//Crea el inicio de sesión
+function createLogin() {
+  let idGrupo;
+  let html = [
+    '<div class="container">',
+            '<div class="row d-flex justify-content-center mt-5 pt-5">',
+                '<div class="col-0 col-lg-1"></div>',
+                '<div class="col-lg-6">',
+                    '<h1 class="display-1 text-center w-100 big-title">Garabato</h1>',
+                '</div>',
+            '</div>',
+            '<form action="" method="post">',
+                '<div class="row d-flex justify-content-center mt-4">',
+                    '<div class="col-lg-1">Usuario:</div>',
+                    '<div class="col-lg-6">',
+                        '<input type="text" name="" id="" class="w-100">',
+                    '</div>',
+                '</div>',
+                '<div class="row mt-3 d-flex justify-content-center">',
+                    '<div class="col-lg-1">Contraseña:</div>',
+                    '<div class="col-lg-6">',
+                        '<input type="text" name="" id="" class="w-100">',
+                    '</div>',
+                '</div>',
+                '<div class="row mt-3 d-flex justify-content-center">',
+                    '<div class="col-0 col-lg-1"></div>',
+                    '<div class="col-lg-6">',
+                        '<button class="w-100 btn btn-success">Iniciar Sesión</button>',
+                    '</div>',
+                '</div>',
+                '<div class="row d-flex justify-content-center">',
+                    '<div class="col-0 col-lg-1"></div>',
+                    '<div class="col-lg-6">',
+                        '<button class="text-left w-100 btn btn-link">Recuperar contraseña</button>',
+                    '</div>',
+                '</div>',
+            '</form>',
+        '</div>',
+  ];
+
+  return $(html.join(''));
+}
+
+//Crear agrupamiento de mensajes
 function createGroupDate(date) {
   let idGrupo;
   let html = [];
@@ -179,6 +223,17 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 //
 //
 
+window.loadLogin = function loadMessage() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createLogin());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
 // funcion para cargar los mensajes
 window.loadMessage = function loadMessage() {
   try {
@@ -227,6 +282,10 @@ window.crearClase = function crearClase() {
 
 // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
 Gb.connect("http://gin.fdi.ucm.es:8080/api/");
+
+if(Gb.serverToken == "no-has-hecho-login") {
+  window.loadLogin();
+}
 
 // ejemplo de login
 Gb.login("1Cx5DQ", "SNhXAw").then(d => console.log("login ok!", d));

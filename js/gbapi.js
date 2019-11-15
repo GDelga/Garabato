@@ -532,4 +532,5 @@ export {
 
     // Utilidades varias que no forman parte de la API
     Util,
+    serverToken,
 };
