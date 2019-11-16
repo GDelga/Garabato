@@ -30,53 +30,83 @@ const U = Gb.Util;
 function inputClass() {
   let html = [];
   for (let c in Gb.globalState.classes) {
-    console.log("c es:")
-    console.log(c);
     html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
   }
   return $(html.join(''));
 }
 
 //Crea el inicio de sesión
-function createLogin() {
-  let idGrupo;
+function createAdminMenu() {
   let html = [
-    '<div class="container">',
-            '<div class="row d-flex justify-content-center mt-5 pt-5">',
-                '<div class="col-0 col-lg-1"></div>',
-                '<div class="col-lg-6">',
-                    '<h1 class="display-1 text-center w-100 big-title">Garabato</h1>',
-                '</div>',
-            '</div>',
-            '<form action="" method="post">',
-                '<div class="row d-flex justify-content-center mt-4">',
-                    '<div class="col-lg-1">Usuario:</div>',
-                    '<div class="col-lg-6">',
-                        '<input type="text" name="" id="" class="w-100">',
-                    '</div>',
-                '</div>',
-                '<div class="row mt-3 d-flex justify-content-center">',
-                    '<div class="col-lg-1">Contraseña:</div>',
-                    '<div class="col-lg-6">',
-                        '<input type="text" name="" id="" class="w-100">',
-                    '</div>',
-                '</div>',
-                '<div class="row mt-3 d-flex justify-content-center">',
-                    '<div class="col-0 col-lg-1"></div>',
-                    '<div class="col-lg-6">',
-                        '<button class="w-100 btn btn-success">Iniciar Sesión</button>',
-                    '</div>',
-                '</div>',
-                '<div class="row d-flex justify-content-center">',
-                    '<div class="col-0 col-lg-1"></div>',
-                    '<div class="col-lg-6">',
-                        '<button class="text-left w-100 btn btn-link">Recuperar contraseña</button>',
-                    '</div>',
-                '</div>',
-            '</form>',
-        '</div>',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="lineas2 mt-5">',
+    '<div class=" row d-flex justify-content-center align-content-center">',
+    '<div class="col-lg-6 ">',
+    '<div class="row  d-flex justify-content-center align-content-center">',
+    '<div class="d-none d-lg-block col-lg-1"></div>',
+    '<div class="col-md-12 col-lg-4" onclick="window.loadProfesores()">',
+    '<a role="button" class="enlacesMenu">',
+    '<img src="imagenes/profesor.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Profesores</h1>',
+    '</a>',
+    '</div>',
+    '<div class="d-none d-lg-block col-lg-1"></div>',
+    '<div class="col-md-12 col-lg-4" onclick="window.loadAlumnos()">',
+    '<a role="button" class="enlacesMenu">',
+    '<img src="imagenes/alumnos.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Alumnos</h1>',
+    '</a>',
+    '</div>',
+    '</div>',
+    '<div class="row d-flex justify-content-center align-content-center">',
+    '<div class="col-lg-1 d-none d-lg-block"></div>',
+    '<div class="col-md-12 col-lg-4" onclick="window.loadResponsables()">',
+    '<a role="button" class="enlacesMenu">',
+    '<img src="imagenes/padres.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Responsables</h1>',
+    '</a>',
+    '</div>',
+    '<div class="col-lg-1 d-none d-lg-block"></div>',
+    '<div class="col-md-12 col-lg-4" onclick="window.loadClases()">',
+    '<a role="button" class="enlacesMenu">',
+    '<img src="imagenes/aula.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Clases</h1>',
+    '</a>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '<div class="col-lg-6 d-flex justify-content-center align-items-center" onclick="window.loadMenuMensajes()">',
+    '<a role="button" class="enlacesMenu">',
+    '<img src="imagenes/unread.png" alt="" class="img-fluid" width="350px">',
+    '<h1 class="text-center">Mensajes</h1>',
+    '</a>',
+    '</div>',
+    '</div>',
+    '</div>',
   ];
-
   return $(html.join(''));
 }
 
@@ -223,12 +253,121 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 //
 //
 
-window.loadLogin = function loadMessage() {
+window.loadLogin = function loadLogin() {
   try {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createLogin());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.login = function login() {
+  let usuario = $("#idUsuario").val();
+  let contras = $("#contrasena").val();
+  debugger;
+  console.log("usuario " + usuario);
+  console.log("contra " + contras);
+  Gb.login(usuario, contras).then(d => {
+    let u = Gb.resolve(usuario);
+    debugger;
+    if (u !== undefined) {
+      // la operación ha funcionado (u es el usuario que ha conseguido hacer login)
+      console.log(u);
+      window.loadAdminMenu();
+    } else {
+      // ha habido un error (u ha vuelto como undefined; en la consola se verá qué ha pasado)
+      debugger;
+    }
+  });
+
+}
+
+window.loadAdminMenu = function adminMenu() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAdminMenu());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadProfessorMenu = function professorMenu() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createProfessorMenu());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadAlumnos = function loadAlumnos() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAlumnos());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadResponsables = function loadResponsables() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createResponsables());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadClases = function loadClases() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createClases());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadProfesores = function loadProfesores() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createProfesores());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadMenuMensajes = function loadProfesores() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
+  } catch (e) {
+    console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.cerrarSesion = function loadProfesores() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
   } catch (e) {
     console.log('Error cargando los mensajes', e);
   }
@@ -255,13 +394,14 @@ window.loadMessage = function loadMessage() {
   }
 }
 
+// Refrescar las clases existentes
 window.loadClass = function loadClass() {
   try {
+    console.log("SE metio");
     // vaciamos un contenedor
     $("#inputClaseMensaje").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#inputClaseMensaje").append(inputClass());
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
   } catch (e) {
     console.log('Error actualizando', e);
   }
@@ -269,12 +409,14 @@ window.loadClass = function loadClass() {
 
 window.crearClase = function crearClase() {
   try {
-    debugger;
-    Gb.addClass({
-      cid: "1A Grupo6"
-    })
-    debugger;
-    window.loadClass();
+
+    let callback = loadClass;
+    let clase = {
+      cid: "1B Grupo6 hola"
+    };
+    console.log("hola " + callback);
+    Gb.addClass(clase, callback);
+    console.log("Acabo");
   } catch (e) {
     console.log('Error actualizando', e);
   }
@@ -283,18 +425,17 @@ window.crearClase = function crearClase() {
 // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
 Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
-if(Gb.serverToken == "no-has-hecho-login") {
+/*if(Gb.serverToken == "no-has-hecho-login") {
   window.loadLogin();
-}
+}*/
 
 // ejemplo de login
-Gb.login("1Cx5DQ", "SNhXAw").then(d => console.log("login ok!", d));
 
 // ejemplo de crear una clase, una vez logeados
-window.crearClase();
+//window.crearClase();
 
 // ejemplo de crear un usuario, una vez logueados como admin (los no-admin no pueden hacer eso)
-Gb.addUser({
+/*Gb.addUser({
   "uid": "18950946G",
   "first_name": "Elena",
   "last_name": "Enseña Enséñez",
@@ -304,7 +445,7 @@ Gb.addUser({
   "classes": [
     "1A"
   ]
-});
+});*/
 
 //Funcion para enviar un mensaje a una clase
 window.enviarMensajeAClase = function enviarMensajeAClase() {
@@ -410,3 +551,7 @@ window.responderMensaje = function responderMensaje() {
     "Contenido: " + message.body;
   alert(aviso);
 }
+// Fav, favoritos, archivados, enviados, recibidos, no leidos y eleminados
+
+// DATOS PARA CREAR UN PROFESOR
+//DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)

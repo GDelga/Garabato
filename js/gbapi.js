@@ -410,6 +410,7 @@ function updateState(data) {
     globalState.users.forEach(o => getId(o.uid, o));
     globalState.messages.forEach(o => getId(o.msgid, o));
     console.log("Updated state", globalState);
+    window.loadClass();
     return data;
 }
 
@@ -442,7 +443,7 @@ function login(uid, pass) {
         .then(d => {
             if (!d) return;
             serverToken = d.token;
-            updateState(d);
+            return updateState(d);
         });
 }
 
@@ -453,7 +454,6 @@ function logout(id) {
 
 // añade una nueva clase; alumnos y profes, si se especifican, deben existir
 function addClass(eclass) {
-    debugger;
     return go(serverApiUrl + serverToken + "/addclass", 'POST', eclass)
         .then(d => updateState(d));
 }

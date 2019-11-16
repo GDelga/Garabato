@@ -62,18 +62,18 @@
                     </button>
                 </div>
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" onkeyup="myFunction()" placeholder="Search">
+                    <input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">
                     <div class="input-group-append">
-                        <select class="bg-info text-white text-center" name="OS">
-                            <option value="DNI">DNI</option>
-                            <option value="NOMBRE">NOMBRE</option>
-                            <option value="APELLIDOS">APELLIDOS</option>
+                        <select id="filtro" class="bg-info text-white text-center" name="OS">
+                            <option value="0">DNI</option>
+                            <option value="1">NOMBRE</option>
+                            <option value="2">APELLIDOS</option>
                         </select>
                     </div>
                 </div>
                 <div class="table-wrapper-scroll-y my-custom-scrollbar">
                     <div id="table" class="table-editable">
-                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center">
+                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">
                             <thead>
                                 <tr class="headerTabla">
                                     <th class="text-center">DNI</th>

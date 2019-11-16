@@ -62,19 +62,19 @@
                     </button>
                 </div>
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" onkeyup="myFunction()" placeholder="Search">
+                    <input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">
                     <div class="input-group-append">
-                        <select class="bg-info text-white text-center" name="OS">
-                            <option value="DNI">DNI</option>
-                            <option value="NOMBRE">NOMBRE</option>
-                            <option value="APELLIDOS">APELLIDOS</option>
-                            <option value="CLASE">CLASE</option>
+                        <select id="filtro" class="bg-info text-white text-center" name="OS">
+                            <option value="0">DNI</option>
+                            <option value="1">NOMBRE</option>
+                            <option value="2">APELLIDOS</option>
+                            <option value="3">CLASE</option>
                         </select>
                     </div>
                 </div>
                 <div class="table-wrapper-scroll-y my-custom-scrollbar">
                     <div id="table" class="table-editable">
-                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center">
+                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">
                             <thead>
                                 <tr class="headerTabla">
                                     <th class="text-center">DNI</th>
@@ -145,8 +145,8 @@
                                 </tr>
                                 <tr>
                                     <td class="pt-3-half" contenteditable="true">12345678A</td>
-                                    <td class="pt-3-half" contenteditable="true">Juana</td>
-                                    <td class="pt-3-half" contenteditable="true">Lopez</td>
+                                    <td class="pt-3-half" contenteditable="true">Ma</td>
+                                    <td class="pt-3-half" contenteditable="true">Kol</td>
                                     <td class="pt-3-half" contenteditable="true">1A</td>
                                     <td>
                                         <div class="row">
@@ -223,88 +223,4 @@
             </div>
         </div>
     </div>
-    <!-- Editable table -->
-    <script>
-        const $tableID = $('#table');
-        const $BTN = $('#boton-exportar');
-        const $EXPORT = $('#export');
-
-        const newTr = `
-<tr class="hide">
-  <td class="pt-3-half" contenteditable="true">Example</td>
-  <td class="pt-3-half" contenteditable="true">Example</td>
-  <td class="pt-3-half" contenteditable="true">Example</td>
-  <td class="pt-3-half" contenteditable="true">Example</td>
-  <td class="pt-3-half" contenteditable="true">Example</td>
-  <td class="pt-3-half">
-    <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
-    <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
-  </td>
-  <td>
-    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>
-  </td>
-</tr>`;
-
-        $tableID.on('click', '.table-remove', function () {
-
-            $(this).parents('tr').detach();
-        });
-
-        // A few jQuery helpers for exporting only
-        jQuery.fn.pop = [].pop;
-        jQuery.fn.shift = [].shift;
-
-        $BTN.on('click', () => {
-            debugger;
-            const $rows = $tableID.find('tr:not(:hidden)');
-            const headers = [];
-            const data = [];
-
-            // Get the headers (add special header logic here)
-            $($rows.shift()).find('th:not(:empty)').each(function () {
-
-                headers.push($(this).text().toLowerCase());
-            });
-
-            // Turn all existing rows into a loopable array
-            $rows.each(function () {
-                const $td = $(this).find('td');
-                const h = {};
-
-                // Use the headers from earlier to name our hash keys
-                headers.forEach((header, i) => {
-
-                    h[header] = $td.eq(i).text();
-                });
-
-                data.push(h);
-            });
-
-            // Output the result
-            $EXPORT.text(JSON.stringify(data));
-        });
-    </script>
-    <script>
-        function myFunction() {
-            // Declare variables
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
 </body>
