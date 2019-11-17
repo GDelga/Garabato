@@ -37,109 +37,6 @@ function inputClass() {
   }
   return $(html.join(''));
 }
-// Crea un nuevo profesor
-function createProfesor() {
-  let html = [
-    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" href="#">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
-    '</a>',
-    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
-    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
-    '<span class="navbar-toggler-icon"></span>',
-    '</button>',
-    '<!--Las diferentes opciones de la barra de menu-->',
-    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
-    '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores()">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
-    '</div>',
-    '<!--Boton para cerrar sesion-->',
-    '<div class="navbar-nav">',
-    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
-    '</div>',
-    '</div>',
-    '</nav>',
-    '<!--Empieza el formulario de la pagina-->',
-    '<div class="container justify-content-center align-items-center">',
-    '<div class="row justify-content-center align-items-center">',
-    '<div class="col-md-8">',
-    '<h2 class="display-4 text-center mt-3">Añadir Profesor</h2>',
-    '</div>',
-    '</div>',
-    '<div class="justify-content-center">',
-    '<div class="pl-5 pr-4 pt-3">',
-    '<div class="row pt-2 align-items-center justify-content-center">',
-    '<div class="col-md-2">',
-    '<label for="inputID">ID:</label>',
-    '</div>',
-    '<div class="col-md-6">',
-    '<input type="text" class="form-control" id="inputID">',
-    '</div>',
-    '</div>',
-    '<div class="row pt-2 align-items-center justify-content-center">',
-    '<div class="col-md-2">',
-    '<label for="inputContra">Contraseña:</label>',
-    '</div>',
-    '<div class="col-md-6">',
-    '<input type="password" class="form-control" id="inputContra">',
-    '</div>',
-    '</div>',
-    '<div class="row pt-2 align-items-center justify-content-center">',
-    '<div class="col-md-2">',
-    '<label for="inputNombre">Nombre:</label>',
-    '</div>',
-    '<div class="col-md-6">',
-    '<input type="text" class="form-control" id="inputNombre">',
-    '</div>',
-    '</div>',
-    '<div class="row pt-2 align-items-center justify-content-center">',
-    '<div class="col-md-2">',
-    '<label for="inputApellidos">Apellidos:</label>',
-    '</div>',
-    '<div class="col-md-6">',
-    '<input type="text" class="form-control" id="inputApellidos">',
-    '</div>',
-    '</div>',
-    '<div class="row pt-2 align-items-center justify-content-center">',
-    '<div class="col-md-2">',
-    '<label for="inputDNI">Clases:</label>',
-    '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="class1" placeholder="Clase 1">',
-    '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="class2" placeholder="Clase 2 (Opcional)">',
-    '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="class3" placeholder="Clase 3 (Opcional)">',
-    '</div>',
-    '</div>',
-    '<!-- botonera -->',
-    '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-8 text-right">',
-    '<button id="boton-cancelar" class="btn">',
-    '<div class="img">',
-    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
-    '</div>',
-    '</button>',
-    '<button id="boton-guardar" class="btn" onclick="window.crearResponsable()">',
-    '<div class="img">',
-    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
-    '</div>',
-    '</button>',
-    '</div>',
-    '</div>',
-    '</div>',
-    '</div>',
-    '</div>'
-  ];
-  return $(html.join(''));
-}
 
 // Crea un nuevo responsable
 function createResponsables() {
@@ -929,7 +826,7 @@ function createClases() {
     '</div>',
     '</div>',
   );
-  
+
   return $(html.join(''));
 }
 
@@ -1019,6 +916,288 @@ function createAddClases() {
   return $(html.join(''));
 }
 
+function createProfesores() {
+  let html = [
+    '<!-- Editable table -->',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" href="#">Alumnos</a>',
+    '<a class="nav-item nav-link" href="#">Responsables</a>',
+    '<a class="nav-item nav-link" href="#">Clases</a>',
+    '<a class="nav-item nav-link active" href="#">Profesores</a>',
+    '<a class="nav-item nav-link">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container">',
+    '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Profesores</h1>',
+    '<div class="card-body pt-0">',
+    '<div class="row d-flex justify-content-end">',
+    '<button id="boton-add" class="btn" onclick="window.loadAddProfesor()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="input-group mb-2">',
+    '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
+    '<div class="input-group-append">',
+    '<select id="filtro" class="bg-info text-white text-center" name="OS">',
+    '<option value="0">Id</option>',
+    '<option value="1">Nombre</option>',
+    '<option value="2">Apellidos</option>',
+    '</select>',
+    '</div>',
+    '</div>',
+    '<div class="table-wrapper-scroll-y my-custom-scrollbar">',
+    '<div id="miTabla" class="table-editable ">',
+    '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
+    '<thead>',
+    '<tr class="headerTabla">',
+    '<th class="text-center">Id</th>',
+    '<th class="text-center">Nombre</th>',
+    '<th class="text-center">Apellidos</th>',
+    '<th class="text-center">Clases</th>',
+    '<th class="text-center">Eliminar</th>',
+    '</tr>',
+    '</thead>',
+    '<tbody>',
+  ]
+
+  //FUNCION LISTA DE PROFESORES
+  html.push(createGroupProfesores());
+
+  html.push(
+    '</tbody>',
+    '</table>',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row mt-3 d-flex justify-content-end">',
+    '<div>',
+    '<button id="boton-cancelar" class="btn">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-exportar" class="btn" onclick="window.crearProfesor()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>'
+  )
+  return $(html.join(''));
+
+}
+
+function createGroupProfesores() {
+  let html = [];
+  for (let i in Gb.globalState.users) {
+    if (Gb.globalState.users[i].type == Gb.UserRoles.TEACHER) {
+      idGrupo = 'p_' + Math.floor(Math.random() * 10000000);
+      html.push(
+        '<tr>',
+        '<td class="pt-3-half">', Gb.globalState.users[i].uid, '</td>',
+        '<td class="pt-3-half" contenteditable="true">', Gb.globalState.users[i].first_name, '</td>',
+        '<td class="pt-3-half" contenteditable="true">', Gb.globalState.users[i].last_name, '</td>',
+        '<td>',
+        '<div class="row">',
+        '<div class="col-xl-7">',
+        '<div class="card text-white bg-dark">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" data-toggle="collapse"',
+        'href="#', idGrupo, '" role="button"',
+        'aria-controls="', idGrupo, '">',
+        'Ver Clases',
+        '</a>',
+        '</div>',
+        '<div class="collapse" id="', idGrupo, '">',
+        '<ul class="list-group list-group-flush">'
+      );
+
+      //FUNCION QUE LISTA CLASES
+      html.push(createGroupClases(Gb.globalState.users[i].classes));
+
+      html.push(
+        '</ul>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '<div class="col-xl-5">',
+        '<div class="card text-white bg-info">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" role="button">',
+        'Editar',
+        '</a>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</td>',
+        '<td>',
+        '<div class="table-remove card text-white bg-danger">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" role="button">',
+        'Remove',
+        '</a>',
+        '</div>',
+        '</div>',
+        '</td>',
+        '</tr>'
+      )
+    }
+  }
+  return (html.join(''));
+}
+
+function createGroupClases(clases) {
+  let html = [];
+  for (let i in clases) {
+    html.push(
+      '<li class="list-group-item bg-dark">',
+      '<div class="row">',
+      clases[i],
+      '</div>',
+      '</li>',
+    )
+  }
+  return (html.join(''));
+}
+
+function createAddProfesor() {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link " role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<!--Empieza el formulario de la pagina-->',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Añadir Profesor</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputID">Id:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputID">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputContra">Contraseña:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="password" class="form-control" id="inputContra">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputNombre">Nombre:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputNombre">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputApellidos">Apellidos:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputApellidos">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputClase">Clases:</label>',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class1" placeholder="Clase 1">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class2" placeholder="Clase 2 (Opcional)">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class3" placeholder="Clase 3 (Opcional)">',
+    '</div>',
+    '<!--Botonera de telefonos-->',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputTelefonos">Teléfonos:</label>',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf1" placeholder="Tlf 1">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf2" placeholder="Tlf 2 (Opcional)">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf3" placeholder="Tlf 3 (Opcional)">',
+    '</div>',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-8 text-right">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadProfesores()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-guardar" class="btn" onclick="window.crearProfesor()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  ];
+  return $(html.join(''));
+}
 
 //Crear agrupamiento de mensajes
 function createGroupDate(date) {
@@ -1162,28 +1341,6 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 // Generalmente de la forma $("selector").comportamiento(...)
 //
 //
-
-// Funcion para eliminar un alumno de la tabla 
-window.eliminarAlumno = function eliminar() {
-  //console.log($("#boton-remove").parents('tr').getElementsByTagName("td")[0]);
-  // $("#boton-remove").parents('tr').getElementsByTagName("td")[0];
-  let dni = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
-  $("#boton-remove").parents('tr').detach();
-  console.log(dni);
-  Gb.rm(dni).then(d => {
-    if (d !== undefined) {
-      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      console.log("Alumno borrado con exito")
-    } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_del_alumno = "Error al eliminar alumno.\n" +
-        "Algo ha ido mal.\n"
-      alert(aviso_error_del_alumno);
-    }
-  });
-}
-
-
 
 window.loadLogin = function loadLogin() {
   try {
@@ -1343,6 +1500,17 @@ window.loadAddResponsable = function loadAddResponsable() {
   }
 }
 
+window.loadAddProfesor = function loadAddProfesor() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAddProfesor());
+  } catch (e) {
+    console.log('Error cargando añadir profesor', e);
+  }
+}
+
 // funcion para cargar los mensajes
 window.loadMessage = function loadMessage() {
   try {
@@ -1462,6 +1630,7 @@ window.crearResponsable = function crearResponsable() {
       telefonos.push($("#tlf3").val());
     }
   }
+
   //If form correctly filled
   if (telefonos.length > 0 &&
     $("#inputID").val() != "" &&
@@ -1503,6 +1672,89 @@ window.crearResponsable = function crearResponsable() {
 
     });
     console.log(responsable);
+  } else {
+    //Notifies unsuccesful push.
+    let aviso_error = "Error: El formulario no se ha rellenado correctamente.\n";
+    alert(aviso_error);
+  }
+}
+
+// Logica de crear un nuevo profesor
+window.crearProfesor = function crearProfesor() {
+  var clases = [];
+  var telefonos = [];
+  debugger;
+
+  //Meter telefonos solo si el primer campo esta relleno.
+  if ($("#tlf1").val() != "") {
+    telefonos.push($("#tlf1").val());
+    if ($("#tlf2").val() != "") {
+      telefonos.push($("#tlf2").val());
+    }
+    if ($("#tlf3").val() != "") {
+      telefonos.push($("#tlf3").val());
+    }
+  }
+
+  //Meter clases solo si el primer campo está relleno.
+  if ($("#class1").val() != "") {
+    clases.push($("#class1").val());
+    if ($("#class2").val() != "") {
+      clases.push($("#class2").val());
+    }
+    if ($("#class3").val() != "") {
+      clases.push($("#class3").val());
+    }
+  }
+
+  //If form correctly filled
+  if (clases.length > 0 &&
+      telefonos.length > 0 &&
+    $("#inputID").val() != "" &&
+    $("#inputNombre").val() != "" &&
+    $("#inputApellidos").val() != "" &&
+    $("#inputContra").val() != "") {
+    let profesor = new Gb.User(
+      $("#inputID").val(),
+      Gb.UserRoles.TEACHER,
+      $("#inputNombre").val(),
+      $("#inputApellidos").val(),
+      telefonos,
+      clases,
+      [],
+      $("#inputContra").val()
+    );
+
+    console.log("Datos profesores: " + profesor);
+    //Pushes user to globalstate.
+    Gb.addUser(profesor).then(d => {
+      if (d !== undefined) {
+        // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+        var string_clases = "", string_tlfs = "";
+
+        for (let i = 0; i < telefonos.length; i++) {
+          string_tlfs += telefonos[i] + " ";
+        }
+
+        for (let i = 0; i < clases.length; i++) {
+          string_clases += clases[i] + " ";
+        }
+        let aviso = "Usuario añadido\n" +
+          "ID: " + profesor.uid + "\n" +
+          "Nombre completo: " + profesor.first_name + " " + profesor.last_name + "\n" +
+          "Teléfonos: " + string_tlfs + "\n" +
+          "Clases: " + string_clases + "\n";
+        alert(aviso);
+        window.loadProfesores();
+      } else {
+        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+        let aviso_error_add_prof = "Error al añadir usuario.\n" +
+          "Comprueba que los campos introducidos son correctos.\n"
+        alert(aviso_error_add_prof);
+      }
+
+    });
+    console.log(profesor);
   } else {
     //Notifies unsuccesful push.
     let aviso_error = "Error: El formulario no se ha rellenado correctamente.\n";
@@ -1747,6 +1999,105 @@ window.crearClase = function crearClase() {
 
   });
 }
+
+// Funcion para eliminar un alumno de la tabla 
+window.eliminarAlumno = function eliminarAlumno() {
+
+  let id_alumno = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(id_alumno);
+  Gb.rm(id_alumno).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Alumno borrado con exito")
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_del_alumno = "Error al eliminar alumno.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_del_alumno);
+    }
+  });
+}
+
+// Funcion para eliminar un profesor de la tabla
+window.eliminarProfesor = function eliminarProfesor() {
+
+  let id_profe = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(id_profe);
+  Gb.rm(id_profe).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Profesor borrado con exito");
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_eliminar_profe = "Error al eliminar profesor.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_eliminar_profe);
+    }
+  });
+}
+
+// Funcion para eliminar una clase de la tabla
+window.eliminarClase = function eliminarClase() {
+
+  let id_clase = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(id_clase);
+  Gb.rm(id_clase).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Profesor borrado con exito");
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_eliminar_clase = "Error al eliminar clase.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_eliminar_clase);
+    }
+  });
+}
+
+// Funcion para eliminar un Mensaje de la tabla
+window.eliminarMensaje = function eliminarMensaje() {
+
+  let id_Mensaje = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(id_mensaje);
+  Gb.rm(id_mensaje).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Profesor borrado con exito");
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_eliminar_mensaje = "Error al eliminar mensaje.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_eliminar_mensaje);
+    }
+  });
+}
+
+// Funcion para eliminar un Responsable de la tabla
+window.eliminarResponsable = function eliminarResponsable() {
+
+  let id_Responsable = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(id_responsable);
+  Gb.rm(id_responsable).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Profesor borrado con exito");
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_eliminar_responsable = "Error al eliminar responsable.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_eliminar_responsable);
+    }
+  });
+}
+
+
+
+
 
 // DATOS PARA CREAR UN PROFESOR
 //DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)

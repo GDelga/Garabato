@@ -47,7 +47,8 @@
             </div>
             <!--Boton para cerrar sesion-->
             <div class="navbar-nav">
-                <button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>
+                <button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar
+                    Sesión</button>
             </div>
         </div>
     </nav>
@@ -62,7 +63,7 @@
             <div class="pl-5 pr-4 pt-3">
                 <div class="row pt-2 align-items-center justify-content-center">
                     <div class="col-md-2">
-                        <label for="inputID">ID:</label>
+                        <label for="inputID">Id:</label>
                     </div>
                     <div class="col-md-6">
                         <input type="text" class="form-control" id="inputID">
@@ -92,31 +93,64 @@
                         <input type="text" class="form-control" id="inputApellidos">
                     </div>
                 </div>
+                <!--Campos de clase-->
                 <div class="row pt-2 align-items-center justify-content-center">
                     <div class="col-md-2">
-                        <label for="inputDNI">Clases:</label>
+                        <label for="inputClase">Clases:</label>
+                    </div>
+                    <!--Enlace: https://stackoverflow.com/a/30525521-->
+                    <div class="col-md-2">
+                        <!--Campo para escribir el destinatario-->
+                        <select id="class1" class="form-control">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                        <!--<input type="text" class="form-control" id="class1" placeholder="Clase 1">-->
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="class1" placeholder="Clase 1">
+                        <select id="class2" class="form-control">
+                            <option></option>
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="class2" placeholder="Clase 2 (Opcional)">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="class3" placeholder="Clase 3 (Opcional)">
+                        <select id="class3" class="form-control">
+                            <option></option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
                     </div>
                 </div>
-
+                <!--Campos de telefonos-->
+                <div class="row pt-2 align-items-center justify-content-center">
+                    <div class="col-md-2">
+                        <label for="inputTelefonos">Teléfonos:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="tlf1" placeholder="Tlf 1">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="tlf2" placeholder="Tlf 2 (Opcional)">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="tlf3" placeholder="Tlf 3 (Opcional)">
+                    </div>
+                </div>
                 <!-- botonera -->
                 <div class="row text-left mt-3 justify-content-center">
                     <div class="col-md-8 text-right">
-                        <button id="boton-cancelar" class="btn">
+                        <button id="boton-cancelar" class="btn" onclick="window.loadProfesores()">
                             <div class="img">
                                 <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
                             </div>
                         </button>
 
-                        <button id="boton-guardar" class="btn" onclick="window.crearResponsable()">
+                        <button id="boton-guardar" class="btn" onclick="window.crearProfesor()">
                             <div class="img">
                                 <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
                             </div>
@@ -127,4 +161,5 @@
         </div>
     </div>
 </body>
+
 </html>
