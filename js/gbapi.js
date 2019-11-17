@@ -410,7 +410,6 @@ function updateState(data) {
     globalState.users.forEach(o => getId(o.uid, o));
     globalState.messages.forEach(o => getId(o.msgid, o));
     console.log("Updated state", globalState);
-    window.loadClass();
     return data;
 }
 
@@ -499,6 +498,16 @@ function initialize() {
     return go(serverApiUrl + "initialize", 'GET')
         .then(d => console.log(d));
 }
+
+function getResponsableById(id){
+    for(let responsable in globalState){
+        if(responsable.uid == id){
+            return responsable;
+        }
+    }
+}
+
+
 
 // cosas que estarán disponibles desde fuera de este módulo
 export {

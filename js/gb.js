@@ -29,13 +29,16 @@ const U = Gb.Util;
 //
 function inputClass() {
   let html = [];
+  console.log("Todas las clases");
+  console.log(Gb.globalState.classes);
   for (let c in Gb.globalState.classes) {
+    console.log("Clase "+c);
     html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
   }
   return $(html.join(''));
 }
 
-//Crea el inicio de sesión
+//Crea menu de administrador
 function createAdminMenu() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
@@ -109,6 +112,412 @@ function createAdminMenu() {
   ];
   return $(html.join(''));
 }
+
+//Crea menu de administrador
+function createProfessorMenu() {
+  let html = [
+    '<!--Barra de navegacion-->',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Profesor</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<!--Este grid-->',
+    '<div class=" lineas row d-flex justify-content-center align-items-center">',
+    '<!--Alumnos-->',
+    '<div class="col-lg-3 col-md-4 col-12">',
+    '<a role="button" onclick="window.loadAlumnos()" class="enlacesMenu">',
+    '<img src="imagenes/alumnos.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Alumnos</h1>',
+    '</a>',
+    '</div>',
+    '<!--Padres-->',
+    '<div class="d-none d-lg-block col-lg-1"></div>',
+    '<div class="col-lg-3 col-md-4 col-12">',
+    '<a role="button" onclick="window.loadResponsables()" class="enlacesMenu">',
+    '<img src="imagenes/padres.png" alt="" class="img-fluid">',
+    '<h1 class="text-center">Responsables</h1>',
+    '</a>',
+    '</div>',
+    '<!--Mensajes-->',
+    '<div class="d-none d-lg-block col-lg-1"></div>',
+    '<div class="col-lg-3 col-md-4 col-12">',
+    '<a role="button" onclick="window.loadMenuMensajes()" class="enlacesMenu">',
+    '<img src="imagenes/unread.png" alt="" class=" img-fluid"></img>',
+    '<h1 class="text-center">Mensajes</h1>',
+    '</a>',
+    '</div>',
+    '</div>',
+  ];
+  return $(html.join(''));
+}
+
+//Crea menu de administrador
+function createAlumnos() {
+  let html = [
+    '<!-- Editable table -->',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container">',
+    '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Alumnos</h1>',
+    '<div class="card-body pt-0">',
+    '<div class="row d-flex justify-content-end">',
+    '<button id="boton-add" class="btn" onclick="window.loadAddAlumnos()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="input-group mb-2">',
+    '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
+    '<div class="input-group-append">',
+    '<select id="filtro" class="bg-info text-white text-center" name="OS">',
+    '<option value="0">DNI</option>',
+    '<option value="1">Nombre</option>',
+    '<option value="2">Apellidos</option>',
+    '<option value="3">Clase</option>',
+    '</select>',
+    '</div>',
+    '</div>',
+    '<div class="table-wrapper-scroll-y my-custom-scrollbar">',
+    '<div id="miTabla" class="table-editable">',
+    '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
+    '<thead>',
+    '<tr class="headerTabla">',
+    '<th class="text-center">DNI</th>',
+    '<th class="text-center">Nombre</th>',
+    '<th class="text-center">Apellidos</th>',
+    '<th class="text-center">Clase</th>',
+    '<th class="text-center">Responsables</th>',
+    '<th class="text-center">Eliminar</th>',
+    '</tr>',
+    '</thead>',
+    '<tbody>'
+  ]
+  html.push(createGroupAlumnos());
+  html.push(
+    '</tbody>',
+    '</table>',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row mt-3 d-flex justify-content-end">',
+    '<div>',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-exportar" class="btn" onclick="window.crearResponsable()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  )
+  return $(html.join(''));
+}
+
+function createGroupAlumnos() {
+  let html = [];
+  let idGrupo;
+  for (let i in Gb.globalState.students) {
+    idGrupo = 'r_' + Math.floor(Math.random() * 10000000);
+    html.push('<tr >',
+      '<td class="pt-3-half" contenteditable="false">', Gb.globalState.students[i].sid, '</td>',
+      '<td class="pt-3-half" contenteditable="true">', Gb.globalState.students[i].firstName, '</td>',
+      '<td class="pt-3-half" contenteditable="true">', Gb.globalState.students[i].lastName, '</td>',
+      '<td class="pt-3-half" contenteditable="true">', Gb.globalState.students[i].cid, '</td>',
+      '<td>',
+      '<div class="row">',
+      '<div class="col-xl-8">',
+      '<div class="card text-white bg-dark">',
+      '<div class="card-header">',
+      '<a class="tituloSeccion" data-toggle="collapse"',
+      'href="#', idGrupo, '" role="button"',
+      'aria-controls="', idGrupo, '">',
+      'Ver Responsables',
+      '</a>',
+      '</div>',
+      '<div class="collapse" id="', idGrupo, '">',
+      '<ul class="list-group list-group-flush">');
+    html.push(createDesplegableResponsables(Gb.globalState.students[i].guardians));
+    html.push(
+      '</ul>',
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="col-xl-4">',
+      '<div class="card text-white bg-info">',
+      '<div class="card-header">',
+      '<a class="tituloSeccion" role="button">',
+      'Editar',
+      '</a>',
+      '</div>',
+      '</div>',
+      '</div>',
+      '</td>',
+      '<td>',
+      '<div class="table-remove card text-white bg-danger">',
+      '<div class="card-header">',
+      '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',
+      'Remove',
+      '</a>',
+      // Simbolo encontra de la tirania de Guille
+      //'<button id="boton-remove" class="btn tituloSeccion d-flex justify-content-center align-items-center" onclick="window.eliminarAlumno()"> Remove',
+      '</div>',
+      '</div>',
+      '</td>',
+      '</tr>'
+    );
+  }
+  return (html.join(''));
+}
+
+
+
+// Funcion que hace el desplegable de los responsables
+function createDesplegableResponsables(responsables) {
+  let html = [];
+  for (let i in responsables) {
+    html.push(
+      '<li class="list-group-item bg-dark">',
+      '<div class="row">');
+    html.push(Gb.getResponsableById(responsables[i]).first_name);
+    html.push(
+      '</div>',
+      '</li>'
+    );
+    return (html.join(''));
+  }
+}
+
+function createAddAlumnos() {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-6">',
+    '<h2 class="display-4 text-center mt-3">Añadir Alumno</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputIDAlumno">ID:</label>',
+    '</div>',
+    '<div class="col-md-4">',
+    '<input type="text" class="form-control" id="inputIDAlumno">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputNombreAlumno">Nombre:</label>',
+    '</div>',
+    '<div class="col-md-4">',
+    '<input type="text" class="form-control" id="inputNombreAlumno">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputApellidosAlumno">Apellidos:</label>',
+    '</div>',
+    '<div class="col-md-4">',
+    '<input type="text" class="form-control" id="inputApellidosAlumno">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputClase">Clase:</label>',
+    '</div>',
+    '<div class="col-md-4">',
+    '<select id="inputClase" class="form-control">',
+    '</select>',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-6 text-right">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAlumnos()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-guardarAlumno" class="btn" onclick="window.crearAlumno()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  ];
+  return $(html.join(''));
+}
+
+function createAddResponsable() {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Añadir Responsable</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputID">ID:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputID">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputNombre">Nombre:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputNombre">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputApellidos">Apellidos:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputApellidos">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputDNI">Teléfonos:</label>',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf1" placeholder="Tlf 1">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf2" placeholder="Tlf 2 (Opcional)">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="tlf3" placeholder="Tlf 3 (Opcional)">',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-8 text-right">',
+    '<button id="boton-cancelar" class="btn">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-guardar" class="btn" onclick="window.crearResponsable()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  ];
+
+  return $(html.join(''));
+}
+
 
 //Crear agrupamiento de mensajes
 function createGroupDate(date) {
@@ -253,6 +662,30 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 //
 //
 
+// Funcion creada por Víctor Todos los derechos de autor reservados
+window.eliminarAlumno = function eliminar(){
+  debugger;
+  //console.log($("#boton-remove").parents('tr').getElementsByTagName("td")[0]);
+ // $("#boton-remove").parents('tr').getElementsByTagName("td")[0];
+  let dni = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
+  $("#boton-remove").parents('tr').detach();
+  console.log(dni);
+  Gb.rm(dni).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      console.log("Alumno borrado con exito")
+    } else {
+        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+        let aviso_error_del_alumno = "Error al eliminar alumno.\n" +
+                                     "Algo ha ido mal.\n"
+        alert(aviso_error_del_alumno);
+    }
+ 
+ });
+}
+
+
+
 window.loadLogin = function loadLogin() {
   try {
     // vaciamos un contenedor
@@ -263,23 +696,22 @@ window.loadLogin = function loadLogin() {
     console.log('Error cargando los mensajes', e);
   }
 }
-
+var usuarioIniciado = "noIniciado";
 window.login = function login() {
   let usuario = $("#idUsuario").val();
   let contras = $("#contrasena").val();
-  debugger;
-  console.log("usuario " + usuario);
-  console.log("contra " + contras);
   Gb.login(usuario, contras).then(d => {
     let u = Gb.resolve(usuario);
-    debugger;
     if (u !== undefined) {
       // la operación ha funcionado (u es el usuario que ha conseguido hacer login)
       console.log(u);
       window.loadAdminMenu();
+      usuarioIniciado = u;
     } else {
       // ha habido un error (u ha vuelto como undefined; en la consola se verá qué ha pasado)
-      debugger;
+      let aviso_error_login = "Ha habido un problema al validar sus credenciales.\n" +
+        "Usuario o contraseña incorrectos.\n"
+      alert(aviso_error_login);
     }
   });
 
@@ -334,7 +766,7 @@ window.loadClases = function loadClases() {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#contenido").append(createClases());
+    $("#contenido").append(inputClass());
   } catch (e) {
     console.log('Error cargando los mensajes', e);
   }
@@ -373,6 +805,29 @@ window.cerrarSesion = function loadProfesores() {
   }
 }
 
+window.loadAddAlumnos = function loadAddAlumnos() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAddAlumnos());
+    window.loadInputClases();
+  } catch (e) {
+    console.log('Error cargando añadir alumnos', e);
+  }
+}
+
+window.loadAddResponsable = function loadAddResponsable() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAddResponsable());
+  } catch (e) {
+    console.log('Error cargando añadir responsable', e);
+  }
+}
+
 // funcion para cargar los mensajes
 window.loadMessage = function loadMessage() {
   try {
@@ -395,13 +850,12 @@ window.loadMessage = function loadMessage() {
 }
 
 // Refrescar las clases existentes
-window.loadClass = function loadClass() {
+window.loadInputClases = function loadInputClases() {
   try {
-    console.log("SE metio");
     // vaciamos un contenedor
-    $("#inputClaseMensaje").empty();
+    $("#inputClase").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#inputClaseMensaje").append(inputClass());
+    $("#inputClase").append(inputClass());
   } catch (e) {
     console.log('Error actualizando', e);
   }
@@ -472,15 +926,27 @@ window.crearAlumno = function crearAlumno() {
     $("#inputIDAlumno").val(),
     $("#inputNombreAlumno").val(),
     $("#inputApellidosAlumno").val(),
-    $("#inputClaseAlumno").val()
+    $("#inputClase").val()
   );
-  window.Gb.addStudent(alumno);
-  let aviso = "Alumno añadido\n" +
-    "Id: " + alumno.sid + "\n" +
-    "Nombre: " + alumno.first_name + "\n" +
-    "Apellido: " + alumno.last_name + "\n" +
-    "Id clase: " + alumno.cid;
-  alert(aviso);
+  debugger;
+  window.Gb.addStudent(alumno).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      let aviso = "Alumno añadido\n" +
+        "Id: " + alumno.sid + "\n" +
+        "Nombre: " + alumno.first_name + "\n" +
+        "Apellido: " + alumno.last_name + "\n" +
+        "Id clase: " + alumno.cid;
+      alert(aviso);
+      window.loadAlumnos();
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_add_alumno = "Error al añadir alumno.\n" +
+        "Comprueba que los campos introducidos son correctos.\n"
+      alert(aviso_error_add_alumno);
+    }
+
+  });
 }
 
 // Logica de crear un nuevo responsable
@@ -551,7 +1017,194 @@ window.responderMensaje = function responderMensaje() {
     "Contenido: " + message.body;
   alert(aviso);
 }
-// Fav, favoritos, archivados, enviados, recibidos, no leidos y eleminados
+// favoritos, archivados, enviados, recibidos, no leidos
+// Funcion que carga los mensajes archivados
+window.loadMessageArchivados = function loadMessageArchivos() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    // busco los mensajes archivados y los guardo
+    let archivados = [];
+    // Recorro los mensajes
+    for (let mensaje in Gb.globalState.messages) {
+      // Miro los labels, en busca del label "arch"
+      for (let pos in mensaje.labels) {
+        if (pos == "arch") {
+          archivados.push(mensaje);
+          break;
+        }
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    archivados.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(archivados);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)*/
+  } catch (e) {
+    console.log('Error al cargar los mensajes archivados', e);
+  }
+}
+
+// Funcion que carga los mensajes favoritos
+window.loadMessageFavoritos = function loadMessageFavoritos() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let favoritos = [];
+    for (let mes in Gb.globalState.messages) {
+      for (let label in mes.MessageLabels) {
+        if (label == "fav") {
+          favoritos.push(mes);
+          break;
+        }
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    favoritos.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(favoritos);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
+  } catch (e) {
+    console.log('Error al cargar los mensajes favoritos', e);
+  }
+}
+
+// Funcion que carga los mensajes recibidos
+window.loadMessageRecibidos = function loadMessageRecibidos() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let recibidos = [];
+    for (let mes in Gb.globalState.messages) {
+      for (let label in mes.MessageLabels) {
+        if (label == "received") {
+          recibidos.push(mes);
+          break;
+        }
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    recibidos.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(recibidos);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
+  } catch (e) {
+    console.log('Error al cargar los mensajes recibidos', e);
+  }
+}
+
+// Funcion que carga los mensajes leidos
+window.loadMessageLeidos = function loadMessageLeidos() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let leidos = [];
+    let read = false; //si has leido el mensaje
+    let reci = false; //si es un mensaje recibido
+    for (let mes in Gb.globalState.messages) {
+      read = false;
+      reci = false;
+      for (let label in mes.MessageLabels) {
+        if (label == "received") {
+          reci = true;
+        } else if (label == "read") {
+          read = true;
+        }
+        if (reci && read) {
+          leidos.push(mes);
+          break;
+        }
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    leidos.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(leidos);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
+  } catch (e) {
+    console.log('Error al cargar los mensajes leidos', e);
+  }
+}
+
+// Funcion que carga los mensajes enviados
+window.loadMessageEnviados = function loadMessageEnviados() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    // busco los mensajes archivados y los guardo
+    let enviados = [];
+    // Recorro los mensajes
+    for (let mensaje in Gb.globalState.messages) {
+      // Miro los labels, en busca del label "sent"
+      for (let pos in mensaje.labels) {
+        if (pos == "sent") {
+          enviados.push(mensaje);
+          break;
+        }
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    enviados.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(enviados);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)*/
+  } catch (e) {
+    console.log('Error al cargar los mensajes enviados', e);
+  }
+}
+
+// Funcion que carga los mensajes no leidos
+window.loadMessageNoLeidos = function loadMessageNoLeidos() {
+  try {
+    // vaciamos un contenedor
+    $("#mensajes").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let noLeidos = [];
+    for (let mes in Gb.globalState.messages) {
+      let recibido = false,
+        leido = false;
+      for (let label in mes.MessageLabels) {
+        // Miro si esta recibido
+        if (label == "received") {
+          recibido = true;
+        }
+        // Miro que no este leido
+        else if (label == "read") {
+          leido = true;
+        }
+      }
+      if (recibido && !leido) {
+        noLeidos.push(mes);
+      }
+    }
+
+    // Ordenamos los mensajes, por si se ha añadido uno nuevo
+    noLeidos.sort(U.sortByDate);
+    let mensajesAgrupados = U.groupByKeys(noLeidos);
+    // Nos recorremos los mensajes agrupados
+    $("#mensajes").append(createGroupDate(mensajesAgrupados));
+    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
+  } catch (e) {
+    console.log('Error al cargar los mensajes no leidos', e);
+  }
+}
+
 
 // DATOS PARA CREAR UN PROFESOR
 //DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)
+

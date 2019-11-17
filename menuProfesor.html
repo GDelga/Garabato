@@ -38,9 +38,9 @@
         <!--Las diferentes opciones de la barra de menu-->
         <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
             <div class="navbar-nav ml-auto mr-auto">
-                <a class="nav-item nav-link" href="#">Alumnos</a>
-                <a class="nav-item nav-link" href="#">Responsables</a>
-                <a class="nav-item nav-link">Mensajes</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
             </div>
             <!--Boton para cerrar sesion-->
             <div class="navbar-nav">
@@ -54,7 +54,7 @@
     <div class=" lineas row d-flex justify-content-center align-items-center">
         <!--Alumnos-->
         <div class="col-lg-3 col-md-4 col-12">
-            <a href="" class="enlacesMenu">
+            <a role="button" onclick="window.loadAlumnos()" class="enlacesMenu">
                 <img src="imagenes/alumnos.png" alt="" class="img-fluid">
                 <h1 class="text-center">Alumnos</h1>
             </a>
@@ -64,7 +64,7 @@
         <!--Padres-->
         <div class="d-none d-lg-block col-lg-1"></div>
         <div class="col-lg-3 col-md-4 col-12">
-            <a href="" class="enlacesMenu">
+            <a role="button" onclick="window.load()" class="enlacesMenu" >
                 <img src="imagenes/padres.png" alt="" class="img-fluid">
                 <h1 class="text-center">Responsables</h1>
             </a>

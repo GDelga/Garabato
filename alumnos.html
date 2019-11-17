@@ -22,6 +22,7 @@
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/misFunciones.js"></script>
 </head>
 
 <body>
@@ -39,11 +40,11 @@
             <!--Las diferentes opciones de la barra de menu-->
             <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto mr-auto">
-                    <a class="nav-item nav-link active" href="#">Alumnos</a>
-                    <a class="nav-item nav-link" href="#">Responsables</a>
-                    <a class="nav-item nav-link" href="#">Clases</a>
-                    <a class="nav-item nav-link" href="#">Profesores</a>
-                    <a class="nav-item nav-link">Mensajes</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>
+                    <a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
                 </div>
                 <!--Boton para cerrar sesion-->
                 <div class="navbar-nav">
@@ -62,7 +63,8 @@
                     </button>
                 </div>
                 <div class="input-group mb-2">
-                    <input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">
+                    <input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()"
+                        placeholder="Search">
                     <div class="input-group-append">
                         <select id="filtro" class="bg-info text-white text-center" name="OS">
                             <option value="0">DNI</option>
@@ -73,8 +75,9 @@
                     </div>
                 </div>
                 <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                    <div id="table" class="table-editable">
-                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">
+                    <div id="miTabla" class="table-editable">
+                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center"
+                            id="miTabla">
                             <thead>
                                 <tr class="headerTabla">
                                     <th class="text-center">DNI</th>
@@ -223,4 +226,49 @@
             </div>
         </div>
     </div>
+    <!-- Editable table -->
+    <script>
+        const $tableID = $('#miTabla');
+        const $BTN = $('#boton-exportar');
+        const $EXPORT = $('#export');
+
+        $tableID.on('click', '.table-remove', function () {
+            debugger;
+            $(this).parents('tr').detach();
+        });
+
+        // A few jQuery helpers for exporting only
+        jQuery.fn.pop = [].pop;
+        jQuery.fn.shift = [].shift;
+
+        $BTN.on('click', () => {
+            debugger;
+            const $rows = $tableID.find('tr:not(:hidden)');
+            const headers = [];
+            const data = [];
+
+            // Get the headers (add special header logic here)
+            $($rows.shift()).find('th:not(:empty)').each(function () {
+
+                headers.push($(this).text().toLowerCase());
+            });
+
+            // Turn all existing rows into a loopable array
+            $rows.each(function () {
+                const $td = $(this).find('td');
+                const h = {};
+
+                // Use the headers from earlier to name our hash keys
+                headers.forEach((header, i) => {
+
+                    h[header] = $td.eq(i).text();
+                });
+
+                data.push(h);
+            });
+
+            // Output the result
+            $EXPORT.text(JSON.stringify(data));
+        });
+    </script>
 </body>
