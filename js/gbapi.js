@@ -500,8 +500,16 @@ function initialize() {
 }
 
 function getResponsableById(id){
-    for(let responsable in globalState){
+    for(let responsable in globalState.users){
         if(responsable.uid == id){
+            return responsable;
+        }
+    }
+}
+
+function getStudentById(id){
+    for(let students in globalState.students){
+        if(students.uid == id){
             return responsable;
         }
     }
@@ -541,5 +549,4 @@ export {
 
     // Utilidades varias que no forman parte de la API
     Util,
-    serverToken,
 };

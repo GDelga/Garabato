@@ -32,11 +32,335 @@ function inputClass() {
   console.log("Todas las clases");
   console.log(Gb.globalState.classes);
   for (let c in Gb.globalState.classes) {
-    console.log("Clase "+c);
+    console.log("Clase " + c);
     html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
   }
   return $(html.join(''));
 }
+// Crea un nuevo profesor
+function createProfesor() {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<!--Empieza el formulario de la pagina-->',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Añadir Profesor</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputID">ID:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputID">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputContra">Contraseña:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="password" class="form-control" id="inputContra">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputNombre">Nombre:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputNombre">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputApellidos">Apellidos:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputApellidos">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputDNI">Clases:</label>',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class1" placeholder="Clase 1">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class2" placeholder="Clase 2 (Opcional)">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="class3" placeholder="Clase 3 (Opcional)">',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-8 text-right">',
+    '<button id="boton-cancelar" class="btn">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-guardar" class="btn" onclick="window.crearResponsable()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>'
+  ];
+  return $(html.join(''));
+}
+
+// Crea un nuevo responsable
+function createResponsables() {
+  let html = [
+    '<!-- Editable table -->',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container">',
+    '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Responsables</h1>',
+    '<div class="card-body pt-0">',
+    '<div class="row d-flex justify-content-end">',
+    '<button id="boton-add" class="btn" onclick="window.loadAddResponsable()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="input-group mb-2">',
+    '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
+    '<div class="input-group-append">',
+    '<select id="filtro" class="bg-info text-white text-center" name="OS">',
+    '<option value="0">DNI</option>',
+    '<option value="1">NOMBRE</option>',
+    '<option value="2">APELLIDOS</option>',
+    '</select>',
+    '</div>',
+    '</div>',
+    '<div class="table-wrapper-scroll-y my-custom-scrollbar">',
+    '<div id="miTabla" class="table-editable ">',
+    '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
+    '<thead>',
+    '<tr class="headerTabla">',
+    '<th class="text-center">DNI</th>',
+    '<th class="text-center">NOMBRE</th>',
+    '<th class="text-center">APELLIDOS</th>',
+    '<th class="text-center">TELÉFONOS</th>',
+    '<th class="text-center">ALUMNOS</th>',
+    '<th class="text-center">ELIMINAR</th>',
+    '</tr>',
+    '</thead>',
+    '<tbody>'
+  ];
+
+  //FUNCION QUE LLAMA A CADA FILA
+  html.push(createGroupResponsables());
+
+
+  html.push(
+    '</tbody>',
+    '</table>',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row mt-3 d-flex justify-content-end">',
+    '<div>',
+    '<button id="boton-cancelar" class="btn">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-exportar" class="btn" onclick="window.crearResponsable()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  );
+  return $(html.join(''));
+}
+
+function createGroupResponsables() {
+  let html = [];
+  let idGrupoTelefonos;
+  let idGrupoAlumnos;
+  for (let i in Gb.globalState.users) {
+    if (Gb.globalState.users[i].type != undefined && Gb.globalState.users[i].type == Gb.GUARDIAN) {
+      idGrupoTelefonos = 't_' + Math.floor(Math.random() * 10000000);
+      idGrupoAlumnos = 'a_' + Math.floor(Math.random() * 10000000);
+      html.push(
+        '<tr>',
+        '<td class="pt-3-half" contenteditable="false">', Gb.globalState.users[i].uid, '</td>',
+        '<td class="pt-3-half" contenteditable="true">', Gb.globalState.users[i].first_name, '</td>',
+        '<td class="pt-3-half" contenteditable="true">', Gb.globalState.users[i].last_name, '</td>',
+        '<td>',
+        '<div class="row">',
+        '<div class="col-xl-7">',
+        '<div class="card text-white bg-dark">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" data-toggle="collapse"',
+        'href="#', idGrupoTelefonos, '" role="button"',
+        'aria-controls="', idGrupoTelefonos, '">',
+        'Ver Teléfonos',
+        '</a>',
+        '</div>',
+        '<div class="collapse" id="', idGrupoTelefonos, '">',
+        '<ul class="list-group list-group-flush">',
+      );
+      //FUNCION LISTA TELEFONOS
+      html.push(createDesplegableTelefonos(Gb.globalState.users[i].tels));
+      html.push(
+        '</ul>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '<div class="col-xl-5">',
+        '<div class="card text-white bg-info">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" role="button">',
+        'Editar',
+        '</a>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</td>',
+        '<td>',
+        '<div class="row">',
+        '<div class="col-xl-7">',
+        '<div class="card text-white bg-dark">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" data-toggle="collapse"',
+        'href="#', idGrupoAlumnos, '" role="button"',
+        'aria-controls="', idGrupoAlumnos, '">',
+        'Ver Alumnos',
+        '</a>',
+        '</div>',
+        '<div class="collapse" id="', idGrupoAlumnos, '">',
+        '<ul class="list-group list-group-flush">',
+      );
+      //FUNCION DE LISTA DE ALUMNOS
+      html.push(createDesplegableAlumnos(Gb.globalState.users[i].students));
+      html.push(
+        '</ul>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '<div class="col-xl-5">',
+        '<div class="card text-white bg-info">',
+        '<div class="card-header">',
+        '<a class="tituloSeccion" role="button">',
+        'Editar',
+        '</a>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</td>',
+        '<td>',
+        '<div class="table-remove card text-white bg-danger">',
+        '<div class="card-header">',
+        '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',
+        'Remove',
+        '</a>',
+        '</div>',
+        '</div>',
+        '</td>',
+        '</tr>',
+      );
+    }
+  }
+  return (html.join(''));
+}
+
+
+
+// Funcion que hace el desplegable de los responsables
+function createDesplegableTelefonos(telefonos) {
+  let html = [];
+  for (let i in telefonos) {
+    html.push(
+      '<li class="list-group-item bg-dark">',
+      '<div class="row">');
+    html.push(telefonos[i]);
+    html.push(
+      '</div>',
+      '</li>'
+    );
+    return (html.join(''));
+  }
+}
+
+// Funcion que hace el desplegable de los alumnos
+function createDesplegableAlumnos(alumnos) {
+  let html = [];
+  for (let i in alumnos) {
+    html.push(
+      '<li class="list-group-item bg-dark">',
+      '<div class="row">');
+    html.push(Gb.getStudentById(alumnos[i]).first_name);
+    html.push(
+      '</div>',
+      '</li>'
+    );
+    return (html.join(''));
+  }
+}
+
 
 //Crea menu de administrador
 function createAdminMenu() {
@@ -305,7 +629,6 @@ function createGroupAlumnos() {
       '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',
       'Remove',
       '</a>',
-      // Simbolo encontra de la tirania de Guille
       //'<button id="boton-remove" class="btn tituloSeccion d-flex justify-content-center align-items-center" onclick="window.eliminarAlumno()"> Remove',
       '</div>',
       '</div>',
@@ -372,7 +695,7 @@ function createAddAlumnos() {
     '<div class="col-md-2">',
     '<label for="inputIDAlumno">ID:</label>',
     '</div>',
-    '<div class="col-md-4">',
+    '<div class="col-md-6">',
     '<input type="text" class="form-control" id="inputIDAlumno">',
     '</div>',
     '</div>',
@@ -380,7 +703,7 @@ function createAddAlumnos() {
     '<div class="col-md-2">',
     '<label for="inputNombreAlumno">Nombre:</label>',
     '</div>',
-    '<div class="col-md-4">',
+    '<div class="col-md-6">',
     '<input type="text" class="form-control" id="inputNombreAlumno">',
     '</div>',
     '</div>',
@@ -388,7 +711,7 @@ function createAddAlumnos() {
     '<div class="col-md-2">',
     '<label for="inputApellidosAlumno">Apellidos:</label>',
     '</div>',
-    '<div class="col-md-4">',
+    '<div class="col-md-6">',
     '<input type="text" class="form-control" id="inputApellidosAlumno">',
     '</div>',
     '</div>',
@@ -396,14 +719,28 @@ function createAddAlumnos() {
     '<div class="col-md-2">',
     '<label for="inputClase">Clase:</label>',
     '</div>',
-    '<div class="col-md-4">',
+    '<div class="col-md-6">',
     '<select id="inputClase" class="form-control">',
     '</select>',
     '</div>',
     '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputRes">Responsables:</label>',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="res1" placeholder="Res 1">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="res2" placeholder="Res 2 (Opcional)">',
+    '</div>',
+    '<div class="col-md-2">',
+    '<input type="text" class="form-control" id="res3" placeholder="Res 3 (Opcional)">',
+    '</div>',
+    '</div>',
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-6 text-right">',
+    '<div class="col-md-8 text-right">',
     '<button id="boton-cancelar" class="btn" onclick="window.loadAlumnos()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
@@ -467,6 +804,14 @@ function createAddResponsable() {
     '</div>',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
+    '<label for="inputContra">Contraseña:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="password" class="form-control" id="inputContra">',
+    '</div>',
+    '</div>',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
     '<label for="inputNombre">Nombre:</label>',
     '</div>',
     '<div class="col-md-6">',
@@ -498,7 +843,7 @@ function createAddResponsable() {
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
     '<div class="col-md-8 text-right">',
-    '<button id="boton-cancelar" class="btn">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadResponsables()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
@@ -514,7 +859,163 @@ function createAddResponsable() {
     '</div>',
     '</div>',
   ];
+  return $(html.join(''));
+}
 
+function createClases() {
+  let html = [
+    '<!-- Editable table -->',
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container">',
+    '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Clases</h1>',
+    '<div class="card-body pt-0">',
+    '<div class="row d-flex justify-content-end">',
+    '<button id="boton-add" class="btn" onclick="window.loadAddClases()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="input-group mb-2">',
+    '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
+    '<div class="input-group-append">',
+    '<select id="filtro" class="bg-info text-white text-center" name="OS">',
+    '<option value="0">ID</option>',
+    '</select>',
+    '</div>',
+    '</div>',
+    '<div class="table-wrapper-scroll-y my-custom-scrollbar">',
+    '<div id="table" class="table-editable">',
+    '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
+    '<thead>',
+    '<tr class="headerTabla">',
+    '<th class="text-center">ID</th>',
+    '<th class="text-center">Eliminar</th>',
+    '</tr>',
+    '</thead>',
+    '<tbody>',
+  ]
+  //FUNCION CARGAR CLASES
+  html.push(cargarClases());
+
+  html.push(
+    '</tbody>',
+    '</table>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  );
+  
+  return $(html.join(''));
+}
+
+function cargarClases() {
+  let html = [];
+  for (let i in Gb.globalState.classes) {
+    html.push(
+      '<tr>',
+      '<td class="pt-3-half">', Gb.globalState.classes[i].cid, '</td>',
+      '<td>',
+      '<div class="table-remove card text-white bg-danger">',
+      '<div class="card-header">',
+      '<a class="tituloSeccion" role="button">',
+      'Remove',
+      '</a>',
+      '</div>',
+      '</div>',
+      '</td>',
+      '</tr>',
+    )
+  }
+  return (html.join(''));
+}
+
+function createAddClases() {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" href="#">',
+    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<!--Empieza el formulario de la pagina-->',
+    '<div class="container justify-content-center align-items-center mt-5">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Añadir Clase</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputNombre">Nombre:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" id="inputNombre">',
+    '</div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-8 text-right">',
+    '<button id="boton-cancelar" class="btn">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-guardar" class="btn" onclick="window.crearClase()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>'
+  ]
   return $(html.join(''));
 }
 
@@ -662,11 +1163,10 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 //
 //
 
-// Funcion creada por Víctor Todos los derechos de autor reservados
-window.eliminarAlumno = function eliminar(){
-  debugger;
+// Funcion para eliminar un alumno de la tabla 
+window.eliminarAlumno = function eliminar() {
   //console.log($("#boton-remove").parents('tr').getElementsByTagName("td")[0]);
- // $("#boton-remove").parents('tr').getElementsByTagName("td")[0];
+  // $("#boton-remove").parents('tr').getElementsByTagName("td")[0];
   let dni = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
   $("#boton-remove").parents('tr').detach();
   console.log(dni);
@@ -675,13 +1175,12 @@ window.eliminarAlumno = function eliminar(){
       // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
       console.log("Alumno borrado con exito")
     } else {
-        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-        let aviso_error_del_alumno = "Error al eliminar alumno.\n" +
-                                     "Algo ha ido mal.\n"
-        alert(aviso_error_del_alumno);
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_del_alumno = "Error al eliminar alumno.\n" +
+        "Algo ha ido mal.\n"
+      alert(aviso_error_del_alumno);
     }
- 
- });
+  });
 }
 
 
@@ -705,8 +1204,12 @@ window.login = function login() {
     if (u !== undefined) {
       // la operación ha funcionado (u es el usuario que ha conseguido hacer login)
       console.log(u);
-      window.loadAdminMenu();
       usuarioIniciado = u;
+      if (usuarioIniciado.type == Gb.UserRoles.ADMIN || usuarioIniciado.type == undefined) {
+        window.loadAdminMenu();
+      } else if (usuarioIniciado == Gb.UserRoles.TEACHER) {
+        window.loadProfessorMenu();
+      }
     } else {
       // ha habido un error (u ha vuelto como undefined; en la consola se verá qué ha pasado)
       let aviso_error_login = "Ha habido un problema al validar sus credenciales.\n" +
@@ -724,7 +1227,7 @@ window.loadAdminMenu = function adminMenu() {
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createAdminMenu());
   } catch (e) {
-    console.log('Error cargando los mensajes', e);
+    console.log('Error cargando el menu de administradores', e);
   }
 }
 
@@ -735,7 +1238,7 @@ window.loadProfessorMenu = function professorMenu() {
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createProfessorMenu());
   } catch (e) {
-    console.log('Error cargando los mensajes', e);
+    console.log('Error cargando el menu de profesores', e);
   }
 }
 
@@ -766,9 +1269,9 @@ window.loadClases = function loadClases() {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#contenido").append(inputClass());
+    $("#contenido").append(createClases());
   } catch (e) {
-    console.log('Error cargando los mensajes', e);
+    console.log('Error cargando las clases', e);
   }
 }
 
@@ -802,6 +1305,18 @@ window.cerrarSesion = function loadProfesores() {
     $("#contenido").append(createMenuMensajes());
   } catch (e) {
     console.log('Error cargando los mensajes', e);
+  }
+}
+
+window.loadAddClases = function loadAddClases() {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createAddClases());
+    window.loadInputClases();
+  } catch (e) {
+    console.log('Error cargando añadir clases', e);
   }
 }
 
@@ -861,21 +1376,6 @@ window.loadInputClases = function loadInputClases() {
   }
 }
 
-window.crearClase = function crearClase() {
-  try {
-
-    let callback = loadClass;
-    let clase = {
-      cid: "1B Grupo6 hola"
-    };
-    console.log("hola " + callback);
-    Gb.addClass(clase, callback);
-    console.log("Acabo");
-  } catch (e) {
-    console.log('Error actualizando', e);
-  }
-}
-
 // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
 Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
@@ -928,7 +1428,6 @@ window.crearAlumno = function crearAlumno() {
     $("#inputApellidosAlumno").val(),
     $("#inputClase").val()
   );
-  debugger;
   window.Gb.addStudent(alumno).then(d => {
     if (d !== undefined) {
       // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
@@ -952,7 +1451,7 @@ window.crearAlumno = function crearAlumno() {
 // Logica de crear un nuevo responsable
 window.crearResponsable = function crearResponsable() {
   var telefonos = [];
-
+  debugger;
   //Meter telefonos solo si el primer campo esta relleno.
   if ($("#tlf1").val() != "") {
     telefonos.push($("#tlf1").val());
@@ -967,32 +1466,43 @@ window.crearResponsable = function crearResponsable() {
   if (telefonos.length > 0 &&
     $("#inputID").val() != "" &&
     $("#inputNombre").val() != "" &&
-    $("#inputApellidos").val() != "") {
+    $("#inputApellidos").val() != "" &&
+    $("#inputContra").val() != "") {
     let responsable = new Gb.User(
       $("#inputID").val(),
-      'guardian',
+      Gb.UserRoles.GUARDIAN,
       $("#inputNombre").val(),
       $("#inputApellidos").val(),
       telefonos,
       [],
-      []
+      [],
+      $("#inputContra").val()
     );
 
+    console.log("Datos responsables: " + responsable);
     //Pushes user to globalstate.
-    Gb.addUser(responsable);
+    Gb.addUser(responsable).then(d => {
+      if (d !== undefined) {
+        // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+        var string_tlfs = "";
+        for (let i = 0; i < telefonos.length; i++) {
+          string_tlfs += telefonos[i] + " ";
+        }
+        let aviso = "Usuario añadido\n" +
+          "ID: " + responsable.uid + "\n" +
+          "Nombre completo: " + responsable.first_name + " " + responsable.last_name + "\n" +
+          "Teléfonos: " + string_tlfs + "\n";
+        alert(aviso);
+        window.loadResponsables();
+      } else {
+        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+        let aviso_error_add_alumno = "Error al añadir usuario.\n" +
+          "Comprueba que los campos introducidos son correctos.\n"
+        alert(aviso_error_add_alumno);
+      }
+
+    });
     console.log(responsable);
-
-
-    var string_tlfs = "";
-    for (let i = 0; i < telefonos.length; i++) {
-      string_tlfs += telefonos[i] + " ";
-    }
-    //Notifies succesful push.
-    let aviso = "Perfil actualizado correctamente:\n" +
-      "ID: " + responsable.uid + "\n" +
-      "Nombre completo: " + responsable.first_name + " " + responsable.last_name + "\n" +
-      "Teléfonos: " + string_tlfs + "\n";
-    alert(aviso);
   } else {
     //Notifies unsuccesful push.
     let aviso_error = "Error: El formulario no se ha rellenado correctamente.\n";
@@ -1030,7 +1540,7 @@ window.loadMessageArchivados = function loadMessageArchivos() {
     for (let mensaje in Gb.globalState.messages) {
       // Miro los labels, en busca del label "arch"
       for (let pos in mensaje.labels) {
-        if (pos == "arch") {
+        if (pos == Gb.MessageLabels.ARCH) {
           archivados.push(mensaje);
           break;
         }
@@ -1057,7 +1567,7 @@ window.loadMessageFavoritos = function loadMessageFavoritos() {
     let favoritos = [];
     for (let mes in Gb.globalState.messages) {
       for (let label in mes.MessageLabels) {
-        if (label == "fav") {
+        if (label == Gb.MessageLabels.FAV) {
           favoritos.push(mes);
           break;
         }
@@ -1084,7 +1594,7 @@ window.loadMessageRecibidos = function loadMessageRecibidos() {
     let recibidos = [];
     for (let mes in Gb.globalState.messages) {
       for (let label in mes.MessageLabels) {
-        if (label == "received") {
+        if (label == Gb.MessageLabels.RECVD) {
           recibidos.push(mes);
           break;
         }
@@ -1109,15 +1619,14 @@ window.loadMessageLeidos = function loadMessageLeidos() {
     $("#mensajes").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     let leidos = [];
-    let read = false; //si has leido el mensaje
-    let reci = false; //si es un mensaje recibido
+
     for (let mes in Gb.globalState.messages) {
-      read = false;
-      reci = false;
+      let read = false; //si has leido el mensaje
+      let reci = false; //si es un mensaje recibido
       for (let label in mes.MessageLabels) {
-        if (label == "received") {
+        if (label == Gb.MessageLabels.RECVD) {
           reci = true;
-        } else if (label == "read") {
+        } else if (label == Gb.MessageLabels.READ) {
           read = true;
         }
         if (reci && read) {
@@ -1149,8 +1658,10 @@ window.loadMessageEnviados = function loadMessageEnviados() {
     // Recorro los mensajes
     for (let mensaje in Gb.globalState.messages) {
       // Miro los labels, en busca del label "sent"
-      for (let pos in mensaje.labels) {
-        if (pos == "sent") {
+      for (let etiq in mensaje.labels) {
+        //Comprobamos que el mensaje es "Enviado" por el usuario logueado
+        if (etiq == Gb.MessageLabels.SENT &&
+          mensaje.from == usuarioIniciado.uid) {
           enviados.push(mensaje);
           break;
         }
@@ -1177,19 +1688,30 @@ window.loadMessageNoLeidos = function loadMessageNoLeidos() {
     let noLeidos = [];
     for (let mes in Gb.globalState.messages) {
       let recibido = false,
-        leido = false;
-      for (let label in mes.MessageLabels) {
-        // Miro si esta recibido
-        if (label == "received") {
-          recibido = true;
-        }
-        // Miro que no este leido
-        else if (label == "read") {
-          leido = true;
+        leido = false,
+        usuarioCorrecto = false;
+      // Miro si entre los receptores esta el id del usuario que inicio la sesion
+      for (let ids in mes.to) {
+        if (usuarioIniciado.uid == ids) {
+          usuarioCorrecto = true;
+          break;
         }
       }
-      if (recibido && !leido) {
-        noLeidos.push(mes);
+      // Compruebo que el mensaje sea del usuario correcto
+      if (usuarioCorrecto) {
+        for (let label in mes.MessageLabels) {
+          // Miro si esta recibido
+          if (label == Gb.MessageLabels.RECVD) {
+            recibido = true;
+          }
+          // Miro que no este leido
+          else if (label == Gb.MessageLabels.READ) {
+            leido = true;
+          }
+        }
+        if (recibido && !leido) {
+          noLeidos.push(mes);
+        }
       }
     }
 
@@ -1204,7 +1726,27 @@ window.loadMessageNoLeidos = function loadMessageNoLeidos() {
   }
 }
 
+//Funcion para crear una nueva clase
+window.crearClase = function crearClase() {
+  let clase = new Gb.EClass(
+    $("#inputNombre").val()
+  );
+  window.Gb.addClass(clase).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      let aviso = "Clase añadida\n" +
+        "Id: " + clase.cid + "\n"
+      alert(aviso);
+      window.loadClases();
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_add_clase = "Error al añadir clase.\n" +
+        "Comprueba que los campos introducidos son correctos.\n"
+      alert(aviso_error_add_clase);
+    }
+
+  });
+}
 
 // DATOS PARA CREAR UN PROFESOR
 //DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)
-

@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>Garabato: Responsables</title>
+    <title>Garabato</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -39,10 +39,10 @@
         <!--Las diferentes opciones de la barra de menu-->
         <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
             <div class="navbar-nav ml-auto mr-auto">
-                <a class="nav-item nav-link active" role="button" onclick="window.loadProfesores()">Profesores</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>
                 <a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>
                 <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
-                <a class="nav-item nav-link " role="button" onclick="window.loadClases()">Clases</a>
+                <a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>
                 <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
             </div>
             <!--Boton para cerrar sesion-->
@@ -52,30 +52,14 @@
         </div>
     </nav>
     <!--Empieza el formulario de la pagina-->
-    <div class="container justify-content-center align-items-center">
+    <div class="container justify-content-center align-items-center mt-5">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-8">
-                <h2 class="display-4 text-center mt-3">Añadir Profesor</h2>
+                <h2 class="display-4 text-center mt-3">Añadir Clase</h2>
             </div>
         </div>
         <div class="justify-content-center">
             <div class="pl-5 pr-4 pt-3">
-                <div class="row pt-2 align-items-center justify-content-center">
-                    <div class="col-md-2">
-                        <label for="inputID">ID:</label>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="inputID">
-                    </div>
-                </div>
-                <div class="row pt-2 align-items-center justify-content-center">
-                    <div class="col-md-2">
-                        <label for="inputContra">Contraseña:</label>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="password" class="form-control" id="inputContra">
-                    </div>
-                </div>
                 <div class="row pt-2 align-items-center justify-content-center">
                     <div class="col-md-2">
                         <label for="inputNombre">Nombre:</label>
@@ -84,28 +68,7 @@
                         <input type="text" class="form-control" id="inputNombre">
                     </div>
                 </div>
-                <div class="row pt-2 align-items-center justify-content-center">
-                    <div class="col-md-2">
-                        <label for="inputApellidos">Apellidos:</label>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="inputApellidos">
-                    </div>
-                </div>
-                <div class="row pt-2 align-items-center justify-content-center">
-                    <div class="col-md-2">
-                        <label for="inputDNI">Clases:</label>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="class1" placeholder="Clase 1">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="class2" placeholder="Clase 2 (Opcional)">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="class3" placeholder="Clase 3 (Opcional)">
-                    </div>
-                </div>
+                
 
                 <!-- botonera -->
                 <div class="row text-left mt-3 justify-content-center">
