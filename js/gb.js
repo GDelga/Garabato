@@ -37,6 +37,78 @@ function inputClass() {
   }
   return $(html.join(''));
 }
+
+/*MIO*/
+// Crear una clase
+function createClass(){
+  let html = [
+'<nav class="navbar navbar-expand-lg navbar-dark bg-dark">'
+'<a class="navbar-brand d-flex" href="#">'
+'<h1 class="d-inline align-self-start">Garabato </h1>'
+'<h3 class="d-inline align-self-end pl-1"> Admin</h2>'
+</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<!--Las diferentes opciones de la barra de menu-->
+<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+<div class="navbar-nav ml-auto mr-auto">
+<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>
+<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+<a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>
+<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
+</div>
+<!--Boton para cerrar sesion-->
+<div class="navbar-nav">
+<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>
+</div>
+</div>
+</nav>
+<!--Empieza el formulario de la pagina-->
+<div class="container justify-content-center align-items-center mt-5">
+<div class="row justify-content-center align-items-center">
+<div class="col-md-8">
+<h2 class="display-4 text-center mt-3">Añadir Clase</h2>
+</div>
+</div>
+<div class="justify-content-center">
+<div class="pl-5 pr-4 pt-3">
+<div class="row pt-2 align-items-center justify-content-center">
+<div class="col-md-2">
+<label for="inputNombre">Nombre:</label>
+</div>
+<div class="col-md-6">
+<input type="text" class="form-control" id="inputNombre">
+</div>
+</div>
+
+
+<!-- botonera -->
+<div class="row text-left mt-3 justify-content-center">
+<div class="col-md-8 text-right">
+<button id="boton-cancelar" class="btn">
+<div class="img">
+<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
+</div>
+</button>
+
+<button id="boton-guardar" class="btn" onclick="window.crearResponsable()">
+<div class="img">
+<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+  ];
+  return $(html.join(''));
+}
+
+
 // Crea un nuevo profesor
 function createProfesor() {
   let html = [

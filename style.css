@@ -98,9 +98,6 @@ body {
     cursor: pointer;
 }
 
-.borderRojo{
-    border: red solid 2px;
-}
 .headerTabla {
     font-size: 1.5em;
 }
@@ -124,4 +121,17 @@ body {
 .lineas2{
     width: 100%;
     height: 80%;
+}
+
+.tam{
+    width: 50%;
+    height: 870px;
+}
+
+.borderRojo{
+    border: red solid 2px;
+}
+
+.azul{
+    border: blue solid 2px;
 }
