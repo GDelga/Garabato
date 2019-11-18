@@ -87,7 +87,7 @@ const MessageLabels = {
  * Un mensaje
  */
 class Message {
-    constructor(msgid, date, from, to, labels, title,   , parent) {
+    constructor(msgid, date, from, to, labels, title, body, parent) {
         this.msgid = msgid;
         this.date = date || new Date(),
             this.from = from;
