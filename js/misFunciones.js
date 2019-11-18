@@ -23,11 +23,10 @@ function myTableFilter() {
 }
 
 const $tableID = $('#miTabla');
-const $BTN = $('#boton-exportar');
+const $BTN = $('#boton-guardar');
 const $EXPORT = $('#export');
 
 $tableID.on('click', '.table-remove', function () {
-    debugger;
     $(this).parents('tr').detach();
 });
 

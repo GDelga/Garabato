@@ -87,7 +87,7 @@ const MessageLabels = {
  * Un mensaje
  */
 class Message {
-    constructor(msgid, date, from, to, labels, title, body, parent) {
+    constructor(msgid, date, from, to, labels, title,   , parent) {
         this.msgid = msgid;
         this.date = date || new Date(),
             this.from = from;
@@ -498,24 +498,6 @@ function initialize() {
     return go(serverApiUrl + "initialize", 'GET')
         .then(d => console.log(d));
 }
-
-function getResponsableById(id){
-    for(let responsable in globalState.users){
-        if(responsable.uid == id){
-            return responsable;
-        }
-    }
-}
-
-function getStudentById(id){
-    for(let students in globalState.students){
-        if(students.uid == id){
-            return responsable;
-        }
-    }
-}
-
-
 
 // cosas que estarán disponibles desde fuera de este módulo
 export {
