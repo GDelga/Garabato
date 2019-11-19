@@ -38,6 +38,47 @@ function inputClass() {
   return $(html.join(''));
 }
 
+function createLogin() {
+  let html = [
+    '<div class="container">',
+    '<div class="row d-flex justify-content-center mt-5 pt-5">',
+    '<div class="col-0 col-lg-1"></div>',
+    '<div class="col-lg-6">',
+    '<h1 class="display-1 text-center w-100 big-title">Garabato</h1>',
+    '</div>',
+    '</div>',
+    '<div>',
+    '<div class="row d-flex justify-content-center mt-4">',
+    '<div class="col-lg-1">Usuario:</div>',
+    '<div class="col-lg-6">',
+    '<input type="text" name="" id="idUsuario" class="w-100">',
+    '</div>',
+    '</div>',
+    '<div class="row mt-3 d-flex justify-content-center">',
+    '<div class="col-lg-1">Contraseña:</div>',
+    '<div class="col-lg-6">',
+    '<input type="password" name="" id="contrasena" class="w-100">',
+    '</div>',
+    '</div>',
+    '<div class="row mt-3 d-flex justify-content-center">',
+    '<div class="col-0 col-lg-1"></div>',
+    '<div class="col-lg-6">',
+    '<button class="w-100 btn btn-success" onclick="window.login()">Iniciar Sesión</button>',
+    '</div>',
+    '</div>',
+    '<div class="row d-flex justify-content-center">',
+    '<div class="col-0 col-lg-1"></div>',
+    '<div class="col-lg-6">',
+    '<button class="text-left w-100 btn btn-link">Recuperar contraseña</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>'
+  ];
+  return (html.join(''));
+}
+
+
 function groupInputClass() {
   let html = [];
   for (let c in Gb.globalState.classes) {
@@ -52,7 +93,7 @@ function createResponsables() {
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h1 class="d-inline align-self-start text-white text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
@@ -70,7 +111,7 @@ function createResponsables() {
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
-    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
     '</div>',
     '</div>',
     '</nav>',
@@ -122,7 +163,7 @@ function createResponsables() {
     '<!-- botonera -->',
     '<div class="row mt-3 d-flex justify-content-end">',
     '<div>',
-    '<button id="boton-cancelar" class="btn">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
@@ -146,7 +187,7 @@ function createGroupResponsables() {
   let idGrupoTelefonos;
   let idGrupoAlumnos;
   for (let i in Gb.globalState.users) {
-    if (Gb.globalState.users[i].type != undefined && Gb.globalState.users[i].type == Gb.GUARDIAN) {
+    if (Gb.globalState.users[i].type != undefined && Gb.globalState.users[i].type == Gb.UserRoles.GUARDIAN) {
       idGrupoTelefonos = 't_' + Math.floor(Math.random() * 10000000);
       idGrupoAlumnos = 'a_' + Math.floor(Math.random() * 10000000);
       html.push(
@@ -219,7 +260,7 @@ function createGroupResponsables() {
         '<td>',
         '<div class="table-remove card text-white bg-danger">',
         '<div class="card-header">',
-        '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',
+        '<a id="boton-remove" class="tituloSeccion" role="button" onclick="(window.eliminarResponsable(', "'" + Gb.globalState.users[i].uid + "'", '))">',
         'Remove',
         '</a>',
         '</div>',
@@ -272,7 +313,7 @@ function createAdminMenu() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
@@ -347,7 +388,7 @@ function createProfessorMenu() {
   let html = [
     '<!--Barra de navegacion-->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
+    '<a class="navbar-brand d-flex" href="#">',
     '<h1 class="d-inline align-self-start">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1"> Profesor</h2>',
     '</a>',
@@ -369,7 +410,7 @@ function createProfessorMenu() {
     '</div>',
     '</nav>',
     '<!--Este grid-->',
-    '<div class=" lineas row d-flex justify-content-center align-items-center">',
+    '<div class=" lineas row d-flex justify-content-center align-items-center mt-5">',
     '<!--Alumnos-->',
     '<div class="col-lg-3 col-md-4 col-12">',
     '<a role="button" onclick="window.loadAlumnos()" class="enlacesMenu">',
@@ -389,11 +430,11 @@ function createProfessorMenu() {
     '<div class="d-none d-lg-block col-lg-1"></div>',
     '<div class="col-lg-3 col-md-4 col-12">',
     '<a role="button" onclick="window.loadMenuMensajes()" class="enlacesMenu">',
-    '<img src="imagenes/unread.png" alt="" class=" img-fluid"></img>',
+    '<img src="imagenes/unread.png" alt="" class=" img-fluid">',
     '<h1 class="text-center">Mensajes</h1>',
     '</a>',
     '</div>',
-    '</div>',
+    '</div>'
   ];
   return $(html.join(''));
 }
@@ -404,7 +445,7 @@ function createAlumnos() {
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
@@ -531,7 +572,8 @@ function createGroupAlumnos() {
       '<td>',
       '<div class="table-remove card text-white bg-danger">',
       '<div class="card-header">',
-      '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',
+      '<a id="boton-remove" class="tituloSeccion" role="button" onclick="(window.eliminarAlumno(', "'" + Gb.globalState.students[i].sid + "'", '))">',
+      /*'<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarAlumno()">',*/
       'Remove',
       '</a>',
       //'<button id="boton-remove" class="btn tituloSeccion d-flex justify-content-center align-items-center" onclick="window.eliminarAlumno()"> Remove',
@@ -566,7 +608,7 @@ function createAddAlumnos() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
@@ -669,7 +711,7 @@ function createAddResponsable() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
@@ -772,8 +814,8 @@ function createClases() {
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
     'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
@@ -790,7 +832,7 @@ function createClases() {
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
-    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
     '</div>',
     '</div>',
     '</nav>',
@@ -831,6 +873,21 @@ function createClases() {
     '</table>',
     '</div>',
     '</div>',
+    '<!--Botonerade cancelar y guardar-->',
+    '<div class="row mt-3 d-flex justify-content-end">',
+    '<div>',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '<button id="boton-exportar" class="btn" onclick="window.guardarDatos()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
     '</div>',
     '</div>',
   );
@@ -847,7 +904,7 @@ function cargarClases() {
       '<td>',
       '<div class="table-remove card text-white bg-danger">',
       '<div class="card-header">',
-      '<a class="tituloSeccion" role="button">',
+      '<a id="boton-remove" class="tituloSeccion" role="button" onclick="(window.eliminarClase(', "'" + Gb.globalState.classes[i].cid + "'", '))">',
       'Remove',
       '</a>',
       '</div>',
@@ -863,8 +920,8 @@ function createAddClases() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
     'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
@@ -905,7 +962,7 @@ function createAddClases() {
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
     '<div class="col-md-8 text-right">',
-    '<button id="boton-cancelar" class="btn">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadClases()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
@@ -929,8 +986,8 @@ function createProfesores() {
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
     'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
@@ -947,7 +1004,7 @@ function createProfesores() {
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
-    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
     '</div>',
     '</div>',
     '</nav>',
@@ -997,7 +1054,7 @@ function createProfesores() {
     '<!-- botonera -->',
     '<div class="row mt-3 d-flex justify-content-end">',
     '<div>',
-    '<button id="boton-cancelar" class="btn">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
@@ -1064,7 +1121,7 @@ function createGroupProfesores() {
         '<td>',
         '<div class="table-remove card text-white bg-danger">',
         '<div class="card-header">',
-        '<a id="boton-remove" class="tituloSeccion" role="button" onclick="window.eliminarProfesor();">',
+        '<a id="boton-remove" class="tituloSeccion" role="button" onclick="(window.eliminarProfesor(', "'" + Gb.globalState.users[i].uid + "'", '))">',
         'Remove',
         '</a>',
         '</div>',
@@ -1095,8 +1152,8 @@ function createAddProfesor() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
     'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
@@ -1228,8 +1285,8 @@ function createMenuMensajes() {
   let html = [];
   html = ['<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu()">',
-    '<h1 class="d-inline align-self-start">Garabato </h1>',
-    '<h3 class="d-inline align-self-end pl-1"> Admin</h2>',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
     '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
     'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
@@ -1246,7 +1303,7 @@ function createMenuMensajes() {
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
-    '<button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
     '</div>',
     '</div>',
     '</nav>',
@@ -1348,7 +1405,7 @@ function createZonaMensajesDerechaEscribirMensaje() {
     '</div>',
     '<!-- botón para enviar el formulario; justify-content-end no ha funcionado-->',
     '<div class="ml-auto pt-2 pb-2 pr-3">',
-    '<button type="submit" id="boton-enviar" class="btn btn-primary" onclick="window.responderMensaje()">Enviar</button>',
+    '<button type="submit" id="boton-enviar" class="btn btn-primary" onclick="window.escribirMensaje()">Enviar</button>',
     '</div>',
     '</div>'
   ];
@@ -1709,11 +1766,12 @@ window.login = function login() {
     let u = Gb.resolve(usuario);
     if (u !== undefined) {
       // la operación ha funcionado (u es el usuario que ha conseguido hacer login)
+
       console.log(u);
       usuarioIniciado = u;
       if (usuarioIniciado.type == Gb.UserRoles.ADMIN) {
         window.loadAdminMenu();
-      } else if (usuarioIniciado == Gb.UserRoles.TEACHER) {
+      } else if (usuarioIniciado.type == Gb.UserRoles.TEACHER) {
         window.loadProfessorMenu();
       }
     } else {
@@ -1837,12 +1895,18 @@ window.loadMenuMensajes = function loadMenuMensajes() {
 
 window.cerrarSesion = function loadProfesores() {
   try {
-    // vaciamos un contenedor
-    $("#contenido").empty();
+
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#contenido").append(createMenuMensajes());
+    Gb.logout(usuarioIniciado.uid).then(d => {
+      if (d !== undefined) {
+        // vaciamos un contenedor
+      } else {}
+
+    });
+    $("#contenido").empty();
+    $("#contenido").append(createLogin());
   } catch (e) {
-    console.log('Error cargando los mensajes', e);
+    console.log('Error cargando el login', e);
   }
 }
 
@@ -1950,6 +2014,7 @@ window.enviarMensajeAClase = function enviarMensajeAClase() {
 
 //Funcion para crear un nuevo alumno
 window.crearAlumno = function crearAlumno() {
+  
   let alumno = new Gb.Student(
     $("#inputIDAlumno").val(),
     $("#inputNombreAlumno").val(),
@@ -1978,6 +2043,7 @@ window.crearAlumno = function crearAlumno() {
 
 // Logica de crear un nuevo responsable
 window.crearResponsable = function crearResponsable() {
+  
   var telefonos = [];
 
   //Meter telefonos solo si el primer campo esta relleno.
@@ -2067,59 +2133,59 @@ window.crearProfesor = function crearProfesor() {
   }
 
   //If form correctly filled
-  if (clases.length > 0 &&
+  /*if (clases.length > 0 &&
     telefonos.length > 0 &&
     $("#inputID").val() != "" &&
     $("#inputNombre").val() != "" &&
     $("#inputApellidos").val() != "" &&
-    $("#inputContra").val() != "") {
-    let profesor = new Gb.User(
-      $("#inputID").val(),
-      Gb.UserRoles.TEACHER,
-      $("#inputNombre").val(),
-      $("#inputApellidos").val(),
-      telefonos,
-      clases,
-      [],
-      $("#inputContra").val()
-    );
+    $("#inputContra").val() != "") {*/
+  let profesor = new Gb.User(
+    $("#inputID").val(),
+    Gb.UserRoles.TEACHER,
+    $("#inputNombre").val(),
+    $("#inputApellidos").val(),
+    telefonos,
+    clases,
+    [],
+    $("#inputContra").val()
+  );
 
-    console.log("Datos profesores: " + profesor);
-    //Pushes user to globalstate.
-    Gb.addUser(profesor).then(d => {
-      if (d !== undefined) {
-        // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-        var string_clases = "",
-          string_tlfs = "";
+  console.log("Datos profesores: " + profesor);
+  //Pushes user to globalstate.
+  Gb.addUser(profesor).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      var string_clases = "",
+        string_tlfs = "";
 
-        for (let i = 0; i < telefonos.length; i++) {
-          string_tlfs += telefonos[i] + " ";
-        }
-
-        for (let i = 0; i < clases.length; i++) {
-          string_clases += clases[i] + " ";
-        }
-        let aviso = "Usuario añadido\n" +
-          "ID: " + profesor.uid + "\n" +
-          "Nombre completo: " + profesor.first_name + " " + profesor.last_name + "\n" +
-          "Teléfonos: " + string_tlfs + "\n" +
-          "Clases: " + string_clases + "\n";
-        alert(aviso);
-        window.loadProfesores();
-      } else {
-        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-        let aviso_error_add_prof = "Error al añadir usuario.\n" +
-          "Comprueba que los campos introducidos son correctos.\n"
-        alert(aviso_error_add_prof);
+      for (let i = 0; i < telefonos.length; i++) {
+        string_tlfs += telefonos[i] + " ";
       }
 
-    });
-    console.log(profesor);
-  } else {
+      for (let i = 0; i < clases.length; i++) {
+        string_clases += clases[i] + " ";
+      }
+      let aviso = "Usuario añadido\n" +
+        "ID: " + profesor.uid + "\n" +
+        "Nombre completo: " + profesor.first_name + " " + profesor.last_name + "\n" +
+        "Teléfonos: " + string_tlfs + "\n" +
+        "Clases: " + string_clases + "\n";
+      alert(aviso);
+      window.loadProfesores();
+    } else {
+      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+      let aviso_error_add_prof = "Error al añadir usuario.\n" +
+        "Comprueba que los campos introducidos son correctos.\n"
+      alert(aviso_error_add_prof);
+    }
+
+  });
+  console.log(profesor);
+  /*} else {
     //Notifies unsuccesful push.
     let aviso_error = "Error: El formulario no se ha rellenado correctamente.\n";
     alert(aviso_error);
-  }
+  }*/
 }
 
 window.responderMensaje = function responderMensaje() {
@@ -2402,6 +2468,7 @@ window.loadMessageNoLeidos = function loadMessageNoLeidos() {
 
 //Funcion para crear una nueva clase
 window.crearClase = function crearClase() {
+ 
   let clase = new Gb.EClass(
     $("#inputNombre").val()
   );
@@ -2423,70 +2490,38 @@ window.crearClase = function crearClase() {
 }
 
 // Funcion para eliminar un alumno de la tabla 
-window.eliminarAlumno = function eliminarAlumno() {
-  $("#boton-remove").parents('tr').detach();
-}
-
-// Funcion para eliminar un profesor de la tabla
-window.eliminarProfesor = function eliminarProfesor() {
-  //let id_profe = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
-  $("#boton-remove").parents('tr').detach();
-}
-
-// Funcion para eliminar una clase de la tabla
-window.eliminarClase = function eliminarClase() {
-
-  let id_clase = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
-  $("#boton-remove").parents('tr').detach();
-  console.log(id_clase);
-  Gb.rm(id_clase).then(d => {
+window.eliminarAlumno = function eliminarAlumno(id) {
+  Gb.rm(id).then(d => {
     if (d !== undefined) {
-      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      console.log("Profesor borrado con exito");
-    } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_eliminar_clase = "Error al eliminar clase.\n" +
-        "Algo ha ido mal.\n"
-      alert(aviso_error_eliminar_clase);
-    }
+      window.loadAlumnos();
+    } else {}
   });
 }
 
-// Funcion para eliminar un Mensaje de la tabla
-window.eliminarMensaje = function eliminarMensaje() {
-
-  let id_Mensaje = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
-  $("#boton-remove").parents('tr').detach();
-  console.log(id_mensaje);
-  Gb.rm(id_mensaje).then(d => {
+// Funcion para eliminar un profesor de la tabla
+window.eliminarProfesor = function eliminarProfesor(id) {
+  Gb.rm(id).then(d => {
     if (d !== undefined) {
-      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      console.log("Profesor borrado con exito");
-    } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_eliminar_mensaje = "Error al eliminar mensaje.\n" +
-        "Algo ha ido mal.\n"
-      alert(aviso_error_eliminar_mensaje);
-    }
+      window.loadProfesores();
+    } else {}
+  });
+}
+
+// Funcion para eliminar una clase de la tabla
+window.eliminarClase = function eliminarClase(id) {
+  Gb.rm(id).then(d => {
+    if (d !== undefined) {
+      window.loadClases();
+    } else {}
   });
 }
 
 // Funcion para eliminar un Responsable de la tabla
-window.eliminarResponsable = function eliminarResponsable() {
-
-  let id_Responsable = $("#boton-remove").parents('td').parents('tr')[0].innerText.replace(/ +/g, " ").replace(/	+/g, " ").split(" ")[0];
-  $("#boton-remove").parents('tr').detach();
-  console.log(id_responsable);
-  Gb.rm(id_responsable).then(d => {
+window.eliminarResponsable = function eliminarResponsable(id) {
+  Gb.rm(id).then(d => {
     if (d !== undefined) {
-      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      console.log("Profesor borrado con exito");
-    } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_eliminar_responsable = "Error al eliminar responsable.\n" +
-        "Algo ha ido mal.\n"
-      alert(aviso_error_eliminar_responsable);
-    }
+      window.loadProfesores();
+    } else {}
   });
 }
 
@@ -2539,10 +2574,12 @@ window.guardarDatos = function guardarDatos(tipo) {
     }
     let encontrado = false;
     for (let i in list_tipo) {
+     
       encontrado = false;
       for (let j in data) {
         if (data[j].id == list_tipo[i].uid) {
           encontrado = true;
+          // Borramos un profesor
           if (tipo == Gb.UserRoles.TEACHER) {
             Gb.set(
               new Gb.User(
@@ -2621,8 +2658,8 @@ window.loadEscribirMensaje = function loadEscribirMensaje() {
 
 window.escribirMensaje = function escribirMensaje() {
   let message = new Gb.Message(
-    undefined,
-    undefined,
+    U.randomString(),
+    new Date(),
     usuarioIniciado.uid,
     [$("#inputTo").val()],
     [Gb.MessageLabels.SENT],

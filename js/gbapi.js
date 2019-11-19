@@ -100,7 +100,7 @@ class Message {
         labels.forEach(label => Util.checkEnum(label, MessageLabels));
         this.title = title;
         this.body = body;
-        this.order = Util.transformDate(this.date);
+        //this.order = Util.transformDate(this.date);
     }
 }
 
@@ -404,11 +404,18 @@ function updateState(data) {
         return; // excepto si la petición no devuelve nada
     }
     cache = {};
-    globalState = new GlobalState(data.classes, data.students, data.users, data.messages);
+    let mensajes = [];
+    for(let i in data.messages) {
+        if (Object.keys(data.messages[i]).length != 0) {
+            mensajes.push(data.messages[i]);
+        } 
+    }
+    globalState = new GlobalState(data.classes, data.students, data.users, mensajes);
+    
     globalState.classes.forEach(o => getId(o.cid, o));
     globalState.students.forEach(o => getId(o.sid, o));
     globalState.users.forEach(o => getId(o.uid, o));
-    globalState.messages.forEach(o => getId(o.msgid, o));
+    //globalState.messages.forEach(o => getId(o.msgid, o));
     console.log("Updated state", globalState);
     return data;
 }
@@ -448,7 +455,7 @@ function login(uid, pass) {
 
 // hace logout, destruyendo el token usado
 function logout(id) {
-    return go(serverApiUrl + serverToken + "/logout", 'POST');
+    return go(serverApiUrl + serverToken + "/logout", 'POST', id);
 }
 
 // añade una nueva clase; alumnos y profes, si se especifican, deben existir
