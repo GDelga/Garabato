@@ -1480,7 +1480,7 @@ function createZonaMensajesDerechaClase() {
     '<div class="row pt-2 align-items-center">',
     '<div class=" col-12 col-xl-2">Clase:</div>',
     '<div class="col-12 col-xl-10">',
-    '<select id="inputClaseMensaje" class="form-control">',
+    '<select id="inputClase" class="form-control">',
     '</select>',
     '</div>',
     '</div>',
@@ -1498,7 +1498,7 @@ function createZonaMensajesDerechaClase() {
     '<textarea class="campoTexto" id="summernote" name="editordata"></textarea>',
     '<script>',
     '$("#summernote").summernote({',
-    'placeholder: "Hola"',
+    'placeholder: "Hola",',
     'tabsize: 2,',
     'maxHeight: null,',
     'minHeight: "calc(100vh - 25rem)"',
@@ -1524,13 +1524,13 @@ function createZonaMensajesIzquierda(tipo) {
   let html = ['<nav class="navbar navbar-expand-xl navbar-light bg-light sticky-top">'];
 
   if (tipo == Gb.MessageLabels.ARCH) {
-    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageArchivados();">Archivados</a>');
+    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageArchivados()">Archivados</a>');
   } else if (tipo == Gb.MessageLabels.FAV) {
-    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageFavoritos();">Favoritos</a>');
+    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageFavoritos()">Favoritos</a>');
   } else if (tipo == Gb.MessageLabels.RECVD) {
-    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageRecibidos();">Bandeja de entrada</a>');
+    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageRecibidos()">Bandeja de entrada</a>');
   } else if (tipo == Gb.MessageLabels.SENT) {
-    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageEnviados();">Enviados</a>');
+    html.push('<a class="navbar-brand rem1 pr-1" onclick="window.loadMessageEnviados()">Enviados</a>');
   }
   html.push(
     '<button class="navbar-toggler" type="button" data-toggle="collapse"',
@@ -1546,7 +1546,7 @@ function createZonaMensajesIzquierda(tipo) {
     '</a>',
     '</li>',
     '<li class="nav-item">',
-    '<a class="nav-link" href="mensajeClase.html">',
+    '<a class="nav-link" onclick="loadEscribirMensajeClase()">',
     '<img class="iconos" src="imagenes/aula.png" alt="">',
     '</a>',
     '</li>',
@@ -1638,7 +1638,7 @@ function createGroupMessages(mensaje) {
       '<li class="list-group-item bg-light">',
       '<div class="row">',
       '<div class="col-6">',
-      '<a onclick="window.loadLeerMensaje(', mensaje[m].msgid, ')" class="tituloMensaje">',
+      '<a onclick="window.loadLeerMensaje(', "'" + mensaje[m].msgid + "'", ')" class="tituloMensaje">',
       mensaje[m].title,
       '</a>',
       '</div>',
@@ -1656,7 +1656,7 @@ function createGroupMessages(mensaje) {
     }
     html.push(
       '</a>',
-      '<a class="mr-2" href="responder.html">',
+      '<a class="mr-2" onclick="window.loadResponderMensaje(', "'" + mensaje[m].msgid + "'", ')">',
       '<img class="iconos" src="imagenes/reply.png" alt="">',
       '</a>',
       '<a class="mr-2" href="#">')
@@ -2014,7 +2014,7 @@ window.enviarMensajeAClase = function enviarMensajeAClase() {
 
 //Funcion para crear un nuevo alumno
 window.crearAlumno = function crearAlumno() {
-  
+
   let alumno = new Gb.Student(
     $("#inputIDAlumno").val(),
     $("#inputNombreAlumno").val(),
@@ -2043,7 +2043,7 @@ window.crearAlumno = function crearAlumno() {
 
 // Logica de crear un nuevo responsable
 window.crearResponsable = function crearResponsable() {
-  
+
   var telefonos = [];
 
   //Meter telefonos solo si el primer campo esta relleno.
@@ -2468,7 +2468,7 @@ window.loadMessageNoLeidos = function loadMessageNoLeidos() {
 
 //Funcion para crear una nueva clase
 window.crearClase = function crearClase() {
- 
+
   let clase = new Gb.EClass(
     $("#inputNombre").val()
   );
@@ -2574,7 +2574,7 @@ window.guardarDatos = function guardarDatos(tipo) {
     }
     let encontrado = false;
     for (let i in list_tipo) {
-     
+
       encontrado = false;
       for (let j in data) {
         if (data[j].id == list_tipo[i].uid) {
@@ -2644,12 +2644,36 @@ window.loadLeerMensaje = function loadLeerMensaje(id) {
   }
 }
 
+window.loadResponderMensaje = function loadResponderMensaje(id) {
+  try {
+    // vaciamos un contenedor
+    $("#derecha").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#derecha").append(createZonaMensajesDerechaResponder(Gb.resolve(id)));
+    window.loadInputClases();
+  } catch (e) {
+    console.log('Error cargando añadir alumnos', e);
+  }
+}
+
 window.loadEscribirMensaje = function loadEscribirMensaje() {
   try {
     // vaciamos un contenedor
     $("#derecha").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#derecha").append(createZonaMensajesDerechaEscribirMensaje());
+    window.loadInputClases();
+  } catch (e) {
+    console.log('Error cargando añadir alumnos', e);
+  }
+}
+
+window.loadEscribirMensajeClase = function loadEscribirMensajeClase() {
+  try {
+    // vaciamos un contenedor
+    $("#derecha").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#derecha").append(createZonaMensajesDerechaClase());
     window.loadInputClases();
   } catch (e) {
     console.log('Error cargando añadir alumnos', e);
