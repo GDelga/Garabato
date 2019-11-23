@@ -298,13 +298,14 @@ function createDesplegableAlumnos(alumnos) {
     html.push(
       '<li class="list-group-item bg-dark">',
       '<div class="row">');
-    html.push(Gb.resolve(alumnos[i]).first_name);
+    html.push(Gb.resolve(alumnos[i]).firstName);
     html.push(
       '</div>',
       '</li>'
     );
-    return (html.join(''));
+    
   }
+  return (html.join(''));
 }
 
 
@@ -595,6 +596,8 @@ function createDesplegableResponsables(responsables) {
     html.push(
       '<li class="list-group-item bg-dark">',
       '<div class="row">');
+      console.log("AQUI");
+      console.log(Gb.resolve(responsables[i]).first_name);
     html.push(Gb.resolve(responsables[i]).first_name);
     html.push(
       '</div>',
@@ -2017,14 +2020,15 @@ window.crearAlumno = function crearAlumno() {
 
   let responsables = [];
   let res1 = $("#res1").val(), res2 = $("#res2").val(), res3 = $("#res3").val();
+  
 
-  if (res1 != "" && Gb.buscarParticipante(res1) != null) {
+  if (res1 != "" && Gb.resolve(res1) != undefined) {
     responsables.push(res1);
   }
-  if (res2 != "" && Gb.buscarParticipante(res1) != null) {
+  if (res2 != "" && Gb.resolve(res2) != undefined) {
     responsables.push(res2);
   }
-  if (res3 != "" && Gb.buscarParticipante(res1) != null) {
+  if (res3 != "" && Gb.resolve(res3) != undefined) {
     responsables.push(res3);
   }
   // El array de responsables tiene que ser mayor de 1, pork sino implica que algo se ha hecho mal
@@ -2036,10 +2040,10 @@ window.crearAlumno = function crearAlumno() {
       $("#inputClase").val(),
       responsables
     );
-    console.log("RESPONSABLES: " + alumno.guardians);
+    //console.log("RESPONSABLES: " + alumno.guardians);
+    console.log(alumno);
 
-
-    Gb.addStudent(alumno).then(d => {
+   Gb.addStudent(alumno).then(d => {
       if (d !== undefined) {
         let respo = "";
         for (let i = 0; i < alumno.guardians.length; i++) {
@@ -2053,23 +2057,40 @@ window.crearAlumno = function crearAlumno() {
           "Id clase: " + alumno.cid + "\n" +
           "Responsables: " + respo;
         alert(aviso);
-        window.loadAlumnos();
+        Gb.set(alumno).then(d1 => {
+          if (d1 !== undefined) {
+            for(let res of responsables){
+              let responsable = Gb.resolve(res);
+              responsable.students.push(alumno.sid);
+              Gb.set(responsable);
+            }
+            console.log(Gb.globalState);
+            window.loadAlumnos();
+          }
+        });
       } else {
         // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
         let aviso_error_add_alumno = "Error al añadir alumno.\n" +
           "Comprueba que los campos introducidos son correctos.\n"
         alert(aviso_error_add_alumno);
       }
-
     });
     // Para confirmar que se ha guardado bien
-    Gb.set(alumno);
+    //Gb.set(alumno);
+    //console.log(alumno.sid);
+    
+    //debugger;
+    //console.log("AQUIAQUI");
+    //console.log("AQUIAQUI");
     // Añado el nuevo alumno a los responsables que corresponda
-    for(let res in responsables){
-      responsable = Gb.buscarParticipante(res);
-      responsable.students.push(alumno.uid);
+    /*for(let res of responsables){
+      let responsable = Gb.resolve(res);
+      console.log(responsable);
+      console.log(alumno.sid);
+      responsable.students.push(alumno.sid);
       Gb.set(responsable);
-    }
+      console.log(Gb.resolve(res));
+    }*/
   }
   else {
     alert("No se relleno un campo obligatorio y no se guardo el alumno o el id de responsable no existe");
@@ -2558,7 +2579,7 @@ window.eliminarClase = function eliminarClase(id) {
 window.eliminarResponsable = function eliminarResponsable(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
-      window.loadProfesores();
+      window.loadResponsables();
     } else { }
   });
 }
@@ -2749,6 +2770,19 @@ window.escribirMensaje = function escribirMensaje() {
 
 // Buscador de entidades mediante su ID, para poder depurar mejor
 window.buscarEntidad = function buscarEntidad(id) {
-  return Gb.buscarParticipante(id);  
+  return Gb.resolve(id);  
+}
+
+// PELIGRO, cuidado que toca cosas estrañas
+window.borrarForzoso = function borrar(id){
+  console.error(" PELIGRO, cuidado que toca cosas estrañas");
+  debugger;
+  debugger;
+  console.log(id);
+  console.log(Gb.resolve(id));
+  let pro = Gb.resolve(id);
+  pro.guardians = [];
+  Gb.set(pro);
+  console.log(Gb.resolve(id));
 }
 
