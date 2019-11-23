@@ -506,6 +506,31 @@ function initialize() {
         .then(d => console.log(d));
 }
 
+// Cosecha propia para buscar a un participante
+function buscarParticipante(id) {
+    // Buscador de entidades mediante su ID, para poder depurar mejor
+    for (let i = 0; i < Gb.globalState.classes.length; i++) {
+      if (Gb.globalState.classes[i].cid == id) {
+        console.log("Es una clase");
+        return Gb.globalState.classes[i];
+      }
+    }
+  
+    for (let i = 0; i < Gb.globalState.students.length; i++) {
+      if (Gb.globalState.students[i].sid == id) {
+        console.log("Es un alumno");
+        return Gb.globalState.students[i];
+      }
+    }
+    for (let i = 0; i < Gb.globalState.users.length; i++) {
+      if (Gb.globalState.users[i].uid == id) {
+        console.log("Es un usuario");
+        return Gb.globalState.users[i];
+      }
+    }
+    return null;
+}
+
 // cosas que estarán disponibles desde fuera de este módulo
 export {
 
@@ -533,6 +558,7 @@ export {
     set, // (eclass || student || user || message)
     send, // (message)
     list, // ()
+    buscarParticipante, // Nuestra propia
 
     initialize, // ()          --> se puede llamar sólo 1 vez, tras limpiar el servidor
 

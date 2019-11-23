@@ -1900,7 +1900,7 @@ window.cerrarSesion = function loadProfesores() {
     Gb.logout(usuarioIniciado.uid).then(d => {
       if (d !== undefined) {
         // vaciamos un contenedor
-      } else {}
+      } else { }
 
     });
     $("#contenido").empty();
@@ -2015,30 +2015,68 @@ window.enviarMensajeAClase = function enviarMensajeAClase() {
 //Funcion para crear un nuevo alumno
 window.crearAlumno = function crearAlumno() {
 
-  let alumno = new Gb.Student(
-    $("#inputIDAlumno").val(),
-    $("#inputNombreAlumno").val(),
-    $("#inputApellidosAlumno").val(),
-    $("#inputClase").val()
-  );
-  window.Gb.addStudent(alumno).then(d => {
-    if (d !== undefined) {
-      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      let aviso = "Alumno añadido\n" +
-        "Id: " + alumno.sid + "\n" +
-        "Nombre: " + alumno.first_name + "\n" +
-        "Apellido: " + alumno.last_name + "\n" +
-        "Id clase: " + alumno.cid;
-      alert(aviso);
-      window.loadAlumnos();
-    } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_add_alumno = "Error al añadir alumno.\n" +
-        "Comprueba que los campos introducidos son correctos.\n"
-      alert(aviso_error_add_alumno);
-    }
+  let responsables = [];
+  let res1 = $("#res1").val(), res2 = $("#res2").val(), res3 = $("#res3").val();
 
-  });
+  if (res1 != "" && Gb.buscarParticipante(res1) != null) {
+    responsables.push(res1);
+  }
+  if (res2 != "" && Gb.buscarParticipante(res1) != null) {
+    responsables.push(res2);
+  }
+  if (res3 != "" && Gb.buscarParticipante(res1) != null) {
+    responsables.push(res3);
+  }
+  // El array de responsables tiene que ser mayor de 1, pork sino implica que algo se ha hecho mal
+  if (responsables.length > 0) {
+    let alumno = new Gb.Student(
+      $("#inputIDAlumno").val(),
+      $("#inputNombreAlumno").val(),
+      $("#inputApellidosAlumno").val(),
+      $("#inputClase").val(),
+      responsables
+    );
+    console.log("RESPONSABLES: " + alumno.guardians);
+
+
+    Gb.addStudent(alumno).then(d => {
+      if (d !== undefined) {
+        let respo = "";
+        for (let i = 0; i < alumno.guardians.length; i++) {
+          respo += "Res" + i + ": " + alumno.guardians[i] + " , ";
+        }
+        // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+        let aviso = "Alumno añadido\n" +
+          "Id: " + alumno.sid + "\n" +
+          "Nombre: " + alumno.first_name + "\n" +
+          "Apellido: " + alumno.last_name + "\n" +
+          "Id clase: " + alumno.cid + "\n" +
+          "Responsables: " + respo;
+        alert(aviso);
+        window.loadAlumnos();
+      } else {
+        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+        let aviso_error_add_alumno = "Error al añadir alumno.\n" +
+          "Comprueba que los campos introducidos son correctos.\n"
+        alert(aviso_error_add_alumno);
+      }
+
+    });
+    // Para confirmar que se ha guardado bien
+    Gb.set(alumno);
+    // Añado el nuevo alumno a los responsables que corresponda
+    for(let res in responsables){
+      responsable = Gb.buscarParticipante(res);
+      responsable.students.push(alumno.uid);
+      Gb.set(responsable);
+    }
+  }
+  else {
+    alert("No se relleno un campo obligatorio y no se guardo el alumno o el id de responsable no existe");
+  }
+
+
+
 }
 
 // Logica de crear un nuevo responsable
@@ -2494,7 +2532,7 @@ window.eliminarAlumno = function eliminarAlumno(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadAlumnos();
-    } else {}
+    } else { }
   });
 }
 
@@ -2503,7 +2541,7 @@ window.eliminarProfesor = function eliminarProfesor(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadProfesores();
-    } else {}
+    } else { }
   });
 }
 
@@ -2512,7 +2550,7 @@ window.eliminarClase = function eliminarClase(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadClases();
-    } else {}
+    } else { }
   });
 }
 
@@ -2521,7 +2559,7 @@ window.eliminarResponsable = function eliminarResponsable(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadProfesores();
-    } else {}
+    } else { }
   });
 }
 
@@ -2708,3 +2746,9 @@ window.escribirMensaje = function escribirMensaje() {
     } //Enviar el mensaje
   });
 }
+
+// Buscador de entidades mediante su ID, para poder depurar mejor
+window.buscarEntidad = function buscarEntidad(id) {
+  return Gb.buscarParticipante(id);  
+}
+
