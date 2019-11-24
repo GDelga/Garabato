@@ -27,6 +27,10 @@ const U = Gb.Util;
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+
+// Variables globales
+let listaEstudiantes = [];
+
 function inputClass() {
   let html = [];
   console.log("Todas las clases");
@@ -303,7 +307,7 @@ function createDesplegableAlumnos(alumnos) {
       '</div>',
       '</li>'
     );
-    
+
   }
   return (html.join(''));
 }
@@ -518,7 +522,9 @@ function createAlumnos() {
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
-    '<button id="boton-exportar" class="btn" onclick="window.guardarDatos("estudiante")">',
+    // AQUIIIII
+    //'<button id="boton-exportar" class="btn" onclick="window.guardarDatos("estudiante")">',
+    '<button id="boton-exportar" class="btn" onclick="window.guardarAlumnos()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
     '</div>',
@@ -554,6 +560,7 @@ function createGroupAlumnos() {
       '</div>',
       '<div class="collapse" id="', idGrupo, '">',
       '<ul class="list-group list-group-flush">');
+      // Lista de responsables
     html.push(createDesplegableResponsables(Gb.globalState.students[i].guardians));
     html.push(
       '</ul>',
@@ -592,19 +599,22 @@ function createGroupAlumnos() {
 // Funcion que hace el desplegable de los responsables
 function createDesplegableResponsables(responsables) {
   let html = [];
+  console.log(responsables);
   for (let i in responsables) {
     html.push(
       '<li class="list-group-item bg-dark">',
-      '<div class="row">');
-      console.log("AQUI");
-      console.log(Gb.resolve(responsables[i]).first_name);
+      '<div class="row" id="',
+      responsables[i],
+      '">');
+   /* console.log("AQUI");
+    console.log(Gb.resolve(responsables[i]).first_name);*/
     html.push(Gb.resolve(responsables[i]).first_name);
     html.push(
       '</div>',
       '</li>'
     );
-    return (html.join(''));
   }
+  return (html.join(''));
 }
 
 function createAddAlumnos() {
@@ -2020,82 +2030,91 @@ window.crearAlumno = function crearAlumno() {
 
   let responsables = [];
   let res1 = $("#res1").val(), res2 = $("#res2").val(), res3 = $("#res3").val();
-  
-
-  if (res1 != "" && Gb.resolve(res1) != undefined) {
-    responsables.push(res1);
-  }
-  if (res2 != "" && Gb.resolve(res2) != undefined) {
-    responsables.push(res2);
-  }
-  if (res3 != "" && Gb.resolve(res3) != undefined) {
-    responsables.push(res3);
-  }
-  // El array de responsables tiene que ser mayor de 1, pork sino implica que algo se ha hecho mal
-  if (responsables.length > 0) {
-    let alumno = new Gb.Student(
-      $("#inputIDAlumno").val(),
-      $("#inputNombreAlumno").val(),
-      $("#inputApellidosAlumno").val(),
-      $("#inputClase").val(),
-      responsables
-    );
-    //console.log("RESPONSABLES: " + alumno.guardians);
-    console.log(alumno);
-
-   Gb.addStudent(alumno).then(d => {
-      if (d !== undefined) {
-        let respo = "";
-        for (let i = 0; i < alumno.guardians.length; i++) {
-          respo += "Res" + i + ": " + alumno.guardians[i] + " , ";
-        }
-        // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-        let aviso = "Alumno añadido\n" +
-          "Id: " + alumno.sid + "\n" +
-          "Nombre: " + alumno.first_name + "\n" +
-          "Apellido: " + alumno.last_name + "\n" +
-          "Id clase: " + alumno.cid + "\n" +
-          "Responsables: " + respo;
-        alert(aviso);
-        Gb.set(alumno).then(d1 => {
-          if (d1 !== undefined) {
-            for(let res of responsables){
-              let responsable = Gb.resolve(res);
-              responsable.students.push(alumno.sid);
-              Gb.set(responsable);
-            }
-            console.log(Gb.globalState);
-            window.loadAlumnos();
-          }
-        });
-      } else {
-        // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-        let aviso_error_add_alumno = "Error al añadir alumno.\n" +
-          "Comprueba que los campos introducidos son correctos.\n"
-        alert(aviso_error_add_alumno);
-      }
-    });
-    // Para confirmar que se ha guardado bien
-    //Gb.set(alumno);
-    //console.log(alumno.sid);
-    
-    //debugger;
-    //console.log("AQUIAQUI");
-    //console.log("AQUIAQUI");
-    // Añado el nuevo alumno a los responsables que corresponda
-    /*for(let res of responsables){
-      let responsable = Gb.resolve(res);
-      console.log(responsable);
-      console.log(alumno.sid);
-      responsable.students.push(alumno.sid);
-      Gb.set(responsable);
-      console.log(Gb.resolve(res));
-    }*/
+  let alertas = "";
+  if (Gb.resolve($("#inputIDAlumno").val()) != undefined) {
+    alert("ID duplicado");
   }
   else {
-    alert("No se relleno un campo obligatorio y no se guardo el alumno o el id de responsable no existe");
-  }
+    if (res1 != "") {
+      if (Gb.resolve(res1) != undefined) {
+        responsables.push(res1);
+      }
+      else {
+        alertas += "No existe el responsable con ID: " + res1 + ", no se tendra en cuenta" + "\n";
+      }
+    }
+    if (res2 != "") {
+      if (Gb.resolve(res2) != undefined) {
+        responsables.push(res2);
+      }
+      else {
+        alertas += "No existe el responsable con ID: " + res2 + ", no se tendra en cuenta" + "\n";
+      }
+    }
+    if (res3 != "") {
+      if (Gb.resolve(res3) != undefined) {
+        responsables.push(res3);
+      }
+      else {
+        alertas += "No existe el responsable con ID: " + res3 + ", no se tendra en cuenta" + "\n";
+      }
+    }
+    // El array de responsables tiene que ser mayor de 1, pork sino implica que algo se ha hecho mal
+    if (responsables.length > 0) {
+      let alumno = new Gb.Student(
+        $("#inputIDAlumno").val(),
+        $("#inputNombreAlumno").val(),
+        $("#inputApellidosAlumno").val(),
+        $("#inputClase").val(),
+        responsables
+      );
+      console.log(alumno);
 
+      Gb.addStudent(alumno).then(d => {
+        if (d !== undefined) {
+          let respo = "";
+          for (let i = 0; i < alumno.guardians.length; i++) {
+            respo += "Responsable " + (i + 1) + ": " + alumno.guardians[i] + "\n";
+          }
+          // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+          let aviso = "Alumno añadido\n" +
+            "Id: " + alumno.sid + "\n" +
+            "Nombre: " + alumno.first_name + "\n" +
+            "Apellido: " + alumno.last_name + "\n" +
+            "Id clase: " + alumno.cid + "\n" +
+            "Responsables: " + "\n" + respo +
+            "AVISOS: " + "\n";
+          if (alertas == "") {
+            alertas = "Ninguno";
+          }
+          aviso += alertas;
+          alert(aviso);
+          // Para confirmar que se ha guardado bien
+          Gb.set(alumno).then(d1 => {
+            if (d1 !== undefined) {
+              // Guardo el nuevo alumno en los responsables correspondientes
+              for (let res of responsables) {
+                let responsable = Gb.resolve(res);
+                responsable.students.push(alumno.sid);
+                Gb.set(responsable);
+              }
+              console.log(Gb.globalState);
+              window.loadAlumnos();
+            }
+          });
+        }
+        else {
+          // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+          let aviso_error_add_alumno = "Error al añadir alumno.\n" +
+            "Comprueba que los campos introducidos son correctos.\n"
+          alert(aviso_error_add_alumno);
+        }
+      });
+    }
+    else {
+      alert("No se relleno un campo obligatorio y no se guardo el alumno o el id de responsable no existe");
+    }
+  }
 
 
 }
@@ -2550,10 +2569,36 @@ window.crearClase = function crearClase() {
 
 // Funcion para eliminar un alumno de la tabla 
 window.eliminarAlumno = function eliminarAlumno(id) {
-  Gb.rm(id).then(d => {
+  /*console.log("Hola");
+  let estudiantes = Gb.globalState.students;
+  for (let i = 0; i < estudiantes.length; i++) {
+    if (estudiantes[i].sid == id) {
+      Gb.globalState.students.splice(i, 1);
+    }
+  }
+  window.loadAlumnos();*/
+  let estudiante = Gb.resolve(id);
+  for(let i = 0; i < estudiante.guardians.length; i++){
+    let responsable = Gb.resolve(estudiante.guardians[i]);
+    for(let j = 0; j < responsable.students.length; j++){
+      if(responsable.students[j] == id){
+        // Borro el alumno del responsable
+        responsable.students.splice(j, 1);
+        // Actualizo el responsable
+        Gb.set(responsable);
+        break;
+      }
+    }
+  }
+  estudiante.guardians = [];
+  Gb.set(estudiante).then(d => {
     if (d !== undefined) {
-      window.loadAlumnos();
-    } else { }
+      Gb.rm(id).then(d => {
+        if (d !== undefined) {
+          window.loadAlumnos();
+        }
+      });
+    }
   });
 }
 
@@ -2600,6 +2645,48 @@ window.loadEliminarMensaje = function eliminarMensaje() {
 
 // DATOS PARA CREAR UN PROFESOR
 //DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)
+window.guardarAlumnos = function guardarAlumnos() {
+  let userDetails = [];
+  $("table tbody tr").each(function () {
+    var detail = [];
+    $(this).find("td").each(function () {
+      detail.push($(this).html());
+    });
+    // Tratamiento de la cuarta columna
+    /*let tratar = detail[4];
+    tratar = tratar.split("<div class=\"row\" id=\"");
+    let verResponsables = [];
+    for(let i = 1; i < tratar.length; i++){
+      let tratar2 = tratar[i];
+      tratar2 = tratar2.split("\"");
+      verResponsables.push(tratar2[0]);
+    }
+    detail[4] = verResponsables;*/
+    detail.splice(4,2);
+    userDetails.push(detail);
+  });
+  console.log(userDetails);
+  for(let estu of userDetails){
+    let student = Gb.resolve(estu[0]);
+    student.firstName = estu[1];
+    student.lastName = estu[2];
+    // Miro que exista la nueva clase que se ha creado
+    if(Gb.resolve(estu[3]) != undefined){
+      student.cid = estu[3];
+    }
+    student.guardians = ["Manolo1"];
+    // Guardianes ya estan guardados
+    console.log(student);
+    debugger;
+    Gb.set(student).then(d => {
+      if (d !== undefined) {
+        window.loadAdminMenu();
+      }
+    });
+  }
+  
+}
+
 
 window.guardarDatos = function guardarDatos(tipo) {
   const $tableID = $('#miTabla');
@@ -2770,11 +2857,11 @@ window.escribirMensaje = function escribirMensaje() {
 
 // Buscador de entidades mediante su ID, para poder depurar mejor
 window.buscarEntidad = function buscarEntidad(id) {
-  return Gb.resolve(id);  
+  return Gb.resolve(id);
 }
 
 // PELIGRO, cuidado que toca cosas estrañas
-window.borrarForzoso = function borrar(id){
+window.borrarForzoso = function borrar(id) {
   console.error(" PELIGRO, cuidado que toca cosas estrañas");
   debugger;
   debugger;
@@ -2784,5 +2871,12 @@ window.borrarForzoso = function borrar(id){
   pro.guardians = [];
   Gb.set(pro);
   console.log(Gb.resolve(id));
+}
+window.ejemplo = function ejem() {
+  let array = {sid: "Hola1", firstName: "H", lastName: "Hola1", guardians: ["Manolo1"], cid: "qwe12qwe"};
+
+  array.firstName = "PEPE";
+  
+  console.log(array);
 }
 
