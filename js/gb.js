@@ -517,7 +517,8 @@ function createAlumnos() {
     '<!-- botonera -->',
     '<div class="row mt-3 d-flex justify-content-end">',
     '<div>',
-    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
+    //'<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
+    '<button id="boton-cancelar" class="btn" onclick="window.cancelarAlumno()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
@@ -560,7 +561,7 @@ function createGroupAlumnos() {
       '</div>',
       '<div class="collapse" id="', idGrupo, '">',
       '<ul class="list-group list-group-flush">');
-      // Lista de responsables
+    // Lista de responsables
     html.push(createDesplegableResponsables(Gb.globalState.students[i].guardians));
     html.push(
       '</ul>',
@@ -606,8 +607,8 @@ function createDesplegableResponsables(responsables) {
       '<div class="row" id="',
       responsables[i],
       '">');
-   /* console.log("AQUI");
-    console.log(Gb.resolve(responsables[i]).first_name);*/
+    /* console.log("AQUI");
+     console.log(Gb.resolve(responsables[i]).first_name);*/
     html.push(Gb.resolve(responsables[i]).first_name);
     html.push(
       '</div>',
@@ -2569,15 +2570,16 @@ window.crearClase = function crearClase() {
 
 // Funcion para eliminar un alumno de la tabla 
 window.eliminarAlumno = function eliminarAlumno(id) {
-  /*console.log("Hola");
+  console.log("Hola");
   let estudiantes = Gb.globalState.students;
   for (let i = 0; i < estudiantes.length; i++) {
     if (estudiantes[i].sid == id) {
+      listaEstudiantes.push(estudiantes[i]);
       Gb.globalState.students.splice(i, 1);
     }
   }
-  window.loadAlumnos();*/
-  let estudiante = Gb.resolve(id);
+  window.loadAlumnos();
+  /*let estudiante = Gb.resolve(id);
   for(let i = 0; i < estudiante.guardians.length; i++){
     let responsable = Gb.resolve(estudiante.guardians[i]);
     for(let j = 0; j < responsable.students.length; j++){
@@ -2599,7 +2601,7 @@ window.eliminarAlumno = function eliminarAlumno(id) {
         }
       });
     }
-  });
+  });*/
 }
 
 // Funcion para eliminar un profesor de la tabla
@@ -2645,7 +2647,51 @@ window.loadEliminarMensaje = function eliminarMensaje() {
 
 // DATOS PARA CREAR UN PROFESOR
 //DNI, NOMBRE APELLIDOS, ID CLASE(VARIAS)
+
+// Boton cancelar de la tabla de alumnos
+window.cancelarAlumno = function cancelarAlumno() {
+  for (let i = 0; i < listaEstudiantes.length; i++) {
+    Gb.globalState.students.push(listaEstudiantes[i]);
+  }
+  listaEstudiantes = [];
+  //window.loadAlumnos();
+  window.loadAdminMenu();
+}
+
 window.guardarAlumnos = function guardarAlumnos() {
+  if(listaEstudiantes.length == 0){
+    window.loadAdminMenu();
+  }
+  // Elimina definitivamente los alumnos que fueron borrados
+  for (let z = 0; z < listaEstudiantes.length; z++) {
+    let id = listaEstudiantes[z].sid;
+    let estudiante = Gb.resolve(id);
+    for (let i = 0; i < estudiante.guardians.length; i++) {
+      let responsable = Gb.resolve(estudiante.guardians[i]);
+      for (let j = 0; j < responsable.students.length; j++) {
+        if (responsable.students[j] == id) {
+          // Borro el alumno del responsable
+          responsable.students.splice(j, 1);
+          // Actualizo el responsable
+          Gb.set(responsable);
+          break;
+        }
+      }
+    }
+    estudiante.guardians = [];
+    Gb.set(estudiante).then(d => {
+      if (d !== undefined) {
+        Gb.rm(id).then(d => {
+          if (d !== undefined) {
+            //window.loadAlumnos();
+            window.loadAdminMenu();
+          }
+        });
+      }
+    });
+  }
+  listaEstudiantes = [];
+  // Codigo para leer la tabla
   let userDetails = [];
   $("table tbody tr").each(function () {
     var detail = [];
@@ -2653,38 +2699,42 @@ window.guardarAlumnos = function guardarAlumnos() {
       detail.push($(this).html());
     });
     // Tratamiento de la cuarta columna
-    /*let tratar = detail[4];
+    let tratar = detail[4];
     tratar = tratar.split("<div class=\"row\" id=\"");
     let verResponsables = [];
-    for(let i = 1; i < tratar.length; i++){
+    for (let i = 1; i < tratar.length; i++) {
       let tratar2 = tratar[i];
       tratar2 = tratar2.split("\"");
       verResponsables.push(tratar2[0]);
     }
-    detail[4] = verResponsables;*/
-    detail.splice(4,2);
+    detail[4] = verResponsables;
+    detail.splice(5, 1);
     userDetails.push(detail);
   });
-  console.log(userDetails);
-  for(let estu of userDetails){
-    let student = Gb.resolve(estu[0]);
-    student.firstName = estu[1];
-    student.lastName = estu[2];
-    // Miro que exista la nueva clase que se ha creado
-    if(Gb.resolve(estu[3]) != undefined){
-      student.cid = estu[3];
+  //console.log(userDetails);
+  for (let estu of userDetails) {
+    let student;
+    if (Gb.resolve(estu[3]) != undefined) {
+      student = new Gb.Student(estu[0], estu[1], estu[2], estu[3], estu[4]);
     }
-    student.guardians = ["Manolo1"];
-    // Guardianes ya estan guardados
-    console.log(student);
-    debugger;
+    else {
+      student = new Gb.Student(estu[0], estu[1], estu[2], Gb.resolve(estu[0]).cid, estu[4]);
+    }
+
+    // Guardo 2 veces porque no funciona como deberia la funcion set
     Gb.set(student).then(d => {
       if (d !== undefined) {
-        window.loadAdminMenu();
+        Gb.set(student).then(d => {
+          if (d !== undefined) {
+            //window.loadAdminMenu();
+            console.log("AQUI");
+            console.log(student);
+            window.loadAlumnos();
+          }
+        });
       }
     });
   }
-  
 }
 
 
@@ -2873,10 +2923,10 @@ window.borrarForzoso = function borrar(id) {
   console.log(Gb.resolve(id));
 }
 window.ejemplo = function ejem() {
-  let array = {sid: "Hola1", firstName: "H", lastName: "Hola1", guardians: ["Manolo1"], cid: "qwe12qwe"};
+  let array = { sid: "Hola1", firstName: "H", lastName: "Hola1", guardians: ["Manolo1"], cid: "qwe12qwe" };
 
   array.firstName = "PEPE";
-  
+
   console.log(array);
 }
 
