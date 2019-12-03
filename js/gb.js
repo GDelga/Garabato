@@ -1795,7 +1795,111 @@ function createAddProfesor() {
 
 //FUNCIONES DE MENSAJES
 
+function transformDate(date) {
+  let actual = new Date();
+  //Año actual
+  if (date.getFullYear() == actual.getFullYear()) {
+    // Miramos el mes
+    if (date.getMonth() == actual.getMonth()) {
+      // Miramos el dia
+      if (date.getDate() == actual.getDate()) {
+        return "Hoy";
+      }
+      // Hace mas de un dia
+      else {
+        // Mensajes de hace un dia (Ayer)
+        if (actual.getDate() - date.getDate() == 1) {
+          return "Ayer";
+        }
+        // Mensajes de hace 7 dias
+        else if (actual.getDate() - date.getDate() <= 7) {
+          return "Hace una semana"
+        }
+        // Si ha pasado menos de un mes
+        else return "Este mes"
+      }
+    }
+    // Si ha pasado mas de un mes
+    else {
+      if (actual.getMonth() - date.getMonth() == 1) {
+        return "Hace un mes";
+      } else if (actual.getMonth() - date.getMonth() <= 3) {
+        return "Hace tres meses";
+      } else if (actual.getMonth() - date.getMonth() <= 8) {
+        return "Hace ocho meses";
+      } else return "Menos de un año"
+    }
+  }
+  //Mensajes de otro año
+  else {
+    if (actual.getFullYear() - date.getFullYear() == 1) {
+      return "Hace un año";
+    }
+    //Muy antiguos
+    else return "Hace mucho tiempo";
+  }
+}
+
+// Funcion que ordena los mensajes en funcion de su atributo DATE
+function groupByKeys(mensajes) {
+  let groupByKey = {};
+  /*console.log("MENSAJES PASADOS");
+  console.log(mensajes);*/
+  for (let m in mensajes) {
+    // No existe
+    if (groupByKey[mensajes[m].order] == undefined) {
+      groupByKey[mensajes[m].order] = [mensajes[m]];
+    }
+    // Ya existe
+    else groupByKey[mensajes[m].order].push(mensajes[m]);
+  }
+  return groupByKey;
+}
+
+// Para ordenar las fechas de menor a mayor
+function sortByDate(m1, m2) {
+  let date1 = m1.date;
+  let date2 = m2.date;
+  //Miramos anyo
+  if (date1.getFullYear() == date2.getFullYear()) {
+    //Miramos mes
+    if (date1.getMonth() == date2.getMonth()) {
+      //Miramos dia
+      if (date1.getDate() == date2.getDate()) return 0;
+      else if (date1.getDate() < date2.getDate()) return 1;
+      else return -1;
+    } else if (date1.getMonth() < date2.getMonth()) return 1;
+    else return -1;
+  } else if (date1.getFullYear() < date2.getFullYear()) return 1;
+  else return -1;
+}
+
 window.escribirMensaje = function escribirMensaje() {
+  debugger;
+  let texto;
+  if (!/^(.+( .+)*)$/.test($("#inputTo").val())) {
+    $("#aviso").empty();
+    $("#aviso").append(sendAlert("KO", "El mensaje debe tener un destinatario"));
+    return;
+  }
+  if (Gb.resolve($("#inputTo").val()) == undefined) {
+    $("#aviso").empty();
+    $("#aviso").append(sendAlert("KO", "El destinatario no existe"));
+    return;
+  }
+  if (!/^(.+( .+)*)$/.test($("#inputAsunto").val())) {
+    $("#aviso").empty();
+    $("#aviso").append(sendAlert("KO", "El mensaje debe tener un asunto"));
+    return;
+  }
+  if (/^(.+( .+)*)$/.test($("#summernote").val())) {
+    texto = $("#summernote").val().replace(/<+[^>]*>+/g, "");
+  } else {
+    $("#aviso").empty();
+    $("#aviso").append(sendAlert("KO", "El mensaje debe tener un contenido"));
+    return;
+  }
+
   let message = new Gb.Message(
     U.randomString(),
     new Date(),
@@ -1803,23 +1907,19 @@ window.escribirMensaje = function escribirMensaje() {
     [$("#inputTo").val()],
     [Gb.MessageLabels.SENT],
     $("#inputAsunto").val(),
-    $("#summernote").val()
+    texto
   )
   Gb.send(message).then(d => {
     if (d !== undefined) {
       // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-      let aviso = "Se ha enviado un mensaje con los siguientes datos:\n" +
-        "Destinatario: " + message.to + "\n" +
-        "Asunto: " + message.title + "\n" +
-        "Contenido: " + message.body;
-      alert(aviso);
-      $("#derecha").empty();
-      $("#derecha").append(createZonaMensajesDerechaNoLeidos());
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("OK", "El mensaje se ha enviado"));
+      $("#inputTo").val("");
+      $("#inputAsunto").val("");
+      $("#summernote").val("");
     } else {
-      // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
-      let aviso_error_add_alumno = "Error al añadir alumno.\n" +
-        "Comprueba que los campos introducidos son correctos.\n"
-      alert(aviso_error_add_alumno);
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "No se ha podido mandar el mensaje"));
     } //Enviar el mensaje
   });
 }
@@ -1892,8 +1992,10 @@ window.loadMenuMensajes = function loadMenuMensajes() {
     }
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
     // Para ver si hay mensjaes que mostrar
-    recibidos.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(recibidos);
+    debugger;
+    let mensajesConDate = recibidos.apply(x=> x + (x['order'] = transformDate(x.date)));
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = U.groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
     // Parte de la derecha
@@ -2559,6 +2661,9 @@ function createZonaMensajesDerechaEscribirMensaje() {
     'minHeight: "calc(100vh - 25rem)"',
     '});',
     '</script>',
+    '</div>',
+    '<!-- aviso -->',
+    '<div class="col-12 col-xl-12" id="aviso">',
     '</div>',
     '<!-- botón para enviar el formulario; justify-content-end no ha funcionado-->',
     '<div class="ml-auto pt-2 pb-2 pr-3">',

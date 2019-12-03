@@ -100,7 +100,6 @@ class Message {
         labels.forEach(label => Util.checkEnum(label, MessageLabels));
         this.title = title;
         this.body = body;
-        //this.order = Util.transformDate(this.date);
     }
 }
 
@@ -260,104 +259,7 @@ class Util {
             Util.randomText(Util.randomInRange(10, 20)));
     }
 
-    static randomDate(start, end) {
-        return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    }
-
-    /**
-     * Este codigo ha sido copiado de StackOverflow:
-     * 
-     */
-    static transformDate(date) {
-        let actual = new Date();
-        //Año actual
-        if (date.getFullYear() == actual.getFullYear()) {
-            // Miramos el mes
-            if (date.getMonth() == actual.getMonth()) {
-                // Miramos el dia
-                if (date.getDate() == actual.getDate()) {
-                    return "Hoy";
-                }
-                // Hace mas de un dia
-                else {
-                    // Mensajes de hace un dia (Ayer)
-                    if (actual.getDate() - date.getDate() == 1) {
-                        return "Ayer";
-                    }
-                    // Mensajes de hace 7 dias
-                    else if (actual.getDate() - date.getDate() <= 7) {
-                        return "Hace una semana"
-                    }
-                    // Si ha pasado menos de un mes
-                    else return "Este mes"
-                }
-            }
-            // Si ha pasado mas de un mes
-            else {
-                if (actual.getMonth() - date.getMonth() == 1) {
-                    return "Hace un mes";
-                } else if (actual.getMonth() - date.getMonth() <= 3) {
-                    return "Hace tres meses";
-                } else if (actual.getMonth() - date.getMonth() <= 8) {
-                    return "Hace ocho meses";
-                } else return "Menos de un año"
-            }
-        }
-        //Mensajes de otro año
-        else {
-            if (actual.getFullYear() - date.getFullYear() == 1) {
-                return "Hace un año";
-            }
-            //Muy antiguos
-            else return "Hace mucho tiempo";
-        }
-    }
-
-    // Funcion que ordena los mensajes en funcion de su atributo DATE
-    static groupByKeys(mensajes) {
-        let groupByKey = {};
-        /*console.log("MENSAJES PASADOS");
-        console.log(mensajes);*/
-        for (let m in mensajes) {
-            // No existe
-            if (groupByKey[mensajes[m].order] == undefined) {
-                groupByKey[mensajes[m].order] = [mensajes[m]];
-            }
-            // Ya existe
-            else groupByKey[mensajes[m].order].push(mensajes[m]);
-        }
-        return groupByKey;
-    }
-
-    // Funcion que manda todos los mensajes a la funcion "send()"
-    static sendAllMessages(mensajes) {
-        for (let k in mensajes) {
-            for (let m in mensajes[k]) {
-                send(mensajes[k][m]);
-            }
-        }
-    }
-
-    // Para ordenar las fechas de menor a mayor
-    static sortByDate(m1, m2) {
-        let date1 = m1.date;
-        let date2 = m2.date;
-        //Miramos anyo
-        if (date1.getFullYear() == date2.getFullYear()) {
-            //Miramos mes
-            if (date1.getMonth() == date2.getMonth()) {
-                //Miramos dia
-                if (date1.getDate() == date2.getDate()) return 0;
-                else if (date1.getDate() < date2.getDate()) return 1;
-                else return -1;
-            } else if (date1.getMonth() < date2.getMonth()) return 1;
-            else return -1;
-        } else if (date1.getFullYear() < date2.getFullYear()) return 1;
-        else return -1;
-    }
 }
-
-
 // cache de IDs; esto no se exporta
 let cache = {};
 
@@ -416,7 +318,7 @@ function updateState(data) {
     globalState.classes.forEach(o => getId(o.cid, o));
     globalState.students.forEach(o => getId(o.sid, o));
     globalState.users.forEach(o => getId(o.uid, o));
-    //globalState.messages.forEach(o => getId(o.msgid, o));
+    globalState.messages.forEach(o => getId(o.msgid, o));
     console.log("Updated state", globalState);
     return data;
 }
