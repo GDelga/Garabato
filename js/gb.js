@@ -31,12 +31,16 @@ let listaClases = [];
 
 //FUNCIONES DE CREACION DE MENUS
 
-window.loadAdminMenu = function adminMenu() {
+window.loadAdminMenu = function adminMenu(tipo, mensaje) {
   try {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createAdminMenu());
+    if (mensaje != undefined) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert(tipo, mensaje));
+    }
   } catch (e) {
     console.log('Error cargando el menu de administradores', e);
   }
@@ -80,6 +84,12 @@ function createAdminMenu() {
     '</div>',
     '</div>',
     '</nav>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div class="col-0 col-lg-1"></div>',
+    '<div id="aviso" class="col-lg-6"></div>',
+    '</div>',
+    '<!-- Imagenes -->',
     '<div class="lineas2 mt-5">',
     '<div class=" row d-flex justify-content-center align-content-center">',
     '<div class="col-lg-6 ">',
@@ -327,21 +337,24 @@ window.crearClase = function crearClase() {
 }
 
 window.loadClases = function loadClases(tipo, mensaje) {
- // debugger;
+
   try {
-    // vaciamos un contenedor, hola gou
+    // Para distinguir si hemos llegado por click en la barra de navegacion o por otra funcion
+    if (tipo == null) {
+      // Para salvar datos que se han quedado sin guardar
+      saveDatas();
+    }
+    // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createClases());
-    if(mensaje != undefined){
+    if (mensaje != undefined) {
       $("#aviso2").empty();
-    $("#aviso2").append(sendAlert(tipo, mensaje));
+      $("#aviso2").append(sendAlert(tipo, mensaje));
     }
-    
   } catch (e) {
     console.log('Error cargando las clases', e);
   }
-  
 }
 
 //Funcion que crea la ventana de crear clase
@@ -360,11 +373,11 @@ function createClases() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -488,11 +501,11 @@ function createAddClases() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases()">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -665,8 +678,8 @@ window.crearAlumno = function crearAlumno() {
 
   Gb.addStudent(alumno).then(d => {
     if (d !== undefined) {
-      $("#aviso").empty();
-      $("#aviso").append(sendAlert("OK", "Se ha creado correctamente"));
+      /*$("#aviso").empty();
+      $("#aviso").append(sendAlert("OK", "Se ha creado correctamente"));*/
       // Limpio los datos
       /*$("#inputIDAlumno").val("");
       $("#inputNombreAlumno").val("");
@@ -685,6 +698,7 @@ window.crearAlumno = function crearAlumno() {
             responsable.students.push(alumno.sid);
             Gb.set(responsable);
           }
+          window.loadAlumnos("OK", "Se ha creado correctamente el alumno con DNI: " + $("#inputIDAlumno").val());
         }
       });
     } else {
@@ -720,11 +734,11 @@ function createAddAlumnos() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos()">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -813,12 +827,23 @@ function createAddAlumnos() {
   return $(html.join(''));
 }
 
-window.loadAlumnos = function loadAlumnos() {
+window.loadAlumnos = function loadAlumnos(tipo, mensaje) {
   try {
+    // Para distinguir si hemos llegado por click en la barra de navegacion o por otra funcion
+    if (tipo == null) {
+      // Para salvar datos que se han quedado sin guardar
+      saveDatas();
+    }
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createAlumnos());
+
+    // Para mostrar un mensaje informativo
+    if (mensaje != undefined) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert(tipo, mensaje));
+    }
   } catch (e) {
     console.log('Error cargando los mensajes', e);
   }
@@ -892,6 +917,10 @@ function createAlumnos() {
     '</tbody>',
     '</table>',
     '</div>',
+    '</div>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso" class="col-md-8"></div>',
     '</div>',
     '<!-- botonera -->',
     '<div class="row mt-3 d-flex justify-content-end">',
@@ -1199,6 +1228,8 @@ function createAddResponsable() {
 
 window.loadResponsables = function loadResponsables() {
   try {
+    // Para salvar datos que se han quedado sin guardar
+    saveDatas();
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
@@ -1532,6 +1563,8 @@ window.crearProfesor = function crearProfesor() {
 
 window.loadProfesores = function loadProfesores() {
   try {
+    // Para salvar datos que se han quedado sin guardar
+    saveDatas();
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
@@ -2806,7 +2839,8 @@ window.eliminarAlumno = function eliminarAlumno(id) {
       Gb.globalState.students.splice(i, 1);
     }
   }
-  window.loadAlumnos();
+  window.loadAlumnos("OK", "Se borró el alumno con DNI: " + id);
+  //window.loadAlumnos();
   /*let estudiante = Gb.resolve(id);
   for(let i = 0; i < estudiante.guardians.length; i++){
     let responsable = Gb.resolve(estudiante.guardians[i]);
@@ -2834,7 +2868,7 @@ window.eliminarAlumno = function eliminarAlumno(id) {
 
 // Funcion para eliminar un profesor de la tabla
 window.eliminarProfesor = function eliminarProfesor(id) {
-  // REVISAR
+  // OJO REVISAR
   let estudiantes = Gb.globalState.students;
   for (let i = 0; i < estudiantes.length; i++) {
     if (estudiantes[i].sid == id) {
@@ -2886,18 +2920,12 @@ window.eliminarClase = function eliminarClase(id) {
         Gb.globalState.classes.splice(i, 1);
       }
     }
-    window.loadClases("OK", "Se borro la clase: " + id);
-    
+    window.loadClases("OK", "Se borró la clase: " + id);
+
   }
-  else{
+  else {
     window.loadClases("KO", "No se pudo borrar la clase con id: " + id + ", tiene profesores y/o alumnos relacionados");
   }
-
-  /*Gb.rm(id).then(d => {
-    if (d !== undefined) {
-      window.loadClases();
-    } else {}
-  });*/
 }
 
 // Funcion para eliminar un Responsable de la tabla
@@ -2933,7 +2961,7 @@ window.cancelarAlumno = function cancelarAlumno() {
   }
   listaEstudiantes = [];
   //window.loadAlumnos();
-  window.loadAdminMenu();
+  window.loadAdminMenu("KO", "No se guardaron los cambios en Alumnos");
 }
 
 // Boton guardar de la tabla alumnos
@@ -2963,7 +2991,7 @@ window.guardarAlumnos = function guardarAlumnos() {
         Gb.rm(id).then(d => {
           if (d !== undefined) {
             //window.loadAlumnos();
-            window.loadAdminMenu();
+            window.loadAdminMenu("OK", "Se guardaron los cambios en Alumnos");
           }
         });
       }
@@ -3005,9 +3033,10 @@ window.guardarAlumnos = function guardarAlumnos() {
         Gb.set(student).then(d => {
           if (d !== undefined) {
             //window.loadAdminMenu();
-            console.log("AQUI");
-            console.log(student);
-            window.loadAlumnos();
+            //console.log("AQUI");
+            ///console.log(student);
+            ///window.loadAlumnos();
+            window.loadAdminMenu("OK", "Se guardaron los cambios en Alumnos");
           }
         });
       }
@@ -3020,7 +3049,7 @@ window.cancelarClase = function cancelarClases() {
     Gb.globalState.classes.push(listaClases[i]);
   }
   listaClases = [];
-  window.loadAdminMenu();
+  window.loadAdminMenu("KO", "No se guardaron los cambios en Clases");
 }
 
 // Boton para guardar los cambios en las clases
@@ -3032,12 +3061,13 @@ window.guardarClases = function guardarClases() {
   for (let i = 0; i < listaClases.length; i++) {
     Gb.rm(listaClases[i].cid).then(d => {
       if (d !== undefined) {
-        window.loadAdminMenu();
+        window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
       }
     });
   }
   listaClases = [];
-  window.loadAdminMenu();
+  console.log("Hasta aqui");
+  window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
 }
 
 window.guardarDatos = function guardarDatos(tipo) {
@@ -3138,7 +3168,7 @@ window.buscarEntidad = function buscarEntidad(id) {
 // PELIGRO, cuidado que toca cosas estrañas
 window.borrarForzoso = function borrar(id) {
   console.error(" PELIGRO, cuidado que toca cosas estrañas");
- 
+
   console.log(id);
   console.log(Gb.resolve(id));
   let pro = Gb.resolve(id);
@@ -3158,6 +3188,21 @@ window.ejemplo = function ejem() {
   array.firstName = "PEPE";
 
   console.log(array);
+}
+
+// FUNCION PARA RESETEAR LOS DATOS SI NO SE PULSA LOS BOTONES GUARDAR Y CANCELAR
+function saveDatas() {
+  //console.log("LLEga");
+  for (let i = 0; i < listaClases.length; i++) {
+    Gb.globalState.classes.push(listaClases[i]);
+  }
+  listaClases = [];
+
+  for (let i = 0; i < listaEstudiantes.length; i++) {
+    Gb.globalState.students.push(listaEstudiantes[i]);
+  }
+  listaEstudiantes = [];
+  //window.loadAdminMenu();
 }
 
 //FUNCIONES DE ALERT
