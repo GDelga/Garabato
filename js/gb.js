@@ -403,7 +403,7 @@ function createClases() {
     '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
     '<div class="input-group-append">',
     '<select id="filtro" class="bg-info text-white text-center" name="OS">',
-    '<option value="0">ID</option>',
+    '<option value="0">Nombre</option>',
     '</select>',
     '</div>',
     '</div>',
@@ -412,7 +412,7 @@ function createClases() {
     '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
     '<thead>',
     '<tr class="headerTabla">',
-    '<th class="text-center">ID</th>',
+    '<th class="text-center">Nombre</th>',
     '<th class="text-center">Eliminar</th>',
     '</tr>',
     '</thead>',
@@ -544,11 +544,6 @@ function createAddClases() {
     '</button>',
     '</div>',
     '<div class="col-md-4 text-right">',
-    '<button id="boton-cancelar" class="btn" onclick="window.loadClases()">',
-    '<div class="img">',
-    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
-    '</div>',
-    '</button>',
     '<button id="boton-guardar" class="btn" onclick="window.crearClase()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
@@ -807,13 +802,15 @@ function createAddAlumnos() {
     '</div>',
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-8 text-right">',
+    '<div class="col-md-4 text-left">',
     '<button id="boton-cancelar" class="btn" onclick="window.loadAlumnos()">',
     '<div class="img">',
-    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
-    '<button id="boton-guardarAlumno" class="btn" onclick="window.crearAlumno()">',
+    '</div>',
+    '<div class="col-md-4 text-right">',
+    '<button id="boton-guardar" class="btn" onclick="window.crearAlumno()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
     '</div>',
@@ -1190,14 +1187,14 @@ function createAddResponsable() {
     '<div class="col-md-2">',
     '<label for="inputDNI">Teléfonos:</label>',
     '</div>',
-    '<div class="col-md-2">',
+    '<div class="col-md-6">',
     '<input type="text" class="form-control" id="telf1" placeholder="Telf 1">',
     '</div>',
+    '<div class="col-md-8 p-0">',
     '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="telf2" placeholder="Telf 2 (Opcional)">',
+    '<button type="button" class="btn btn-secondary">Añadir Teléfono</button>',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="telf3" placeholder="Telf 3 (Opcional)">',
+    '<div class="col-md-6" id="contenedorTelefonos"></div>',
     '</div>',
     '</div>',
     '<!-- avisos -->',
@@ -1206,12 +1203,14 @@ function createAddResponsable() {
     '</div>',
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-8 text-right">',
+    '<div class="col-md-4 text-left">',
     '<button id="boton-cancelar" class="btn" onclick="window.loadResponsables()">',
     '<div class="img">',
-    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
     '<button id="boton-guardar" class="btn" onclick="window.crearResponsable()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
@@ -1864,12 +1863,14 @@ function createAddProfesor() {
     '</div>',
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-8 text-right">',
+    '<div class="col-md-4 text-left">',
     '<button id="boton-cancelar" class="btn" onclick="window.loadProfesores()">',
     '<div class="img">',
-    '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
     '<button id="boton-guardar" class="btn" onclick="window.crearProfesor()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
@@ -1970,7 +1971,7 @@ function sortByDate(m1, m2) {
 }
 
 window.escribirMensaje = function escribirMensaje() {
-  debugger;
+  //debugger;
   let texto;
   if (!/^(.+( .+)*)$/.test($("#inputTo").val())) {
     $("#aviso").empty();
@@ -2087,7 +2088,7 @@ window.loadMenuMensajes = function loadMenuMensajes() {
     }
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
     // Para ver si hay mensjaes que mostrar
-    debugger;
+    //debugger;
     let mensajesConDate = recibidos.apply(x => x + (x['order'] = transformDate(x.date)));
     mensajesConDate.sort(sortByDate);
     let mensajesAgrupados = U.groupByKeys(mensajesConDate);
@@ -2920,11 +2921,11 @@ window.eliminarClase = function eliminarClase(id) {
         Gb.globalState.classes.splice(i, 1);
       }
     }
-    window.loadClases("OK", "Se borró la clase: " + id);
+    window.loadClases("OK", "Se borró provisionalmente la clase: " + id + ". Si quiere guardar los cambios pulse 💾");
 
   }
   else {
-    window.loadClases("KO", "No se pudo borrar la clase con id: " + id + ", tiene profesores y/o alumnos relacionados");
+    window.loadClases("KO", "No se pudo borrar la clase: " + id + ", tiene profesores y/o alumnos relacionados");
   }
 }
 
@@ -2966,9 +2967,7 @@ window.cancelarAlumno = function cancelarAlumno() {
 
 // Boton guardar de la tabla alumnos
 window.guardarAlumnos = function guardarAlumnos() {
-  if (listaEstudiantes.length == 0) {
-    window.loadAdminMenu();
-  }
+  
   // Elimina definitivamente los alumnos que fueron borrados
   for (let z = 0; z < listaEstudiantes.length; z++) {
     let id = listaEstudiantes[z].sid;
@@ -3043,6 +3042,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     });
   }
 }
+
 // Boton cancelar de la tabla de clases
 window.cancelarClase = function cancelarClases() {
   for (let i = 0; i < listaClases.length; i++) {
