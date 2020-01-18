@@ -27,6 +27,7 @@ Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
 // Variables globales
 let listaEstudiantes = [];
+let listaClases = [];
 
 //FUNCIONES DE CREACION DE MENUS
 
@@ -233,7 +234,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else {}
+      } else { }
 
     });
   } catch (e) {
@@ -298,12 +299,15 @@ window.crearClase = function crearClase() {
     let clase = new Gb.EClass(
       $("#inputNombre").val()
     );
-    window.Gb.addClass(clase).then(d => {
+    Gb.addClass(clase).then(d => {
       $("#aviso").empty();
+     
       if (d !== undefined) {
         // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-        $("#aviso").append(sendAlert("OK", "La clase se ha añadido correctamente"));
-        $("#inputNombre").val("")
+        /*$("#aviso").append(sendAlert("OK", "La clase se ha añadido correctamente"));
+        $("#inputNombre").val("");*/
+        
+        window.loadClases("OK", "La clase se ha añadido correctamente");
       } else {
         // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
         $("#aviso").append(sendAlert("KO", "La clase no se ha podido añadir, inténtalo de nuevo"));
@@ -315,15 +319,22 @@ window.crearClase = function crearClase() {
   }
 }
 
-window.loadClases = function loadClases() {
+window.loadClases = function loadClases(tipo, mensaje) {
+ // debugger;
   try {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createClases());
+    if(mensaje != undefined){
+      $("#aviso2").empty();
+    $("#aviso2").append(sendAlert(tipo, mensaje));
+    }
+    
   } catch (e) {
     console.log('Error cargando las clases', e);
   }
+  
 }
 
 //Funcion que crea la ventana de crear clase
@@ -391,15 +402,19 @@ function createClases() {
     '</table>',
     '</div>',
     '</div>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso2" class="col-md-8"></div>',
+    '</div>',
     '<!--Botonerade cancelar y guardar-->',
     '<div class="row mt-3 d-flex justify-content-end">',
     '<div>',
-    '<button id="boton-cancelar" class="btn" onclick="window.loadAdminMenu()">',
+    '<button id="boton-cancelar" class="btn" onclick="window.cancelarClase()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
-    '<button id="boton-exportar" class="btn" onclick="window.guardarDatos()">',
+    '<button id="boton-exportar" class="btn" onclick="window.guardarClases()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
     '</div>',
@@ -416,6 +431,7 @@ function createClases() {
 function cargarClases() {
   let html = [];
   for (let i in Gb.globalState.classes) {
+    //console.log("Que es la i: " + Gb.globalState.classes[i].cid);
     html.push(
       '<tr>',
       '<td class="pt-3-half">', Gb.globalState.classes[i].cid, '</td>',
@@ -633,6 +649,15 @@ window.crearAlumno = function crearAlumno() {
     if (d !== undefined) {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("OK", "Se ha creado correctamente"));
+      // Limpio los datos
+      /*$("#inputIDAlumno").val("");
+      $("#inputNombreAlumno").val("");
+      $("#inputContra").val("");
+      $("#inputApellidosAlumno").val("");
+      $("#inputClase").val("");
+      $("#res1").val("");
+      $("#res2").val("");
+      $("#res3").val("");*/
       // Para confirmar que se ha guardado bien
       Gb.set(alumno).then(d1 => {
         if (d1 !== undefined) {
@@ -1022,6 +1047,14 @@ window.crearResponsable = function crearResponsable() {
       // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
       $("#aviso").empty();
       $("#aviso").append(sendAlert("OK", "Se ha creado correctamente"));
+      // Limpio los datos
+      $("#inputID").val("");
+      $("#inputNombre").val("");
+      $("#inputContra").val("");
+      $("#inputApellidos").val("");
+      $("#telf1").val("");
+      $("#telf2").val("");
+      $("#telf3").val("");
     } else {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "No se ha podido crear el responsable"));
@@ -1461,6 +1494,17 @@ window.crearProfesor = function crearProfesor() {
       // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
       $("#aviso").empty();
       $("#aviso").append(sendAlert("OK", "Se ha creado correctamente"));
+      // Limpio los datos
+      $("#inputID").val("");
+      $("#inputNombre").val("");
+      $("#inputContra").val("");
+      $("#inputApellidos").val("");
+      $("#class1").val("");
+      $("#class2").val("");
+      $("#class3").val("");
+      $("#telf1").val("");
+      $("#telf2").val("");
+      $("#telf3").val("");
     } else {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "No se ha podido crear el profesor"));
@@ -1993,7 +2037,7 @@ window.loadMenuMensajes = function loadMenuMensajes() {
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
     // Para ver si hay mensjaes que mostrar
     debugger;
-    let mensajesConDate = recibidos.apply(x=> x + (x['order'] = transformDate(x.date)));
+    let mensajesConDate = recibidos.apply(x => x + (x['order'] = transformDate(x.date)));
     mensajesConDate.sort(sortByDate);
     let mensajesAgrupados = U.groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
@@ -2736,7 +2780,7 @@ function createZonaMensajesDerechaClase() {
 
 // Funcion para eliminar un alumno de la tabla 
 window.eliminarAlumno = function eliminarAlumno(id) {
-  console.log("Hola");
+  //console.log("Hola");
   let estudiantes = Gb.globalState.students;
   for (let i = 0; i < estudiantes.length; i++) {
     if (estudiantes[i].sid == id) {
@@ -2772,20 +2816,70 @@ window.eliminarAlumno = function eliminarAlumno(id) {
 
 // Funcion para eliminar un profesor de la tabla
 window.eliminarProfesor = function eliminarProfesor(id) {
-  Gb.rm(id).then(d => {
+  // REVISAR
+  let estudiantes = Gb.globalState.students;
+  for (let i = 0; i < estudiantes.length; i++) {
+    if (estudiantes[i].sid == id) {
+      listaEstudiantes.push(estudiantes[i]);
+      Gb.globalState.students.splice(i, 1);
+    }
+  }
+  window.loadProfesores();
+  /*Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadProfesores();
     } else {}
-  });
+  });*/
 }
 
 // Funcion para eliminar una clase de la tabla
 window.eliminarClase = function eliminarClase(id) {
-  Gb.rm(id).then(d => {
+
+  // Compruebo que no tenga un profesor asignado
+  let usuarios = Gb.globalState.users;// Mezclados los responsables, profesores y administradores
+  let contador = 0, cierto = true;
+  while (cierto && contador < usuarios.length) {
+    let profesor = usuarios[contador];
+    if (profesor.type == "teacher") {
+      for (let i = 0; i < profesor.classes.length && cierto; i++) {
+        if (profesor.classes[i] == id) {
+          cierto = false;
+        }
+      }
+    }
+    contador++;
+  }
+  contador = 0;
+  let estudiantes = Gb.globalState.students;
+  // Compruebo que no tenga un estudiante asignado
+  while (cierto && contador < estudiantes.length) {
+    let estudiante = estudiantes[contador];
+    if (estudiante.cid == id) {
+      cierto = false;
+    }
+    contador++;
+  }
+  if (cierto) {
+    // Borramos la clase temporalmente, hasta una confirmacion
+    let clases = Gb.globalState.classes;
+    for (let i = 0; i < clases.length; i++) {
+      if (clases[i].cid == id) {
+        listaClases.push(clases[i]);
+        Gb.globalState.classes.splice(i, 1);
+      }
+    }
+    window.loadClases("OK", "Se borro la clase: " + id);
+    
+  }
+  else{
+    window.loadClases("KO", "No se pudo borrar la clase con id: " + id + ", tiene profesores y/o alumnos relacionados");
+  }
+
+  /*Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadClases();
     } else {}
-  });
+  });*/
 }
 
 // Funcion para eliminar un Responsable de la tabla
@@ -2793,14 +2887,14 @@ window.eliminarResponsable = function eliminarResponsable(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadResponsables();
-    } else {}
+    } else { }
   });
 }
 
 // Funcion para eliminar un mensaje
 window.loadEliminarMensaje = function eliminarMensaje() {
   // Sacar el id de el id eliminar
-  $("#eliminar")
+  $("#eliminar");
 
   // Borro el mensaje
   Gb.rm(idMensaje).then;
@@ -2824,6 +2918,7 @@ window.cancelarAlumno = function cancelarAlumno() {
   window.loadAdminMenu();
 }
 
+// Boton guardar de la tabla alumnos
 window.guardarAlumnos = function guardarAlumnos() {
   if (listaEstudiantes.length == 0) {
     window.loadAdminMenu();
@@ -2901,7 +2996,31 @@ window.guardarAlumnos = function guardarAlumnos() {
     });
   }
 }
+// Boton cancelar de la tabla de clases
+window.cancelarClase = function cancelarClases() {
+  for (let i = 0; i < listaClases.length; i++) {
+    Gb.globalState.classes.push(listaClases[i]);
+  }
+  listaClases = [];
+  window.loadAdminMenu();
+}
 
+// Boton para guardar los cambios en las clases
+window.guardarClases = function guardarClases() {
+  if (listaClases.length == 0) {
+    window.loadAdminMenu();
+  }
+  // Elimina definitivamente las clases que fueron borradas
+  for (let i = 0; i < listaClases.length; i++) {
+    Gb.rm(listaClases[i].cid).then(d => {
+      if (d !== undefined) {
+        window.loadAdminMenu();
+      }
+    });
+  }
+  listaClases = [];
+  window.loadAdminMenu();
+}
 
 window.guardarDatos = function guardarDatos(tipo) {
   const $tableID = $('#miTabla');
@@ -3001,6 +3120,7 @@ window.buscarEntidad = function buscarEntidad(id) {
 // PELIGRO, cuidado que toca cosas estrañas
 window.borrarForzoso = function borrar(id) {
   console.error(" PELIGRO, cuidado que toca cosas estrañas");
+ 
   console.log(id);
   console.log(Gb.resolve(id));
   let pro = Gb.resolve(id);

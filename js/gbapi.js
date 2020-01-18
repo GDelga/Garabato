@@ -312,7 +312,7 @@ function updateState(data) {
             mensajes.push(data.messages[i]);
         } 
     }
-    debugger;
+    //debugger;
     globalState = new GlobalState(data.classes, data.students, data.users, mensajes);
     
     globalState.classes.forEach(o => getId(o.cid, o));
