@@ -300,16 +300,23 @@ window.crearClase = function crearClase() {
       $("#inputNombre").val()
     );
     Gb.addClass(clase).then(d => {
-      $("#aviso").empty();
-     
       if (d !== undefined) {
         // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
-        /*$("#aviso").append(sendAlert("OK", "La clase se ha añadido correctamente"));
-        $("#inputNombre").val("");*/
-        
-        window.loadClases("OK", "La clase se ha añadido correctamente");
+        Gb.set(clase).then(d1 => {
+          if (d1 !== undefined) {
+            $("#aviso").empty();
+            $("#aviso").append(sendAlert("OK", "La clase se ha añadido correctamente"));
+            $("#inputNombre").val("");
+          }
+          else {
+            // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+            $("#aviso").empty();
+            $("#aviso").append(sendAlert("KO", "La clase no se ha podido añadir, inténtalo de nuevo"));
+          }
+        });
       } else {
         // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
+        $("#aviso").empty();
         $("#aviso").append(sendAlert("KO", "La clase no se ha podido añadir, inténtalo de nuevo"));
       }
     });
@@ -322,7 +329,7 @@ window.crearClase = function crearClase() {
 window.loadClases = function loadClases(tipo, mensaje) {
  // debugger;
   try {
-    // vaciamos un contenedor
+    // vaciamos un contenedor, hola gou
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     $("#contenido").append(createClases());
@@ -365,6 +372,10 @@ function createClases() {
     '</div>',
     '</div>',
     '</nav>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso2" class="col-md-8"></div>',
+    '</div>',
     '<div class="container">',
     '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Clases</h1>',
     '<div class="card-body pt-0">',
@@ -512,7 +523,14 @@ function createAddClases() {
     '</div>',
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
-    '<div class="col-md-8 text-right">',
+    '<div class="col-md-4 text-left">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadClases()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
     '<button id="boton-cancelar" class="btn" onclick="window.loadClases()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">',

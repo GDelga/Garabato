@@ -306,14 +306,14 @@ function updateState(data) {
         return; // excepto si la petición no devuelve nada
     }
     cache = {};
-    let mensajes = [];
+    /*let mensajes = [];
     for(let i in data.messages) {
         if (Object.keys(data.messages[i]).length != 0) {
             mensajes.push(data.messages[i]);
         } 
-    }
-    //debugger;
-    globalState = new GlobalState(data.classes, data.students, data.users, mensajes);
+    }*/
+    debugger;
+    globalState = new GlobalState(data.classes, data.students, data.users, data.messages);
     
     globalState.classes.forEach(o => getId(o.cid, o));
     globalState.students.forEach(o => getId(o.sid, o));
