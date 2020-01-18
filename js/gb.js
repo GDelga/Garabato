@@ -244,7 +244,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else { }
+      } else {}
 
     });
   } catch (e) {
@@ -317,8 +317,7 @@ window.crearClase = function crearClase() {
             $("#aviso").empty();
             $("#aviso").append(sendAlert("OK", "La clase se ha añadido correctamente"));
             $("#inputNombre").val("");
-          }
-          else {
+          } else {
             // ha habido un error (d ha vuelto como undefined; en la consola se verá qué ha pasado)
             $("#aviso").empty();
             $("#aviso").append(sendAlert("KO", "La clase no se ha podido añadir, inténtalo de nuevo"));
@@ -693,7 +692,7 @@ window.crearAlumno = function crearAlumno() {
             responsable.students.push(alumno.sid);
             Gb.set(responsable);
           }
-          window.loadAlumnos("OK", "Se ha creado correctamente el alumno con DNI: " + $("#inputIDAlumno").val());
+          window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
         }
       });
     } else {
@@ -887,7 +886,7 @@ function createAlumnos() {
     '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
     '<div class="input-group-append">',
     '<select id="filtro" class="bg-info text-white text-center" name="OS">',
-    '<option value="0">DNI</option>',
+    '<option value="0">ID</option>',
     '<option value="1">Nombre</option>',
     '<option value="2">Apellidos</option>',
     '<option value="3">Clase</option>',
@@ -899,7 +898,7 @@ function createAlumnos() {
     '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
     '<thead>',
     '<tr class="headerTabla">',
-    '<th class="text-center">DNI</th>',
+    '<th class="text-center">ID</th>',
     '<th class="text-center">Nombre</th>',
     '<th class="text-center">Apellidos</th>',
     '<th class="text-center">Clase</th>',
@@ -1021,10 +1020,7 @@ function createDesplegableResponsables(responsables) {
 
 // Logica de crear un nuevo responsable
 window.crearResponsable = function crearResponsable() {
-  let telefonos = [];
-  let telf1 = null,
-    telf2 = null,
-    telf3 = null;
+  let listaTelefonos = [];
   if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#inputID").val())) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID no es válido"));
@@ -1045,41 +1041,34 @@ window.crearResponsable = function crearResponsable() {
     $("#aviso").append(sendAlert("KO", "El apellido no es válido"));
     return;
   }
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf1").val())) {
+  let telefonos = $('input[name="telefonos"]').map(function () {
+    return $(this).val();
+  }).get();
+  for(let telefono in telefonos){
+    if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
+
+    } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El teléfono " + telefonos[telefono] + " no es válido"));
+      return;
+    } else listaTelefonos.push(telefonos[telefono]);
+  }
+  if (listaTelefonos.length < 1) {
     $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 1 no es válido"));
+    $("#aviso").append(sendAlert("KO", "Al menos un telefono debe de ser válido"));
     return;
-  } else telf1 = $("#telf1").val();
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf2").val()) && !/^\s*$/.test($("#telf2").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 2 no es válido"));
-    return;
-  } else telf2 = $("#telf2").val();
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf3").val()) && !/^\s*$/.test($("#telf3").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 3 no es válido"));
-    return;
-  } else telf3 = $("#telf3").val();
+  }
   if (Gb.resolve($("#inputID").val()) != undefined) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID ya existe"));
     return;
-  }
-  if (telf1 != null && !/^\s*$/.test(telf1)) {
-    telefonos.push(telf1);
-  }
-  if (telf2 != null && !/^\s*$/.test(telf2)) {
-    telefonos.push(telf2);
-  }
-  if (telf3 != null && !/^\s*$/.test(telf3)) {
-    telefonos.push(telf3);
   }
   let responsable = new Gb.User(
     $("#inputID").val(),
     Gb.UserRoles.GUARDIAN,
     $("#inputNombre").val(),
     $("#inputApellidos").val(),
-    telefonos,
+    listaTelefonos,
     [],
     [],
     $("#inputContra").val()
@@ -1188,13 +1177,15 @@ function createAddResponsable() {
     '<label for="inputDNI">Teléfonos:</label>',
     '</div>',
     '<div class="col-md-6">',
-    '<input type="text" class="form-control" id="telf1" placeholder="Telf 1">',
+    '<input type="text" class="form-control" name="telefonos" placeholder="Teléfono">',
     '</div>',
-    '<div class="col-md-8 p-0">',
-    '<div class="col-md-2">',
-    '<button type="button" class="btn btn-secondary">Añadir Teléfono</button>',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroTelefono()">Añadir Teléfono</button>',
     '</div>',
-    '<div class="col-md-6" id="contenedorTelefonos"></div>',
+    '<div class="col-md-9" id="contenedorTelefonos"></div>',
+    '</div>',
     '</div>',
     '</div>',
     '<!-- avisos -->',
@@ -1280,9 +1271,9 @@ function createResponsables() {
     '<input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()" placeholder="Search">',
     '<div class="input-group-append">',
     '<select id="filtro" class="bg-info text-white text-center" name="OS">',
-    '<option value="0">DNI</option>',
-    '<option value="1">NOMBRE</option>',
-    '<option value="2">APELLIDOS</option>',
+    '<option value="0">ID</option>',
+    '<option value="1">Nombre</option>',
+    '<option value="2">Apellidos</option>',
     '</select>',
     '</div>',
     '</div>',
@@ -1291,12 +1282,12 @@ function createResponsables() {
     '<table class="table table-bordered table-responsive-md table-striped table-dark text-center" id="miTabla">',
     '<thead>',
     '<tr class="headerTabla">',
-    '<th class="text-center">DNI</th>',
-    '<th class="text-center">NOMBRE</th>',
-    '<th class="text-center">APELLIDOS</th>',
-    '<th class="text-center">TELÉFONOS</th>',
-    '<th class="text-center">ALUMNOS</th>',
-    '<th class="text-center">ELIMINAR</th>',
+    '<th class="text-center">ID</th>',
+    '<th class="text-center">Nombre</th>',
+    '<th class="text-center">Apellidos</th>',
+    '<th class="text-center">Teléfonos</th>',
+    '<th class="text-center">Alumnos</th>',
+    '<th class="text-center">Eliminar</th>',
     '</tr>',
     '</thead>',
     '<tbody>'
@@ -1462,11 +1453,8 @@ function createDesplegableAlumnos(alumnos) {
 
 // Logica de crear un nuevo profesor
 window.crearProfesor = function crearProfesor() {
-  let telefonos = [];
+  let listaTelefonos = [];
   var clases = [];
-  let telf1 = null,
-    telf2 = null,
-    telf3 = null;
   if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#inputID").val())) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID no es válido"));
@@ -1487,34 +1475,27 @@ window.crearProfesor = function crearProfesor() {
     $("#aviso").append(sendAlert("KO", "El apellido no es válido"));
     return;
   }
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf1").val())) {
+  let telefonos = $('input[name="telefonos"]').map(function () {
+    return $(this).val();
+  }).get();
+  for(let telefono in telefonos){
+    if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
+
+    } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El teléfono " + telefonos[telefono] + " no es válido"));
+      return;
+    } else listaTelefonos.push(telefonos[telefono]);
+  }
+  if (listaTelefonos.length < 1) {
     $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 1 no es válido"));
+    $("#aviso").append(sendAlert("KO", "Al menos un telefono debe de ser válido"));
     return;
-  } else telf1 = $("#telf1").val();
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf2").val()) && !/^\s*$/.test($("#telf2").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 2 no es válido"));
-    return;
-  } else telf2 = $("#telf2").val();
-  if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test($("#telf3").val()) && !/^\s*$/.test($("#telf3").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El teléfono 3 no es válido"));
-    return;
-  } else telf3 = $("#telf3").val();
+  }
   if (Gb.resolve($("#inputID").val()) != undefined) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID ya existe"));
     return;
-  }
-  if (telf1 != null && !/^\s*$/.test(telf1)) {
-    telefonos.push(telf1);
-  }
-  if (telf2 != null && !/^\s*$/.test(telf2)) {
-    telefonos.push(telf2);
-  }
-  if (telf3 != null && !/^\s*$/.test(telf3)) {
-    telefonos.push(telf3);
   }
   if ($("#class1").val() != "") {
     clases.push($("#class1").val());
@@ -1530,7 +1511,7 @@ window.crearProfesor = function crearProfesor() {
     Gb.UserRoles.TEACHER,
     $("#inputNombre").val(),
     $("#inputApellidos").val(),
-    telefonos,
+    listaTelefonos,
     clases,
     [],
     $("#inputContra").val()
@@ -1844,16 +1825,17 @@ function createAddProfesor() {
     '<!--Botonera de telefonos-->',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
-    '<label for="inputTelefonos">Teléfonos:</label>',
+    '<label for="inputDNI">Teléfonos:</label>',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="telf1" placeholder="Telf 1">',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" name="telefonos" placeholder="Teléfono">',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="telf2" placeholder="Telf 2 (Opcional)">',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroTelefono()">Añadir Teléfono</button>',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="telf3" placeholder="Telf 3 (Opcional)">',
+    '<div class="col-md-9" id="contenedorTelefonos"></div>',
     '</div>',
     '</div>',
     '</div>',
@@ -2840,7 +2822,7 @@ window.eliminarAlumno = function eliminarAlumno(id) {
       Gb.globalState.students.splice(i, 1);
     }
   }
-  window.loadAlumnos("OK", "Se borró el alumno con DNI: " + id);
+  window.loadAlumnos("OK", "Se borró el alumno con ID: " + id);
   //window.loadAlumnos();
   /*let estudiante = Gb.resolve(id);
   for(let i = 0; i < estudiante.guardians.length; i++){
@@ -2889,8 +2871,9 @@ window.eliminarProfesor = function eliminarProfesor(id) {
 window.eliminarClase = function eliminarClase(id) {
 
   // Compruebo que no tenga un profesor asignado
-  let usuarios = Gb.globalState.users;// Mezclados los responsables, profesores y administradores
-  let contador = 0, cierto = true;
+  let usuarios = Gb.globalState.users; // Mezclados los responsables, profesores y administradores
+  let contador = 0,
+    cierto = true;
   while (cierto && contador < usuarios.length) {
     let profesor = usuarios[contador];
     if (profesor.type == "teacher") {
@@ -2923,8 +2906,7 @@ window.eliminarClase = function eliminarClase(id) {
     }
     window.loadClases("OK", "Se borró provisionalmente la clase: " + id + ". Si quiere guardar los cambios pulse 💾");
 
-  }
-  else {
+  } else {
     window.loadClases("KO", "No se pudo borrar la clase: " + id + ", tiene profesores y/o alumnos relacionados");
   }
 }
@@ -2934,7 +2916,7 @@ window.eliminarResponsable = function eliminarResponsable(id) {
   Gb.rm(id).then(d => {
     if (d !== undefined) {
       window.loadResponsables();
-    } else { }
+    } else {}
   });
 }
 
@@ -2967,7 +2949,7 @@ window.cancelarAlumno = function cancelarAlumno() {
 
 // Boton guardar de la tabla alumnos
 window.guardarAlumnos = function guardarAlumnos() {
-  
+
   // Elimina definitivamente los alumnos que fueron borrados
   for (let z = 0; z < listaEstudiantes.length; z++) {
     let id = listaEstudiantes[z].sid;
@@ -3232,6 +3214,14 @@ function sendAlert(tipo, texto) {
 }
 
 //FIN DE FUNCIONES DE ALERT
+window.addCuadroTelefono = function addCuadroTelefono() {
+  let nuevo = [
+    '<div class="pt-2">',
+    '<input type="text" class="form-control" name="telefonos" placeholder="Telefono">',
+    '</div>',
+  ]
+  $("#contenedorTelefonos").append($(nuevo.join('')));
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
