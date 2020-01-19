@@ -250,7 +250,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else {}
+      } else { }
 
     });
   } catch (e) {
@@ -346,6 +346,7 @@ window.loadClases = function loadClases(tipo, mensaje) {
   try {
     // Para distinguir si hemos llegado por click en la barra de navegacion o por otra funcion
     if (tipo == null) {
+      //debugger;
       // Para salvar datos que se han quedado sin guardar
       saveDatas();
     }
@@ -3298,7 +3299,6 @@ window.guardarResponsables = function guardarResponsables() {
       verResponsables.push(tratar2[0]);
     }
     detail[4] = verResponsables;
-    debugger;
     detail.splice(5, 1);
     userDetails.push(detail);
   });
@@ -3446,7 +3446,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     $(this).find("td").each(function () {
       detail.push($(this).html());
     });
-    debugger;
+
     // Tratamiento de la cuarta columna
     let tratar = detail[4];
     tratar = tratar.split("<div class=\"row\" id=\"");
@@ -3468,7 +3468,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     } else {
       student = new Gb.Student(estu[0], estu[1], estu[2], Gb.resolve(estu[0]).cid, estu[4]);
     }
-    debugger;
+
     // Guardo 2 veces porque no funciona como deberia la funcion set
     Gb.set(student).then(d => {
       if (d !== undefined) {
@@ -3493,20 +3493,30 @@ window.cancelarClase = function cancelarClases() {
 
 // Boton para guardar los cambios en las clases
 window.guardarClases = function guardarClases() {
-  if (listaClases.length == 0) {
-    window.loadAdminMenu();
+  if (listaClases.length > 0) {
+    eliminarDefinitivamenteClases(0, listaClases.length);
   }
-  // Elimina definitivamente las clases que fueron borradas
-  for (let i = 0; i < listaClases.length; i++) {
-    Gb.rm(listaClases[i].cid).then(d => {
-      if (d !== undefined) {
+  else{
+    window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
+  }
+  console.log("Llego");
+}
+
+function eliminarDefinitivamenteClases(posicion, fin) {
+  Gb.rm(listaClases[posicion].cid).then(d1 => {
+    if (d1 !== undefined) {
+      if (posicion == fin - 1) {
+        listaClases = [];
         window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
       }
-    });
-  }
-  listaClases = [];
-  window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
+      else {
+        eliminarDefinitivamenteClases(posicion + 1, fin);
+      }
+    }
+  });
 }
+
+
 
 window.guardarDatos = function guardarDatos(tipo) {
   const $tableID = $('#miTabla');
