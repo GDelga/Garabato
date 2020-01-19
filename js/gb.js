@@ -974,7 +974,7 @@ function createGroupAlumnos() {
       '<div class="col-xl-4">',
       '<div class="card text-white bg-info">',
       '<div class="card-header">',
-      '<a class="tituloSeccion" role="button" onclick="window.editarResponsables(\'',Gb.globalState.students[i].uid,'\')>',
+      '<a class="tituloSeccion" role="button" onclick="window.loadEditarResponsables(\'',Gb.globalState.students[i].sid,'\')">',
       'Editar',
       '</a>',
       '</div>',
@@ -1473,7 +1473,7 @@ function createEditarResponsables(elemento) {
     '<div class="col-md-8">',
     '<div class="row">',
     '<div class="col-md-3 pt-2">',
-    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroAlumno()">Añadir Alumno</button>',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroResponsable()">Añadir Responsable</button>',
     '</div>',
     '<div class="col-md-9" id="contenedorResponsables">')
   for (let i = 1; i < elemento.guardians.length; ++i) {
@@ -3679,7 +3679,7 @@ window.addCuadroResponsable = function addCuadroResponsable() {
     '<input type="text" class="form-control" name="responsables" placeholder="Responsable">',
     '</div>',
   ]
-  $("#contenedorResponsable").append($(nuevo.join('')));
+  $("#contenedorResponsables").append($(nuevo.join('')));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
