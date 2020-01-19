@@ -250,7 +250,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else {}
+      } else { }
 
     });
   } catch (e) {
@@ -346,6 +346,7 @@ window.loadClases = function loadClases(tipo, mensaje) {
   try {
     // Para distinguir si hemos llegado por click en la barra de navegacion o por otra funcion
     if (tipo == null) {
+      //debugger;
       // Para salvar datos que se han quedado sin guardar
       saveDatas();
     }
@@ -1050,7 +1051,7 @@ window.crearResponsable = function crearResponsable() {
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
   }).get();
-  for(let telefono in telefonos){
+  for (let telefono in telefonos) {
     if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
 
     } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
@@ -1115,7 +1116,7 @@ window.loadAddResponsable = function loadAddResponsable() {
 function createAddResponsable() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1126,11 +1127,11 @@ function createAddResponsable() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1246,7 +1247,7 @@ function createResponsables() {
   let html = [
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1257,11 +1258,11 @@ function createResponsables() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1496,7 +1497,7 @@ window.crearProfesor = function crearProfesor() {
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
   }).get();
-  for(let telefono in telefonos){
+  for (let telefono in telefonos) {
     if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
 
     } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
@@ -1583,7 +1584,7 @@ function createProfesores() {
   let html = [
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1594,11 +1595,11 @@ function createProfesores() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1759,7 +1760,7 @@ window.loadAddProfesor = function loadAddProfesor() {
 function createAddProfesor() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1770,11 +1771,11 @@ function createAddProfesor() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link " role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link " role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -2949,7 +2950,7 @@ window.cancelarResponsable = function cancelarResponsable() {
 
 // Boton guardar de la tabla responsables
 window.guardarResponsables = function guardarResponsables() {
-  
+
   // Elimina definitivamente los profesores que fueron borrados
   for (let z = 0; z < listaResponsables.length; z++) {
     let id = listaResponsables[z].uid;
@@ -2977,7 +2978,7 @@ window.guardarResponsables = function guardarResponsables() {
       tratar2 = tratar2.split('<');
       verResponsables.push(tratar2[0]);
     }
-    verResponsables.splice(0,1);
+    verResponsables.splice(0, 1);
     detail[3] = verResponsables;
     // Tratamiento de la cuarta columna
     tratar = detail[4];
@@ -2989,7 +2990,6 @@ window.guardarResponsables = function guardarResponsables() {
       verResponsables.push(tratar2[0]);
     }
     detail[4] = verResponsables;
-    debugger;
     detail.splice(5, 1);
     userDetails.push(detail);
   });
@@ -3024,7 +3024,7 @@ window.cancelarProfesor = function cancelarProfesor() {
 
 // Boton guardar de la tabla profesores
 window.guardarProfesores = function guardarProfesores() {
-  
+
   // Elimina definitivamente los profesores que fueron borrados
   for (let z = 0; z < listaProfesores.length; z++) {
     let id = listaProfesores[z].uid;
@@ -3045,7 +3045,7 @@ window.guardarProfesores = function guardarProfesores() {
     // Tratamiento de la cuarta columna
     let tratar = detail[3];
     //tratar = tratar.split("<div class=\"row\" id=\"");
-    
+
     tratar = tratar.split('<div class="row">');
     let verResponsables = [];
     //console.log(tratar);
@@ -3058,7 +3058,7 @@ window.guardarProfesores = function guardarProfesores() {
     verResponsables.splice(0, 1);
     detail[3] = verResponsables;
     detail.splice(4, 1);
-   
+
     userDetails.push(detail);
   });
   //console.log(userDetails);
@@ -3138,7 +3138,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     $(this).find("td").each(function () {
       detail.push($(this).html());
     });
-    debugger;
+
     // Tratamiento de la cuarta columna
     let tratar = detail[4];
     tratar = tratar.split("<div class=\"row\" id=\"");
@@ -3160,7 +3160,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     } else {
       student = new Gb.Student(estu[0], estu[1], estu[2], Gb.resolve(estu[0]).cid, estu[4]);
     }
-    debugger;
+
     // Guardo 2 veces porque no funciona como deberia la funcion set
     Gb.set(student).then(d => {
       if (d !== undefined) {
@@ -3185,20 +3185,30 @@ window.cancelarClase = function cancelarClases() {
 
 // Boton para guardar los cambios en las clases
 window.guardarClases = function guardarClases() {
-  if (listaClases.length == 0) {
-    window.loadAdminMenu();
+  if (listaClases.length > 0) {
+    eliminarDefinitivamenteClases(0, listaClases.length);
   }
-  // Elimina definitivamente las clases que fueron borradas
-  for (let i = 0; i < listaClases.length; i++) {
-    Gb.rm(listaClases[i].cid).then(d => {
-      if (d !== undefined) {
+  else{
+    window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
+  }
+  console.log("Llego");
+}
+
+function eliminarDefinitivamenteClases(posicion, fin) {
+  Gb.rm(listaClases[posicion].cid).then(d1 => {
+    if (d1 !== undefined) {
+      if (posicion == fin - 1) {
+        listaClases = [];
         window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
       }
-    });
-  }
-  listaClases = [];
-  window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
+      else {
+        eliminarDefinitivamenteClases(posicion + 1, fin);
+      }
+    }
+  });
 }
+
+
 
 window.guardarDatos = function guardarDatos(tipo) {
   const $tableID = $('#miTabla');
