@@ -632,9 +632,9 @@ window.crearAlumno = function crearAlumno() {
     $("#aviso").append(sendAlert("KO", "El apellido no es válido"));
     return;
   }
-  for(res in listaResponsables) {
+  for(let res in listaResponsables) {
     if (Gb.resolve(listaResponsables[res]) != undefined) {
-      listaDef.push(res);
+      listaDef.push(listaResponsables[res]);
     } else {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "No existe el responsable: " + listaResponsables[res]));
