@@ -699,7 +699,7 @@ window.crearAlumno = function crearAlumno() {
             responsable.students.push(alumno.sid);
             Gb.set(responsable);
           }
-          window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
+          //window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
         } else {
           $("#aviso").empty();
           $("#aviso").append(sendAlert("KO", "No se ha podido crear el alumno"));
@@ -1239,7 +1239,7 @@ window.loadEditarTelefonosResponsable = function loadEditarTelefonosResponsable(
 }
 
 window.editarTelefonos = function editarTelefonos(tipo, id) {
-  debugger;
+  //debugger;
   let listaTelefonos = [];
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
@@ -1378,7 +1378,7 @@ window.loadEditarAlumnos = function loadEditarAlumnos(id) {
 }
 
 window.editarAlumnos = function editarAlumnos(id) {
-  debugger;
+  //debugger;
   let listaAlumnos = [];
   let listaDefinitiva = [];
   let listaBorrar = [];
