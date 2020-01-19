@@ -3398,6 +3398,7 @@ window.guardarProfesores = function guardarProfesores() {
       }
     });
   }
+  window.loadAdminMenu("OK", "Se guardaron los cambios en Profesor");
 }
 
 
