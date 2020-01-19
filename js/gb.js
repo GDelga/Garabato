@@ -1395,21 +1395,22 @@ window.editarAlumnos = function editarAlumnos(id) {
   }
   let elemento = window.buscarEntidad(id);
   let aux;
+  //Me recorro los alumnos que ya tenía ese responsable
   for (let alumno in elemento.students) {
+    //Si entre los que queremos actualizar sigue el alumno lo metemos en definitivos
     if (listaAlumnos.includes(elemento.students[alumno])) listaDefinitiva.push(elemento.students[alumno]);
     else {
+      //Si no, es que lo queremos borrar
       aux = window.buscarEntidad(elemento.students[alumno]);
-      if (aux.guardians.length > 1) listaBorrar.push(elemento.students[alumno]);
-      else {
-        $("#aviso").empty();
-        $("#aviso").append(sendAlert("KO", "El alumno " + elemento.students[alumno] + " no se puede borrar, eres su único responsable"));
-        return;
-      }
+      listaBorrar.push(elemento.students[alumno]);
     }
   }
+  //Me recorro los nuevos alumnos
   for (let alumno in listaAlumnos) {
+    //Si no estaba en los anteriores es que estás añadiendole un nuevo alumno al responsable
     if (!elemento.students.includes(listaAlumnos[alumno])) {
       aux = window.buscarEntidad(listaAlumnos[alumno]);
+      //Buscamos si el alumno existe, si existe lo metemos
       if (aux != undefined) listaDefinitiva.push(listaAlumnos[alumno]);
       else {
         $("#aviso").empty();
@@ -1418,24 +1419,19 @@ window.editarAlumnos = function editarAlumnos(id) {
       }
     }
   }
-  for (let alumno in listaDefinitiva) {
-    aux = window.buscarEntidad(listaDefinitiva[alumno]);
-    if (!aux.guardians.includes(elemento.uid)) {
-      aux.guardians.push(elemento.uid);
-      Gb.set(aux);
-    }
-  }
-  for (let alumno in listaBorrar) {
-    aux = window.buscarEntidad(listaBorrar[alumno]);
-    if (aux.guardians.includes(elemento.uid)) {
-      var i = aux.guardians.indexOf(elemento.uid);
-      aux.guardians.splice(i, 1);
-      Gb.set(aux);
-    }
-  }
   elemento.students = listaDefinitiva;
-  Gb.set(elemento).then(d => {
-    if (d !== undefined) {
+  let responsable = new Gb.User(
+    elemento.uid,
+    elemento.type,
+    elemento.firstName,
+    elemento.lastName,
+    elemento.tels,
+    elemento.classes, 
+    elemento.students
+  )
+  Gb.set(responsable).then(async d => {
+    if(d != undefined) {
+      debugger;
       window.loadResponsables("OK", "Se han actualizado los alumnos del responsable:" + elemento.uid)
     } else {
       window.loadResponsables("KO", "No se han actualizado los alumnos del responsable:" + elemento.uid)
@@ -1473,7 +1469,7 @@ function createEditarAlumnos(elemento) {
     '<div class="container justify-content-center align-items-center">',
     '<div class="row justify-content-center align-items-center">',
     '<div class="col-md-8">',
-    '<h2 class="display-4 text-center mt-3">Editar Alumnos del responsable: "', elemento.uid, '</h2>',
+    '<h2 class="display-4 text-center mt-3">Editar Alumnos del responsable: ', elemento.uid, '</h2>',
     '</div>',
     '</div>',
     '<div class="justify-content-center">',
@@ -3290,7 +3286,7 @@ window.guardarResponsables = function guardarResponsables() {
       tratar2 = tratar2.split('<');
       verResponsables.push(tratar2[0]);
     }
-    verResponsables.splice(0,1);
+    verResponsables.splice(0, 1);
     detail[3] = verResponsables;
     // Tratamiento de la cuarta columna
     tratar = detail[4];
@@ -3357,7 +3353,7 @@ window.guardarProfesores = function guardarProfesores() {
     // Tratamiento de la cuarta columna
     let tratar = detail[3];
     //tratar = tratar.split("<div class=\"row\" id=\"");
-    
+
     tratar = tratar.split('<div class="row">');
     let verResponsables = [];
     //console.log(tratar);
@@ -3370,7 +3366,7 @@ window.guardarProfesores = function guardarProfesores() {
     verResponsables.splice(0, 1);
     detail[3] = verResponsables;
     detail.splice(4, 1);
-   
+
     userDetails.push(detail);
   });
   //console.log(userDetails);
