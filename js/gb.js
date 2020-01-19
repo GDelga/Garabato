@@ -698,7 +698,8 @@ window.crearAlumno = function crearAlumno() {
             responsable.students.push(alumno.sid);
             Gb.set(responsable);
           }
-          window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
+          //window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
+        }
       });
     } else {
       $("#aviso").empty();
@@ -1450,13 +1451,14 @@ function createDesplegableAlumnos(alumnos) {
   for (let i in alumnos) {
     html.push(
       '<li class="list-group-item bg-dark">',
-      '<div class="row">');
+      '<div class="row" id="',
+      alumnos[i],
+      '">');
     html.push(Gb.resolve(alumnos[i]).firstName);
     html.push(
       '</div>',
       '</li>'
     );
-
   }
   return (html.join(''));
 }
@@ -2965,16 +2967,29 @@ window.guardarResponsables = function guardarResponsables() {
     $(this).find("td").each(function () {
       detail.push($(this).html());
     });
-    // Tratamiento de la cuarta columna
-    let tratar = detail[4];
-    tratar = tratar.split("<div class=\"row\" id=\"");
+    // Mirarlo
+    // Tratamiento de la 3º columna
+    let tratar = detail[3];
+    tratar = tratar.split('<div class="row">');
     let verResponsables = [];
     for (let i = 1; i < tratar.length; i++) {
       let tratar2 = tratar[i];
-      tratar2 = tratar2.split("\"");
+      tratar2 = tratar2.split('<');
+      verResponsables.push(tratar2[0]);
+    }
+    verResponsables.splice(0,1);
+    detail[3] = verResponsables;
+    // Tratamiento de la cuarta columna
+    tratar = detail[4];
+    tratar = tratar.split('<div class="row" id="');
+    verResponsables = [];
+    for (let i = 1; i < tratar.length; i++) {
+      let tratar2 = tratar[i];
+      tratar2 = tratar2.split('"');
       verResponsables.push(tratar2[0]);
     }
     detail[4] = verResponsables;
+    debugger;
     detail.splice(5, 1);
     userDetails.push(detail);
   });
@@ -2983,13 +2998,6 @@ window.guardarResponsables = function guardarResponsables() {
     let guardian = Gb.resolve(respon[0]);
     guardian.first_name = respon[1];
     guardian.last_name = respon[2];
-    
-
-    /*if (Gb.resolve(estu[3]) != undefined) {
-      student = new Gb.User(estu[0], estu[1], estu[2], estu[3], estu[4]);
-    } else {
-      student = new Gb.Student(estu[0], estu[1], estu[2], Gb.resolve(estu[0]).cid, estu[4]);
-    }*/
 
     // Guardo 2 veces porque no funciona como deberia la funcion set
     Gb.set(guardian).then(d => {
@@ -3035,16 +3043,22 @@ window.guardarProfesores = function guardarProfesores() {
       detail.push($(this).html());
     });
     // Tratamiento de la cuarta columna
-    let tratar = detail[4];
-    tratar = tratar.split("<div class=\"row\" id=\"");
+    let tratar = detail[3];
+    //tratar = tratar.split("<div class=\"row\" id=\"");
+    
+    tratar = tratar.split('<div class="row">');
     let verResponsables = [];
+    //console.log(tratar);
     for (let i = 1; i < tratar.length; i++) {
       let tratar2 = tratar[i];
-      tratar2 = tratar2.split("\"");
+      tratar2 = tratar2.split("<");
       verResponsables.push(tratar2[0]);
     }
-    detail[4] = verResponsables;
-    detail.splice(5, 1);
+    // Borro la primera posicion, ya que esta vacia
+    verResponsables.splice(0, 1);
+    detail[3] = verResponsables;
+    detail.splice(4, 1);
+   
     userDetails.push(detail);
   });
   //console.log(userDetails);
@@ -3052,7 +3066,8 @@ window.guardarProfesores = function guardarProfesores() {
     let teacher = Gb.resolve(profe[0]);
     teacher.first_name = profe[1];
     teacher.last_name = profe[2];
-    
+    teacher.classes = profe[3];
+    // Falta actualizar los telefonos
 
     /*if (Gb.resolve(estu[3]) != undefined) {
       student = new Gb.User(estu[0], estu[1], estu[2], estu[3], estu[4]);
@@ -3123,6 +3138,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     $(this).find("td").each(function () {
       detail.push($(this).html());
     });
+    debugger;
     // Tratamiento de la cuarta columna
     let tratar = detail[4];
     tratar = tratar.split("<div class=\"row\" id=\"");
@@ -3144,7 +3160,7 @@ window.guardarAlumnos = function guardarAlumnos() {
     } else {
       student = new Gb.Student(estu[0], estu[1], estu[2], Gb.resolve(estu[0]).cid, estu[4]);
     }
-
+    debugger;
     // Guardo 2 veces porque no funciona como deberia la funcion set
     Gb.set(student).then(d => {
       if (d !== undefined) {
