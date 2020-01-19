@@ -231,7 +231,7 @@ window.login = function login() {
         window.loadAdminMenu();
       } else if (usuarioIniciado.type == Gb.UserRoles.TEACHER) {
         window.loadProfessorMenu();
-      }
+      } else window.loadAdminMenu();
     } else {
       // ha habido un error (u ha vuelto como undefined; en la consola se verá qué ha pasado)
       $("#aviso").empty();
@@ -250,7 +250,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else { }
+      } else {}
 
     });
   } catch (e) {
@@ -632,7 +632,7 @@ window.crearAlumno = function crearAlumno() {
     $("#aviso").append(sendAlert("KO", "El apellido no es válido"));
     return;
   }
-  for(let res in listaResponsables) {
+  for (let res in listaResponsables) {
     if (Gb.resolve(listaResponsables[res]) != undefined) {
       listaDef.push(listaResponsables[res]);
     } else {
@@ -954,7 +954,7 @@ function createGroupAlumnos() {
       '<div class="col-xl-4">',
       '<div class="card text-white bg-info">',
       '<div class="card-header">',
-      '<a class="tituloSeccion" role="button" onclick="window.loadEditarResponsables(\'',Gb.globalState.students[i].sid,'\')">',
+      '<a class="tituloSeccion" role="button" onclick="window.loadEditarResponsables(\'', Gb.globalState.students[i].sid, '\')">',
       'Editar',
       '</a>',
       '</div>',
@@ -1055,7 +1055,7 @@ window.crearResponsable = function crearResponsable() {
     [],
     $("#inputContra").val()
   );
-
+  console.log(responsable.password);
   //Pushes user to globalstate.
   Gb.addUser(responsable).then(d => {
     if (d !== undefined) {
@@ -1394,7 +1394,7 @@ window.editarResponsables = function editarResponsables(id) {
   elemento.guardians = listaGuardar; //Lista de responsables a guardar
   //Después hay que modificar los estudiantes de cada responsable
   Gb.set(responsable).then(async d => {
-    if(d != undefined) {
+    if (d != undefined) {
       debugger;
       window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + elemento.sid)
     } else {
@@ -2168,6 +2168,7 @@ function createAddProfesor() {
 
 function transformDate(date) {
   let actual = new Date();
+  date = new Date(date);
   //Año actual
   if (date.getFullYear() == actual.getFullYear()) {
     // Miramos el mes
@@ -2229,14 +2230,26 @@ function groupByKeys(mensajes) {
 
 // Para ordenar las fechas de menor a mayor
 function sortByDate(m1, m2) {
-  let date1 = m1.date;
-  let date2 = m2.date;
+  let date1 = new Date(m1.date);
+  let date2 = new Date(m2.date);
   //Miramos anyo
   if (date1.getFullYear() == date2.getFullYear()) {
     //Miramos mes
     if (date1.getMonth() == date2.getMonth()) {
       //Miramos dia
-      if (date1.getDate() == date2.getDate()) return 0;
+      if (date1.getDate() == date2.getDate()) {
+        if(date1.getHours() == date2.getHours()) {
+          if(date1.getMinutes() == date2.getMinutes()) {
+            if(date1.getSeconds() == date2.getSeconds()) return 0;
+            else if(date1.getSeconds() < date2.getSeconds()) return 1;
+            else return -1;
+          }
+          else if(date1.getMinutes() < date2.getMinutes()) return 1;
+          else return -1;
+        }
+        else if(date1.getHours() < date2.getHours()) return 1;
+        else return -1;
+      } 
       else if (date1.getDate() < date2.getDate()) return 1;
       else return -1;
     } else if (date1.getMonth() < date2.getMonth()) return 1;
@@ -2274,11 +2287,12 @@ window.escribirMensaje = function escribirMensaje() {
   let message = new Gb.Message(
     U.randomString(),
     new Date(),
-    usuarioIniciado.uid,
+    "hola1",
     [$("#inputTo").val()],
     [Gb.MessageLabels.SENT],
     $("#inputAsunto").val(),
-    texto
+    texto,
+    undefined
   )
   Gb.send(message).then(d => {
     if (d !== undefined) {
@@ -2345,17 +2359,17 @@ window.loadMenuMensajes = function loadMenuMensajes() {
     for (let mes in Gb.globalState.messages) {
       let usuarioCorrecto = false;
       // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
+      for (let ids in Gb.globalState.messages[mes].to) {
+        if (usuarioIniciado.uid == Gb.globalState.messages[mes].to[ids]) {
           usuarioCorrecto = true;
           break;
         }
       }
       // Compruebo que el mensaje sea del usuario correcto
       if (usuarioCorrecto) {
-        for (let label in mes.MessageLabels) {
-          if (label == Gb.MessageLabels.RECVD) {
-            recibidos.push(mes);
+        for (let label in Gb.globalState.messages[mes].labels) {
+          if (Gb.globalState.messages[mes].labels[label] == Gb.MessageLabels.RECVD) {
+            recibidos.push(Gb.globalState.messages[mes]);
             break;
           }
         }
@@ -2363,10 +2377,13 @@ window.loadMenuMensajes = function loadMenuMensajes() {
     }
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
     // Para ver si hay mensjaes que mostrar
-    //debugger;
-    let mensajesConDate = recibidos.apply(x => x + (x['order'] = transformDate(x.date)));
+    let mensajesConDate = recibidos.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
     mensajesConDate.sort(sortByDate);
-    let mensajesAgrupados = U.groupByKeys(mensajesConDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
     // Parte de la derecha
@@ -2458,7 +2475,7 @@ function createZonaMensajesIzquierda(tipo) {
     '</a>',
     '</li>',
     '<li class="nav-item">',
-    '<a class="nav-link" id="bandeja" onclick="window.loadMessage()">',
+    '<a class="nav-link" id="bandeja" onclick="window.loadMessageRecibidos()">',
     '<img class="iconos" src="imagenes/bandeja entrada.png" alt="">',
     '</a>',
     '</li>',
@@ -2546,7 +2563,7 @@ function createGroupMessages(mensaje) {
       '<div class="row">',
       '<div class="col-6">',
       '<a onclick="window.loadLeerMensaje(', "'" + mensaje[m].msgid + "'", ')" class="tituloMensaje">',
-      mensaje[m].title,
+      mensaje[m].subject,
       '</a>',
       '</div>',
       '<div class="col-6 d-flex flex-row justify-content-end flex-wrap">',
@@ -2556,17 +2573,21 @@ function createGroupMessages(mensaje) {
       html.push(
         '<img class="iconos" src="imagenes/read.png" alt="">'
       );
+    } else if (mensaje[m].labels.includes(Gb.MessageLabels.SENT)) {
+
     } else {
       html.push(
         '<img class="iconos" src="imagenes/unread.png" alt="">'
       );
     }
-    html.push(
-      '</a>',
-      '<a class="mr-2" onclick="window.loadResponderMensaje(', "'" + mensaje[m].msgid + "'", ')">',
-      '<img class="iconos" src="imagenes/reply.png" alt="">',
-      '</a>',
-      '<a class="mr-2" href="#">')
+    if (mensaje[m].labels.includes(Gb.MessageLabels.RECVD)) {
+      html.push(
+        '</a>',
+        '<a class="mr-2" onclick="window.loadResponderMensaje(', "'" + mensaje[m].msgid + "'", ')">',
+        '<img class="iconos" src="imagenes/reply.png" alt="">',
+        '</a>',
+        '<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje[m].msgid, '\')">')
+    }
     // Para disntinguir entre archivados y no archivados
     if (mensaje[m].labels.includes(Gb.MessageLabels.ARCH)) {
       html.push(
@@ -2579,7 +2600,7 @@ function createGroupMessages(mensaje) {
     }
     html.push(
       '</a>',
-      '<a class="mr-2" href="#">');
+      '<a class="mr-2" href="#" onclick="window.marcarFavorito(\'', mensaje[m].msgid, '\')">');
     // Para disntinguir entre favoritos y no favoritos
     if (mensaje[m].labels.includes(Gb.MessageLabels.FAV)) {
       html.push(
@@ -2592,7 +2613,7 @@ function createGroupMessages(mensaje) {
     }
     html.push(
       '</a>',
-      '<a class="" href="#">',
+      '<a class="" href="#" onclick="window.eliminarMensaje(\'', mensaje.msgid, '\')">',
       '<img class="iconos" src="imagenes/eliminar.png" alt="">',
       '</a>',
       '</div>',
@@ -2603,45 +2624,82 @@ function createGroupMessages(mensaje) {
   return (html.join(''));
 }
 
+window.marcarFavorito = function marcarFavorito(id) {
+  debugger;
+  let mensaje = Gb.resolve(id);
+  if(mensaje.labels.includes(Gb.MessageLabels.FAV)){
+    var i = mensaje.labels.indexOf( Gb.MessageLabels.FAV );
+    mensaje.labels.splice( i, 1 );
+  }
+  else {
+      mensaje.labels.push(Gb.MessageLabels.FAV);
+  }
+  Gb.set(mensaje).then(d => {
+    if(d != undefined) {
+      window.loadMessageFavoritos();
+    }
+  })
+}
+
+window.archivarMensaje = function archivarMensaje(id) {
+  let mensaje = Gb.resolve(id);
+  if(mensaje.labels.includes(Gb.MessageLabels.ARCH)){
+    var i = mensaje.labels.indexOf( Gb.MessageLabels.ARCH );
+    mensaje.labels.splice( i, 1 );
+  }
+  else {
+      mensaje.labels.push(Gb.MessageLabels.ARCH);
+  }
+  Gb.set(mensaje).then(d => {
+    if(d != undefined) {
+      window.loadMessageArchivados();
+    }
+  })
+}
+
+window.eliminarMensaje = function eliminarMensaje(id) {
+  Gb.rm(id).then(d => {
+    if(d != undefined) {
+      window.loadMessageRecibidos();
+    }
+  })
+}
+
 // Funcion que carga los mensajes archivados
 window.loadMessageArchivados = function loadMessageArchivos() {
   try {
     // vaciamos un contenedor
-    $("#izquierda").empty();
-    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
-    $("#mensajes").empty();
+    $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    // busco los mensajes archivados y los guardo
+    $("#contenido").append(createMenuMensajes());
+    $("#izquierda").empty();
+    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.ARCH));
+    $("#mensajes").empty();
     let archivados = [];
     // Recorro los mensajes
     for (let mensaje in Gb.globalState.messages) {
-      let usuarioCorrecto = false;
-      // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
-          usuarioCorrecto = true;
-          break;
-        }
-      }
-      // Compruebo que el mensaje sea del usuario correcto
-      if (usuarioCorrecto) {
-        // Miro los labels, en busca del label "arch"
-        for (let pos in mensaje.labels) {
-
-          if (pos == Gb.MessageLabels.ARCH) {
-            archivados.push(mensaje);
+      if (Gb.globalState.messages[mensaje].from == usuarioIniciado.uid || Gb.globalState.messages[mensaje].to.includes(usuarioIniciado.uid)) {
+        // Miro los labels, en busca del label "sent"
+        for (let label in Gb.globalState.messages[mensaje].labels) {
+          //Comprobamos que el mensaje es "Enviado" por el usuario logueado
+          if (Gb.globalState.messages[mensaje].labels[label] == Gb.MessageLabels.ARCH) {
+            archivados.push(Gb.globalState.messages[mensaje]);
             break;
           }
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    archivados.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(archivados);
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = archivados.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)*/
   } catch (e) {
     console.log('Error al cargar los mensajes archivados', e);
   }
@@ -2650,40 +2708,39 @@ window.loadMessageArchivados = function loadMessageArchivos() {
 // Funcion que carga los mensajes favoritos
 window.loadMessageFavoritos = function loadMessageFavoritos() {
   try {
+    debugger;
     // vaciamos un contenedor
-    $("#izquierda").empty();
-    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
-    $("#mensajes").empty();
+    $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
+    $("#izquierda").empty();
+    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.FAV));
+    $("#mensajes").empty();
     let favoritos = [];
-    for (let mes in Gb.globalState.messages) {
-      let usuarioCorrecto = false;
-      // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
-          usuarioCorrecto = true;
-          break;
-        }
-      }
-      // Compruebo que el mensaje sea del usuario correcto
-      if (usuarioCorrecto) {
-        for (let label in mes.MessageLabels) {
-
-          if (label == Gb.MessageLabels.FAV) {
-            favoritos.push(mes);
+    // Recorro los mensajes
+    for (let mensaje in Gb.globalState.messages) {
+      if (Gb.globalState.messages[mensaje].from == usuarioIniciado.uid || Gb.globalState.messages[mensaje].to.includes(usuarioIniciado.uid)) {
+        // Miro los labels, en busca del label "sent"
+        for (let label in Gb.globalState.messages[mensaje].labels) {
+          //Comprobamos que el mensaje es "Enviado" por el usuario logueado
+          if (Gb.globalState.messages[mensaje].labels[label] == Gb.MessageLabels.FAV) {
+            favoritos.push(Gb.globalState.messages[mensaje]);
             break;
           }
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    favoritos.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(favoritos);
-    // Nos recorremos los mensajes agrupados
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = favoritos.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
   } catch (e) {
     console.log('Error al cargar los mensajes favoritos', e);
   }
@@ -2693,37 +2750,43 @@ window.loadMessageFavoritos = function loadMessageFavoritos() {
 window.loadMessageRecibidos = function loadMessageRecibidos() {
   try {
     // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
     $("#izquierda").empty();
     $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
     $("#mensajes").empty();
-    // y lo volvemos a rellenar con su nuevo contenido
     let recibidos = [];
     for (let mes in Gb.globalState.messages) {
       let usuarioCorrecto = false;
       // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
+      for (let ids in Gb.globalState.messages[mes].to) {
+        if (usuarioIniciado.uid == Gb.globalState.messages[mes].to[ids]) {
           usuarioCorrecto = true;
           break;
         }
       }
       // Compruebo que el mensaje sea del usuario correcto
       if (usuarioCorrecto) {
-        for (let label in mes.MessageLabels) {
-          if (label == Gb.MessageLabels.RECVD) {
-            recibidos.push(mes);
+        for (let label in Gb.globalState.messages[mes].labels) {
+          if (Gb.globalState.messages[mes].labels[label] == Gb.MessageLabels.RECVD) {
+            recibidos.push(Gb.globalState.messages[mes]);
             break;
           }
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    recibidos.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(recibidos);
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = recibidos.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
   } catch (e) {
     console.log('Error al cargar los mensajes recibidos', e);
   }
@@ -2733,46 +2796,34 @@ window.loadMessageRecibidos = function loadMessageRecibidos() {
 window.loadMessageLeidos = function loadMessageLeidos() {
   try {
     // vaciamos un contenedor
-    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
     $("#izquierda").empty();
     $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
     $("#mensajes").empty();
-    // y lo volvemos a rellenar con su nuevo contenido
     let leidos = [];
-
-    for (let mes in Gb.globalState.messages) {
-      let usuarioCorrecto = false;
-      // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
-          usuarioCorrecto = true;
-          break;
-        }
-      }
-      // Compruebo que el mensaje sea del usuario correcto
-      if (usuarioCorrecto) {
-        let read = false; //si has leido el mensaje
-        let reci = false; //si es un mensaje recibido
-        for (let label in mes.MessageLabels) {
-          if (label == Gb.MessageLabels.RECVD) {
-            reci = true;
-          } else if (label == Gb.MessageLabels.READ) {
-            read = true;
-          }
-          if (reci && read) {
-            leidos.push(mes);
-            break;
-          }
+    // Recorro los mensajes
+    for (let mensaje in Gb.globalState.messages) {
+      if (Gb.globalState.messages[mensaje].from == usuarioIniciado.uid) {
+        // Miro los labels, en busca del label "sent"
+        if (Gb.globalState.messages[mensaje].labels.includes(Gb.MessageLabels.RECVD) &&
+          Gb.globalState.messages[mensaje].labels.includes(Gb.MessageLabels.READ)) {
+          leidos.push(Gb.globalState.messages[mensaje]);
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    leidos.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(leidos);
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = leidos.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
   } catch (e) {
     console.log('Error al cargar los mensajes leidos', e);
   }
@@ -2782,33 +2833,37 @@ window.loadMessageLeidos = function loadMessageLeidos() {
 window.loadMessageEnviados = function loadMessageEnviados() {
   try {
     // vaciamos un contenedor
-    // vaciamos un contenedor
-    $("#izquierda").empty();
-    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
-    $("#mensajes").empty();
+    $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    // busco los mensajes archivados y los guardo
+    $("#contenido").append(createMenuMensajes());
+    $("#izquierda").empty();
+    $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.SENT));
+    $("#mensajes").empty();
     let enviados = [];
     // Recorro los mensajes
     for (let mensaje in Gb.globalState.messages) {
-      if (mensaje.from == usuarioIniciado.uid) {
+      if (Gb.globalState.messages[mensaje].from == usuarioIniciado.uid) {
         // Miro los labels, en busca del label "sent"
-        for (let etiq in mensaje.labels) {
+        for (let label in Gb.globalState.messages[mensaje].labels) {
           //Comprobamos que el mensaje es "Enviado" por el usuario logueado
-          if (etiq == Gb.MessageLabels.SENT) {
-            enviados.push(mensaje);
+          if (Gb.globalState.messages[mensaje].labels[label] == Gb.MessageLabels.SENT) {
+            enviados.push(Gb.globalState.messages[mensaje]);
             break;
           }
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    enviados.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(enviados);
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = enviados.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)*/
   } catch (e) {
     console.log('Error al cargar los mensajes enviados', e);
   }
@@ -2817,47 +2872,36 @@ window.loadMessageEnviados = function loadMessageEnviados() {
 // Funcion que carga los mensajes no leidos
 window.loadMessageNoLeidos = function loadMessageNoLeidos() {
   try {
+    debugger;
     // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    $("#contenido").append(createMenuMensajes());
     $("#izquierda").empty();
     $("#izquierda").append(createZonaMensajesIzquierda(Gb.MessageLabels.RECVD));
     $("#mensajes").empty();
-    // y lo volvemos a rellenar con su nuevo contenido
     let noLeidos = [];
-    for (let mes in Gb.globalState.messages) {
-      let recibido = false,
-        leido = false,
-        usuarioCorrecto = false;
-      // Miro si entre los receptores esta el id del usuario que inicio la sesion
-      for (let ids in mes.to) {
-        if (usuarioIniciado.uid == ids) {
-          usuarioCorrecto = true;
-          break;
-        }
-      }
-      // Compruebo que el mensaje sea del usuario correcto
-      if (usuarioCorrecto) {
-        for (let label in mes.MessageLabels) {
-          // Miro si esta recibido
-          if (label == Gb.MessageLabels.RECVD) {
-            recibido = true;
-          }
-          // Miro que no este leido
-          else if (label == Gb.MessageLabels.READ) {
-            leido = true;
-          }
-        }
-        if (recibido && !leido) {
-          noLeidos.push(mes);
+    // Recorro los mensajes
+    for (let mensaje in Gb.globalState.messages) {
+      if (Gb.globalState.messages[mensaje].to.includes(usuarioIniciado.uid)) {
+        // Miro los labels, en busca del label "sent"
+        if (Gb.globalState.messages[mensaje].labels.includes(Gb.MessageLabels.RECVD) &&
+          !Gb.globalState.messages[mensaje].labels.includes(Gb.MessageLabels.READ)) {
+          noLeidos.push(Gb.globalState.messages[mensaje]);
         }
       }
     }
-
     // Ordenamos los mensajes, por si se ha añadido uno nuevo
-    noLeidos.sort(U.sortByDate);
-    let mensajesAgrupados = U.groupByKeys(noLeidos);
+    // Para ver si hay mensjaes que mostrar
+    let mensajesConDate = noLeidos.reduce((ac, n) => {
+      n['order'] = transformDate(n.date);
+      ac.push(n);
+      return ac;
+    }, [])
+    mensajesConDate.sort(sortByDate);
+    let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
-    // y asi para cada cosa que pueda haber cambiado $("#grupos").append(createGroupDate(date)
   } catch (e) {
     console.log('Error al cargar los mensajes no leidos', e);
   }
@@ -2868,7 +2912,16 @@ window.loadLeerMensaje = function loadLeerMensaje(id) {
     // vaciamos un contenedor
     $("#derecha").empty();
     // y lo volvemos a rellenar con su nuevo contenido
-    $("#derecha").append(createZonaMensajesDerechaLeer(Gb.resolve(id)));
+    let mensaje = Gb.resolve(id);
+    $("#derecha").append(createZonaMensajesDerechaLeer(mensaje));
+    if (!mensaje.labels.includes(Gb.MessageLabels.READ)) {
+      mensaje.labels.push(Gb.MessageLabels.READ);
+      Gb.set(mensaje).then(d => {
+        if (d !== undefined) {
+          console.log(d);
+        }
+      });
+    }
     window.loadInputClases();
   } catch (e) {
     console.log('Error cargando añadir alumnos', e);
@@ -2890,47 +2943,66 @@ function createZonaMensajesDerechaLeer(mensaje) {
     '<div class="row pt-2 pb-2 align-items-center">',
     '<div class="col-12 col-xl-2">Asunto:</div>',
     '<div class="col-12 col-xl-10">',
-    '<input type="text" class="form-control" value="', mensaje.title, '" id="inputAsunto" readonly>',
+    '<input type="text" class="form-control" value="', mensaje.subject, '" id="inputAsunto" readonly>',
     '</div>',
     '</div>',
     '<!--Campo para escribir el mensaje-->',
     'Mensaje:',
     '<div class="row pt-1">',
     '<div class="col-12 col-xl-12">',
-    '<textarea class="campoTexto" id="summernote" value="', mensaje.body, '" name="editordata" readonly></textarea>',
+    '<textarea class="campoTexto" id="summernote" name="editordata" readonly>', mensaje.body, '</textarea>',
     '<script>',
     '$("#summernote").summernote({',
     'placeholder: "Hola caracola",',
     'tabsize: 2,',
-    'readonly: true,',
+    'disable: true,',
     'maxHeight: null,',
     'minHeight: "calc(100vh - 25rem)"',
     '});',
     '// Esto hace que el mensaje sea no editable',
     '// Enlace: https://stackoverflow.com/a/49665694',
-    '$("#summernote").summernote("disable");',
+    '$(\'#quote\').summernote(\'disable\');',
+    '$(\'#summernote\').summernote(\'disable\');',
     '</script>',
     '</div>',
     '</div>',
     '<div class="row pt-1">',
     '<!--Botonera con los botones de responder, archivar, favorito y eliminar-->',
     '<div class="col-12 d-flex flex-row justify-content-end flex-wrap">',
-    '<a class="mr-2" href="#">',
+    '<a class="mr-2" href="#" onclick="window.loadResponderMensaje(\'', mensaje.msgid, '\')">',
     '<img class="iconos" src="imagenes/reply.png" alt="">',
-    '</a>',
-    '<a class="mr-2" href="#">',
-    '<img class="iconos" src="imagenes/no-archivados.png" alt="">',
-    '</a>',
-    '<a class="mr-2" href="#">',
-    '<img class="iconos" src="imagenes/favorito-desactivado.png" alt="">',
-    '</a>',
+    '</a>'
+  ]
+  if (mensaje.labels.includes(Gb.MessageLabels.ARCH)) {
+    html.push(
+      '<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje.msgid, '\')">',
+      '<img class="iconos" src="imagenes/no-archivados.png" alt="">',
+      '</a>')
+  } else {
+    html.push(
+      '<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje.msgid, '\')">',
+      '<img class="iconos" src="imagenes/archivados.png" alt="">',
+      '</a>')
+  }
+  if (mensaje.labels.includes(Gb.MessageLabels.FAV)) {
+    html.push(
+      '<a class="mr-2" href="#" onclick="window.marcarFavorito(\'', mensaje.msgid, '\')">',
+      '<img class="iconos" src="imagenes/favorito-activado.png" alt="">',
+      '</a>')
+  } else {
+    html.push(
+      '<a class="mr-2" href="#" onclick="window.marcarFavorito(\'', mensaje.msgid, '\')">',
+      '<img class="iconos" src="imagenes/favorito-desactivado" alt="">',
+      '</a>')
+  }
+  html.push(
     '<a class="" href="#">',
-    '<img class="iconos" src="imagenes/eliminar.png" alt="">',
+    '<img class="iconos" src="imagenes/eliminar.png" alt="" onclick="window.eliminarMensaje(\'', mensaje.msgid, '\')">',
     '</a>',
     '</div>',
     '</div>',
     '</div>'
-  ];
+  );
 
   return $(html.join(''));
 }
@@ -2963,7 +3035,7 @@ function createZonaMensajesDerechaResponder(mensaje) {
     '<div class="row pt-2 pb-2 align-items-center">',
     '<div class="col-12 col-xl-2">Asunto:</div>',
     '<div class="col-12 col-xl-10">',
-    '<input type="text" id="inputAsunto" class="form-control" value="Re: ', mensaje.title, '" placeholder="Re: Falta de asistencia"',
+    '<input type="text" id="inputAsunto" class="form-control" value="Re: ', mensaje.subject, '" placeholder="Re: Falta de asistencia"',
     'readonly>',
     '</div>',
     '</div>',
@@ -3450,8 +3522,7 @@ window.cancelarClase = function cancelarClases() {
 window.guardarClases = function guardarClases() {
   if (listaClases.length > 0) {
     eliminarDefinitivamenteClases(0, listaClases.length);
-  }
-  else{
+  } else {
     window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
   }
   console.log("Llego");
@@ -3463,8 +3534,7 @@ function eliminarDefinitivamenteClases(posicion, fin) {
       if (posicion == fin - 1) {
         listaClases = [];
         window.loadAdminMenu("OK", "Se guardaron los cambios en Clases");
-      }
-      else {
+      } else {
         eliminarDefinitivamenteClases(posicion + 1, fin);
       }
     }
