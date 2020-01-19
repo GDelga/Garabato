@@ -699,6 +699,10 @@ window.crearAlumno = function crearAlumno() {
             Gb.set(responsable);
           }
           window.loadAlumnos("OK", "Se ha creado correctamente el alumno con ID: " + $("#inputIDAlumno").val());
+        } else {
+          $("#aviso").empty();
+          $("#aviso").append(sendAlert("KO", "No se ha podido crear el alumno"));
+        }
       });
     } else {
       $("#aviso").empty();
@@ -877,6 +881,10 @@ function createAlumnos() {
     '</div>',
     '</div>',
     '</nav>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso" class="col-md-8"></div>',
+    '</div>',
     '<div class="container">',
     '<h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Alumnos</h1>',
     '<div class="card-body pt-0">',
@@ -918,10 +926,6 @@ function createAlumnos() {
     '</tbody>',
     '</table>',
     '</div>',
-    '</div>',
-    '<!-- avisos -->',
-    '<div class="row mt-3 justify-content-center">',
-    '<div id="aviso" class="col-md-8"></div>',
     '</div>',
     '<!-- botonera -->',
     '<div class="row mt-3 d-flex justify-content-end">',
@@ -1049,7 +1053,7 @@ window.crearResponsable = function crearResponsable() {
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
   }).get();
-  for(let telefono in telefonos){
+  for (let telefono in telefonos) {
     if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
 
     } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
@@ -1114,7 +1118,7 @@ window.loadAddResponsable = function loadAddResponsable() {
 function createAddResponsable() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1125,11 +1129,11 @@ function createAddResponsable() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1221,6 +1225,316 @@ function createAddResponsable() {
   return $(html.join(''));
 }
 
+window.loadEditarTelefonosResponsable = function loadEditarTelefonosResponsable(id) {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let elemento = window.buscarEntidad(id);
+    $("#contenido").append(createEditarTelefonos(elemento, "responsable"));
+  } catch (e) {
+    console.log('Error cargando editar teléfonos de un responsable', e);
+  }
+}
+
+window.editarTelefonos = function editarTelefonos(tipo, id) {
+  debugger;
+  let listaTelefonos = [];
+  let telefonos = $('input[name="telefonos"]').map(function () {
+    return $(this).val();
+  }).get();
+  for (let telefono in telefonos) {
+    if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
+
+    } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El teléfono " + telefonos[telefono] + " no es válido"));
+      return;
+    } else listaTelefonos.push(telefonos[telefono]);
+  }
+  if (listaTelefonos.length < 1) {
+    $("#aviso").empty();
+    $("#aviso").append(sendAlert("KO", "Al menos un telefono debe de ser válido"));
+    return;
+  }
+  let elemento = window.buscarEntidad(id);
+  elemento.tels = listaTelefonos;
+  Gb.set(elemento).then(d => {
+    if (d !== undefined) {
+      if (tipo == "responsable") {
+        window.loadResponsables("OK", "Se han actualizado los teléfonos del responsable:" + elemento.uid)
+      } else if (tipo == "profesor") {
+        window.loadResponsables("OK", "Se han actualizado los teléfonos del profesor:" + elemento.uid)
+      }
+    } else {
+      if (tipo == "responsable") {
+        window.loadResponsables("KO", "No se han actualizado los teléfonos del responsable:" + elemento.uid)
+      } else if (tipo == "profesor") {
+        window.loadResponsables("KO", "No se han actualizado los teléfonos del profesor:" + elemento.uid)
+      }
+    }
+  });
+
+}
+
+function createEditarTelefonos(elemento, tipo) {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Editar Teléfonos del ', tipo, ": ", elemento.uid, '</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputDNI">Teléfonos:</label>',
+    '</div>',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" name="telefonos" placeholder="Teléfono" value="', elemento.tels[0], '">',
+    '</div>',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroTelefono()">Añadir Teléfono</button>',
+    '</div>',
+    '<div class="col-md-9" id="contenedorTelefonos">'
+  ]
+  for (let i = 1; i < elemento.tels.length; ++i) {
+    html.push(
+      '<div class="pt-2">',
+      '<input type="text" class="form-control" name="telefonos" placeholder="Teléfono" value="', elemento.tels[i], '">',
+      '</div>')
+  }
+  html.push(
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso" class="col-md-8"></div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-4 text-left">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadResponsables()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
+    '<button id="boton-guardar" class="btn" onclick="window.editarTelefonos(\'' + tipo + '\',\'' + elemento.uid, '\')">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  );
+  return $(html.join(''));
+}
+
+window.loadEditarAlumnos = function loadEditarAlumnos(id) {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let elemento = window.buscarEntidad(id);
+    $("#contenido").append(createEditarAlumnos(elemento));
+  } catch (e) {
+    console.log('Error cargando editar alumnos de un responsable', e);
+  }
+}
+
+window.editarAlumnos = function editarAlumnos(id) {
+  debugger;
+  let listaAlumnos = [];
+  let listaDefinitiva = [];
+  let listaBorrar = [];
+  let alumnos = $('input[name="alumnos"]').map(function () {
+    return $(this).val();
+  }).get();
+  for (let alumno in alumnos) {
+    if (!/^(\s*\w+.*)/.test(alumnos[alumno])) {
+
+    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(alumnos[alumno])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El alumno " + alumnos[alumno] + " no es válido"));
+      return;
+    } else listaAlumnos.push(alumnos[alumno]);
+  }
+  let elemento = window.buscarEntidad(id);
+  let aux;
+  for (let alumno in elemento.students) {
+    if (listaAlumnos.includes(elemento.students[alumno])) listaDefinitiva.push(elemento.students[alumno]);
+    else {
+      aux = window.buscarEntidad(elemento.students[alumno]);
+      if (aux.guardians.length > 1) listaBorrar.push(elemento.students[alumno]);
+      else {
+        $("#aviso").empty();
+        $("#aviso").append(sendAlert("KO", "El alumno " + elemento.students[alumno] + " no se puede borrar, eres su único responsable"));
+        return;
+      }
+    }
+  }
+  for (let alumno in listaAlumnos) {
+    if (!elemento.students.includes(listaAlumnos[alumno])) {
+      aux = window.buscarEntidad(listaAlumnos[alumno]);
+      if (aux != undefined) listaDefinitiva.push(listaAlumnos[alumno]);
+      else {
+        $("#aviso").empty();
+        $("#aviso").append(sendAlert("KO", "El alumno " + listaAlumnos[alumno] + " no existe"));
+        return;
+      }
+    }
+  }
+  for (let alumno in listaDefinitiva) {
+    aux = window.buscarEntidad(listaDefinitiva[alumno]);
+    if (!aux.guardians.includes(elemento.uid)) {
+      aux.guardians.push(elemento.uid);
+      Gb.set(aux);
+    }
+  }
+  for (let alumno in listaBorrar) {
+    aux = window.buscarEntidad(listaBorrar[alumno]);
+    if (aux.guardians.includes(elemento.uid)) {
+      var i = aux.guardians.indexOf(elemento.uid);
+      aux.guardians.splice(i, 1);
+      Gb.set(aux);
+    }
+  }
+  elemento.students = listaDefinitiva;
+  Gb.set(elemento).then(d => {
+    if (d !== undefined) {
+      window.loadResponsables("OK", "Se han actualizado los alumnos del responsable:" + elemento.uid)
+    } else {
+      window.loadResponsables("KO", "No se han actualizado los alumnos del responsable:" + elemento.uid)
+    }
+  });
+
+}
+
+function createEditarAlumnos(elemento) {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Editar Alumnos del responsable: "', elemento.uid, '</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputDNI">Teléfonos:</label>',
+    '</div>',
+    '<div class="col-md-6">'
+  ]
+  if (elemento.students.length > 0) {
+    html.push('<input type="text" class="form-control" name="alumnos" placeholder="Alumno" value="', elemento.students[0], '">')
+  } else {
+    html.push('<input type="text" class="form-control" name="alumnos" placeholder="Alumno">')
+  }
+  html.push('</div>',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroAlumno()">Añadir Alumno</button>',
+    '</div>',
+    '<div class="col-md-9" id="contenedorAlumnos">')
+  for (let i = 1; i < elemento.students.length; ++i) {
+    html.push(
+      '<div class="pt-2">',
+      '<input type="text" class="form-control" name="alumnos" placeholder="Alumno" value="', elemento.students[i], '">',
+      '</div>')
+  }
+  html.push(
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso" class="col-md-8"></div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-4 text-left">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadResponsables()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
+    '<button id="boton-guardar" class="btn" onclick="window.editarAlumnos(\'' + elemento.uid, '\')">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  );
+  return $(html.join(''));
+}
+
 window.loadResponsables = function loadResponsables(tipo, mensaje) {
   try {
     if (tipo == null) {
@@ -1245,7 +1559,7 @@ function createResponsables() {
   let html = [
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1256,11 +1570,11 @@ function createResponsables() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1374,7 +1688,7 @@ function createGroupResponsables() {
         '<div class="col-xl-5">',
         '<div class="card text-white bg-info">',
         '<div class="card-header">',
-        '<a class="tituloSeccion" role="button">',
+        '<a class="tituloSeccion" role="button" onclick="window.loadEditarTelefonosResponsable(\'' + Gb.globalState.users[i].uid + '\')">',
         'Editar',
         '</a>',
         '</div>',
@@ -1405,7 +1719,7 @@ function createGroupResponsables() {
         '<div class="col-xl-5">',
         '<div class="card text-white bg-info">',
         '<div class="card-header">',
-        '<a class="tituloSeccion" role="button">',
+        '<a class="tituloSeccion" role="button" onclick="window.loadEditarAlumnos(\'' + Gb.globalState.users[i].uid + '\')">',
         'Editar',
         '</a>',
         '</div>',
@@ -1494,7 +1808,7 @@ window.crearProfesor = function crearProfesor() {
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
   }).get();
-  for(let telefono in telefonos){
+  for (let telefono in telefonos) {
     if (!/^(\s*\w+.*)/.test(telefonos[telefono])) {
 
     } else if (!/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test(telefonos[telefono])) {
@@ -1581,7 +1895,7 @@ function createProfesores() {
   let html = [
     '<!-- Editable table -->',
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1592,11 +1906,11 @@ function createProfesores() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -1757,7 +2071,7 @@ window.loadAddProfesor = function loadAddProfesor() {
 function createAddProfesor() {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
-    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu('+"null"+')">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
     '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
     '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
     '</a>',
@@ -1768,11 +2082,11 @@ function createAddProfesor() {
     '<!--Las diferentes opciones de la barra de menu-->',
     '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
     '<div class="navbar-nav ml-auto mr-auto">',
-    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores('+"null"+')">Profesores</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos('+"null"+')">Alumnos</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables('+"null"+')">Responsables</a>',
-    '<a class="nav-item nav-link " role="button" onclick="window.loadClases('+"null"+')">Clases</a>',
-    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes('+"null"+')">Mensajes</a>',
+    '<a class="nav-item nav-link active" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link " role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
     '</div>',
     '<!--Boton para cerrar sesion-->',
     '<div class="navbar-nav">',
@@ -2947,7 +3261,7 @@ window.cancelarResponsable = function cancelarResponsable() {
 
 // Boton guardar de la tabla responsables
 window.guardarResponsables = function guardarResponsables() {
-  
+
   // Elimina definitivamente los profesores que fueron borrados
   for (let z = 0; z < listaResponsables.length; z++) {
     let id = listaResponsables[z].uid;
@@ -2983,7 +3297,7 @@ window.guardarResponsables = function guardarResponsables() {
     let guardian = Gb.resolve(respon[0]);
     guardian.first_name = respon[1];
     guardian.last_name = respon[2];
-    
+
 
     /*if (Gb.resolve(estu[3]) != undefined) {
       student = new Gb.User(estu[0], estu[1], estu[2], estu[3], estu[4]);
@@ -3016,7 +3330,7 @@ window.cancelarProfesor = function cancelarProfesor() {
 
 // Boton guardar de la tabla profesores
 window.guardarProfesores = function guardarProfesores() {
-  
+
   // Elimina definitivamente los profesores que fueron borrados
   for (let z = 0; z < listaProfesores.length; z++) {
     let id = listaProfesores[z].uid;
@@ -3052,7 +3366,7 @@ window.guardarProfesores = function guardarProfesores() {
     let teacher = Gb.resolve(profe[0]);
     teacher.first_name = profe[1];
     teacher.last_name = profe[2];
-    
+
 
     /*if (Gb.resolve(estu[3]) != undefined) {
       student = new Gb.User(estu[0], estu[1], estu[2], estu[3], estu[4]);
@@ -3362,6 +3676,15 @@ window.addCuadroTelefono = function addCuadroTelefono() {
     '</div>',
   ]
   $("#contenedorTelefonos").append($(nuevo.join('')));
+}
+
+window.addCuadroAlumno = function addCuadroAlumno() {
+  let nuevo = [
+    '<div class="pt-2">',
+    '<input type="text" class="form-control" name="alumnos" placeholder="Alumno">',
+    '</div>',
+  ]
+  $("#contenedorAlumnos").append($(nuevo.join('')));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
