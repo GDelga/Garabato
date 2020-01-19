@@ -603,10 +603,20 @@ function inputClass() {
 
 //Funcion para crear un nuevo alumno
 window.crearAlumno = function crearAlumno() {
-  let responsables = [];
-  let res1 = null,
-    res2 = null,
-    res3 = null;
+  let listaResponsables = [];
+  let responsables = $('input[name="responsables"]').map(function () {
+    return $(this).val();
+  }).get();
+  let listaDef = [];
+  for (let res in responsables) {
+    if (!/^(\s*\w+.*)/.test(responsables[res])) {
+
+    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
+      return;
+    } else listaResponsables.push(responsables[res]);
+  }
   if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#inputIDAlumno").val())) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID no es válido"));
@@ -642,30 +652,12 @@ window.crearAlumno = function crearAlumno() {
     $("#aviso").append(sendAlert("KO", "El ID ya existe"));
     return;
   }
-  if (res1 != null) {
-    if (Gb.resolve(res1) != undefined) {
-      responsables.push(res1);
+  for(res in listaResponsables) {
+    if (Gb.resolve(listaResponsables[res]) != undefined) {
+      listaDef.push(res);
     } else {
       $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "No existe el responsable 1"));
-      return;
-    }
-  }
-  if (res2 != null && !/^\s*$/.test(res2)) {
-    if (Gb.resolve(res2) != undefined) {
-      responsables.push(res2);
-    } else {
-      $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "No existe el responsable 2"));
-      return;
-    }
-  }
-  if (res3 != null && !/^\s*$/.test(res3)) {
-    if (Gb.resolve(res3) != undefined) {
-      responsables.push(res3);
-    } else {
-      $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "No existe el responsable 3"));
+      $("#aviso").append(sendAlert("KO", "No existe el responsable: " + listaResponsables[res]));
       return;
     }
   }
@@ -674,7 +666,7 @@ window.crearAlumno = function crearAlumno() {
     $("#inputNombreAlumno").val(),
     $("#inputApellidosAlumno").val(),
     $("#inputClase").val(),
-    responsables
+    listaDef
   );
 
   Gb.addStudent(alumno).then(d => {
@@ -687,14 +679,12 @@ window.crearAlumno = function crearAlumno() {
       $("#inputContra").val("");
       $("#inputApellidosAlumno").val("");
       $("#inputClase").val("");
-      $("#res1").val("");
-      $("#res2").val("");
-      $("#res3").val("");
+      $('input[name="responsables"]').val("");
       // Para confirmar que se ha guardado bien
       Gb.set(alumno).then(d1 => {
         if (d1 !== undefined) {
           // Guardo el nuevo alumno en los responsables correspondientes
-          for (let res of responsables) {
+          for (let res of listaDef) {
             let responsable = Gb.resolve(res);
             responsable.students.push(alumno.sid);
             Gb.set(responsable);
@@ -793,16 +783,18 @@ function createAddAlumnos() {
     '</div>',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
-    '<label for="inputRes">Responsables:</label>',
+    '<label for="inputDNI">Responsables:</label>',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="res1" placeholder="Res 1">',
+    '<div class="col-md-6">',
+    '<input type="text" class="form-control" name="responsables" placeholder="Responsable">',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="res2" placeholder="Res 2 (Opcional)">',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroResponsable()">Añadir Responsable</button>',
     '</div>',
-    '<div class="col-md-2">',
-    '<input type="text" class="form-control" id="res3" placeholder="Res 3 (Opcional)">',
+    '<div class="col-md-9" id="contenedorResponsables"></div>',
+    '</div>',
     '</div>',
     '</div>',
     '<!-- avisos -->',
@@ -982,7 +974,7 @@ function createGroupAlumnos() {
       '<div class="col-xl-4">',
       '<div class="card text-white bg-info">',
       '<div class="card-header">',
-      '<a class="tituloSeccion" role="button">',
+      '<a class="tituloSeccion" role="button" onclick="window.editarResponsables(\'',Gb.globalState.students[i].uid,'\')>',
       'Editar',
       '</a>',
       '</div>',
@@ -1365,83 +1357,75 @@ function createEditarTelefonos(elemento, tipo) {
   return $(html.join(''));
 }
 
-window.loadEditarAlumnos = function loadEditarAlumnos(id) {
+window.loadEditarResponsables = function loadEditarResponsables(id) {
   try {
     // vaciamos un contenedor
     $("#contenido").empty();
     // y lo volvemos a rellenar con su nuevo contenido
     let elemento = window.buscarEntidad(id);
-    $("#contenido").append(createEditarAlumnos(elemento));
+    $("#contenido").append(createEditarResponsables(elemento));
   } catch (e) {
-    console.log('Error cargando editar alumnos de un responsable', e);
+    console.log('Error cargando editar responsables de un alumno', e);
   }
 }
 
-window.editarAlumnos = function editarAlumnos(id) {
+window.editarResponsables = function editarResponsables(id) {
   debugger;
-  let listaAlumnos = [];
-  let listaDefinitiva = [];
+  let listaResponsables = [];
+  let listaGuardar = [];
   let listaBorrar = [];
-  let alumnos = $('input[name="alumnos"]').map(function () {
+  let responsables = $('input[name="responsables"]').map(function () {
     return $(this).val();
   }).get();
-  for (let alumno in alumnos) {
-    if (!/^(\s*\w+.*)/.test(alumnos[alumno])) {
+  for (let res in responsables) {
+    if (!/^(\s*\w+.*)/.test(responsables[res])) {
 
-    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(alumnos[alumno])) {
+    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
       $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "El alumno " + alumnos[alumno] + " no es válido"));
+      $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
       return;
-    } else listaAlumnos.push(alumnos[alumno]);
+    } else listaResponsables.push(responsables[res]);
   }
   let elemento = window.buscarEntidad(id);
   let aux;
-  //Me recorro los alumnos que ya tenía ese responsable
-  for (let alumno in elemento.students) {
-    //Si entre los que queremos actualizar sigue el alumno lo metemos en definitivos
-    if (listaAlumnos.includes(elemento.students[alumno])) listaDefinitiva.push(elemento.students[alumno]);
+  //Me recorro los responsables que tenía el alumno
+  for (let res in elemento.guardians) {
+    //Si entre los que queremos actualizar sigue el responsable
+    if (listaResponsables.includes(elemento.guardians[res])) listaGuardar.push(elemento.guardians[res]);
     else {
       //Si no, es que lo queremos borrar
-      aux = window.buscarEntidad(elemento.students[alumno]);
-      listaBorrar.push(elemento.students[alumno]);
+      aux = window.buscarEntidad(elemento.guardians[res]);
+      listaBorrar.push(elemento.guardians[res]);
     }
   }
   //Me recorro los nuevos alumnos
-  for (let alumno in listaAlumnos) {
-    //Si no estaba en los anteriores es que estás añadiendole un nuevo alumno al responsable
-    if (!elemento.students.includes(listaAlumnos[alumno])) {
-      aux = window.buscarEntidad(listaAlumnos[alumno]);
-      //Buscamos si el alumno existe, si existe lo metemos
-      if (aux != undefined) listaDefinitiva.push(listaAlumnos[alumno]);
+  for (let res in listaResponsables) {
+    //Si no estaba en los anteriores es que estás añadiendole un nuevo responsable al alumno
+    if (!elemento.guardians.includes(listaResponsables[res])) {
+      aux = window.buscarEntidad(listaResponsables[res]);
+      //Buscamos si el responsable existe, si existe lo metemos
+      if (aux != undefined) listaGuardar.push(listaResponsables[res]);
       else {
         $("#aviso").empty();
-        $("#aviso").append(sendAlert("KO", "El alumno " + listaAlumnos[alumno] + " no existe"));
+        $("#aviso").append(sendAlert("KO", "El responsable " + listaResponsables[res] + " no existe"));
         return;
       }
     }
   }
-  elemento.students = listaDefinitiva;
-  let responsable = new Gb.User(
-    elemento.uid,
-    elemento.type,
-    elemento.firstName,
-    elemento.lastName,
-    elemento.tels,
-    elemento.classes, 
-    elemento.students
-  )
+  elemento.guardians = listaGuardar; //Lista de responsables a guardar
+  //Después hay que modificar los estudiantes de cada responsable
   Gb.set(responsable).then(async d => {
     if(d != undefined) {
       debugger;
-      window.loadResponsables("OK", "Se han actualizado los alumnos del responsable:" + elemento.uid)
+      window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + elemento.sid)
     } else {
-      window.loadResponsables("KO", "No se han actualizado los alumnos del responsable:" + elemento.uid)
+      window.loadAlumnos("KO", "No se han actualizado los responsables del alumno: " + elemento.sid)
     }
   });
 
 }
 
-function createEditarAlumnos(elemento) {
+function createEditarResponsables(elemento) {
   let html = [
     '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
     '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
@@ -1470,7 +1454,7 @@ function createEditarAlumnos(elemento) {
     '<div class="container justify-content-center align-items-center">',
     '<div class="row justify-content-center align-items-center">',
     '<div class="col-md-8">',
-    '<h2 class="display-4 text-center mt-3">Editar Alumnos del responsable: ', elemento.uid, '</h2>',
+    '<h2 class="display-4 text-center mt-3">Editar los responsables del alumno: ', elemento.sid, '</h2>',
     '</div>',
     '</div>',
     '<div class="justify-content-center">',
@@ -1481,10 +1465,10 @@ function createEditarAlumnos(elemento) {
     '</div>',
     '<div class="col-md-6">'
   ]
-  if (elemento.students.length > 0) {
-    html.push('<input type="text" class="form-control" name="alumnos" placeholder="Alumno" value="', elemento.students[0], '">')
+  if (elemento.guardians.length > 0) {
+    html.push('<input type="text" class="form-control" name="responsables" placeholder="Responsable" value="', elemento.guardians[0], '">')
   } else {
-    html.push('<input type="text" class="form-control" name="alumnos" placeholder="Alumno">')
+    html.push('<input type="text" class="form-control" name="responsables" placeholder="Responsable">')
   }
   html.push('</div>',
     '<div class="col-md-8">',
@@ -1492,11 +1476,11 @@ function createEditarAlumnos(elemento) {
     '<div class="col-md-3 pt-2">',
     '<button type="button" class="btn btn-secondary" onclick="window.addCuadroAlumno()">Añadir Alumno</button>',
     '</div>',
-    '<div class="col-md-9" id="contenedorAlumnos">')
-  for (let i = 1; i < elemento.students.length; ++i) {
+    '<div class="col-md-9" id="contenedorResponsables">')
+  for (let i = 1; i < elemento.guardians.length; ++i) {
     html.push(
       '<div class="pt-2">',
-      '<input type="text" class="form-control" name="alumnos" placeholder="Alumno" value="', elemento.students[i], '">',
+      '<input type="text" class="form-control" name="responsables" placeholder="Responsable" value="', elemento.guardians[i], '">',
       '</div>')
   }
   html.push(
@@ -1511,14 +1495,14 @@ function createEditarAlumnos(elemento) {
     '<!-- botonera -->',
     '<div class="row text-left mt-3 justify-content-center">',
     '<div class="col-md-4 text-left">',
-    '<button id="boton-cancelar" class="btn" onclick="window.loadResponsables()">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadAlumnos()">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
     '</div>',
     '</button>',
     '</div>',
     '<div class="col-md-4 text-right">',
-    '<button id="boton-guardar" class="btn" onclick="window.editarAlumnos(\'' + elemento.uid, '\')">',
+    '<button id="boton-guardar" class="btn" onclick="window.editarResponsables(\'' + elemento.sid, '\')">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
     '</div>',
@@ -1694,7 +1678,7 @@ function createGroupResponsables() {
         '</td>',
         '<td>',
         '<div class="row">',
-        '<div class="col-xl-7">',
+        '<div class="col-xl-12">',
         '<div class="card text-white bg-dark">',
         '<div class="card-header">',
         '<a class="tituloSeccion" data-toggle="collapse"',
@@ -1710,15 +1694,6 @@ function createGroupResponsables() {
       html.push(createDesplegableAlumnos(Gb.globalState.users[i].students));
       html.push(
         '</ul>',
-        '</div>',
-        '</div>',
-        '</div>',
-        '<div class="col-xl-5">',
-        '<div class="card text-white bg-info">',
-        '<div class="card-header">',
-        '<a class="tituloSeccion" role="button" onclick="window.loadEditarAlumnos(\'' + Gb.globalState.users[i].uid + '\')">',
-        'Editar',
-        '</a>',
         '</div>',
         '</div>',
         '</div>',
@@ -3698,13 +3673,13 @@ window.addCuadroTelefono = function addCuadroTelefono() {
   $("#contenedorTelefonos").append($(nuevo.join('')));
 }
 
-window.addCuadroAlumno = function addCuadroAlumno() {
+window.addCuadroResponsable = function addCuadroResponsable() {
   let nuevo = [
     '<div class="pt-2">',
-    '<input type="text" class="form-control" name="alumnos" placeholder="Alumno">',
+    '<input type="text" class="form-control" name="responsables" placeholder="Responsable">',
     '</div>',
   ]
-  $("#contenedorAlumnos").append($(nuevo.join('')));
+  $("#contenedorResponsable").append($(nuevo.join('')));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
