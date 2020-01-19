@@ -632,26 +632,6 @@ window.crearAlumno = function crearAlumno() {
     $("#aviso").append(sendAlert("KO", "El apellido no es válido"));
     return;
   }
-  if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#res1").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El ID  del responsable 1 no es válido"));
-    return;
-  } else res1 = $("#res1").val();
-  if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#res2").val()) && !/^\s*$/.test($("#res2").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El ID  del responsable 2 no es válido"));
-    return;
-  } else res2 = $("#res2").val();
-  if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#res3").val()) && !/^\s*$/.test($("#res3").val())) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El ID  del responsable 3 no es válido"));
-    return;
-  } else res3 = $("#res3").val();
-  if (Gb.resolve($("#inputIDAlumno").val()) != undefined) {
-    $("#aviso").empty();
-    $("#aviso").append(sendAlert("KO", "El ID ya existe"));
-    return;
-  }
   for(res in listaResponsables) {
     if (Gb.resolve(listaResponsables[res]) != undefined) {
       listaDef.push(res);
