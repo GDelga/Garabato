@@ -1350,48 +1350,103 @@ window.loadEditarResponsables = function loadEditarResponsables(id) {
 }
 
 window.editarResponsables = function editarResponsables(id) {
-  let listaResponsables = [];
-  let listaGuardar = [];
-  let listaBorrar = [];
+  let listaResponsables2 = [];
+  /*let listaGuardar = [];
+  let listaBorrar = [];*/
   let responsables = $('input[name="responsables"]').map(function () {
     return $(this).val();
   }).get();
   for (let res in responsables) {
     if (!/^(\s*\w+.*)/.test(responsables[res])) {
 
-    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
+    } 
+    else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
       return;
-    } else listaResponsables.push(responsables[res]);
+    } 
+    else {
+      listaResponsables2.push(responsables[res]);
+    }
   }
-  let elemento = window.buscarEntidad(id);
-  let aux;
+  let alumno = window.buscarEntidad(id);
+  //let aux;
+
+  // 1. Compruebo que todos los ids de Responsables existen
+  // 2. Añado el id del usuario a la lista de alumnos del responsable
+  // 3. 
+  for(let i = 0; i < listaResponsables2.length; i++){
+    let idResponsable = listaResponsables2[i];
+    // 1.
+    if(Gb.resolve(idResponsable) == undefined){
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El responsable " + idResponsable + " no existe"));
+      return;
+    }
+    // 2.
+    if(!alumno.guardians.includes(idResponsable)){
+      let responsable = Gb.resolve(idResponsable);
+      responsable.students.push(id);
+      // Guardo los cambios en el responsable
+      Gb.set(responsable);
+    }
+  }
+
+  // Me recorro el array de responsables antiguos para eliminar al alumno
+  // de la lista de alumnos a los responsables que no esten en la nueva lista
+  for(let i = 0; i < alumno.guardians.length; i++){
+    let idResponsableViejo = alumno.guardians[i];
+    if(!listaResponsables2.includes(idResponsableViejo)){
+      let responsableViejo = Gb.resolve(idResponsableViejo);
+      // Me recorro el array de responsable viejo para encontrar el id del alumno actual
+      // y borrarlo de su lista
+      for(let j = 0; j < responsableViejo.students.length; j++){
+        if(responsableViejo.students[i] == id){
+          responsableViejo.students.splice(j, 1);
+        }
+      }
+      // Guardo los cambios
+      Gb.set(responsableViejo);
+    }
+  }
+
+  // Machaco la nueva lista de responsables del alumno actual
+  alumno.guardians = listaResponsables2;
+  // Guardo los datos de alumno
+  Gb.set(alumno).then(async d => {
+    if(d != undefined) {
+      debugger;
+      window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + alumno.sid)
+    } else {
+      window.loadAlumnos("KO", "No se han actualizado los responsables del alumno: " + alumno.sid)
+    }
+  });
+
   //Me recorro los responsables que tenía el alumno
-  for (let res in elemento.guardians) {
+  /*for (let res in elemento.guardians) {
     //Si entre los que queremos actualizar sigue el responsable
-    if (listaResponsables.includes(elemento.guardians[res])) listaGuardar.push(elemento.guardians[res]);
+    if (listaResponsables2.includes(elemento.guardians[res])) listaGuardar.push(elemento.guardians[res]);
     else {
       //Si no, es que lo queremos borrar
-      aux = window.buscarEntidad(elemento.guardians[res]);
+      //aux = window.buscarEntidad(elemento.guardians[res]);
       listaBorrar.push(elemento.guardians[res]);
     }
   }
   //Me recorro los nuevos alumnos
-  for (let res in listaResponsables) {
+  for (let res in listaResponsables2) {
     //Si no estaba en los anteriores es que estás añadiendole un nuevo responsable al alumno
-    if (!elemento.guardians.includes(listaResponsables[res])) {
-      aux = window.buscarEntidad(listaResponsables[res]);
+    if (!elemento.guardians.includes(listaResponsables2[res])) {
+      aux = Gb.resolve(listaResponsables2[res]);
       //Buscamos si el responsable existe, si existe lo metemos
-      if (aux != undefined) listaGuardar.push(listaResponsables[res]);
+      if (aux != undefined) listaGuardar.push(listaResponsables2[res]);
       else {
         $("#aviso").empty();
-        $("#aviso").append(sendAlert("KO", "El responsable " + listaResponsables[res] + " no existe"));
+        $("#aviso").append(sendAlert("KO", "El responsable " + listaResponsables2[res] + " no existe"));
         return;
       }
     }
-  }
-  elemento.guardians = listaGuardar; //Lista de responsables a guardar
+  }*/
+  /*elemento.guardians = listaGuardar; //Lista de responsables a guardar
   //Después hay que modificar los estudiantes de cada responsable
   Gb.set(responsable).then(async d => {
     if(d != undefined) {
@@ -1400,7 +1455,7 @@ window.editarResponsables = function editarResponsables(id) {
     } else {
       window.loadAlumnos("KO", "No se han actualizado los responsables del alumno: " + elemento.sid)
     }
-  });
+  });*/
 
 }
 
