@@ -1477,7 +1477,7 @@ function createEditarResponsables(elemento) {
     '<div class="pl-5 pr-4 pt-3">',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
-    '<label for="inputDNI">Teléfonos:</label>',
+    '<label for="inputDNI">Responsables:</label>',
     '</div>',
     '<div class="col-md-6">'
   ]
