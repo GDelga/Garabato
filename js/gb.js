@@ -1860,6 +1860,9 @@ window.crearProfesor = function crearProfesor() {
   });
 }
 
+
+
+
 window.loadProfesores = function loadProfesores(tipo, mensaje) {
   try {
     if (tipo == null) {
@@ -2009,7 +2012,7 @@ function createGroupProfesores() {
         '<div class="col-xl-5">',
         '<div class="card text-white bg-info">',
         '<div class="card-header">',
-        '<a class="tituloSeccion" role="button">',
+        '<a class="tituloSeccion" role="button" onclick="window.loadEditarClases(\'', Gb.globalState.users[i].uid, '\')">',
         'Editar',
         '</a>',
         '</div>',
@@ -2184,6 +2187,164 @@ function createAddProfesor() {
     '</div>',
     '<div class="col-md-4 text-right">',
     '<button id="boton-guardar" class="btn" onclick="window.crearProfesor()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+  );
+  return $(html.join(''));
+}
+
+
+// Editar Clases de Profesor
+
+window.loadEditarClases = function loadEditarClases(id) {
+  try {
+    // vaciamos un contenedor
+    $("#contenido").empty();
+    // y lo volvemos a rellenar con su nuevo contenido
+    let elemento = window.buscarEntidad(id);
+    $("#contenido").append(createEditarClases(elemento));
+  } catch (e) {
+    console.log('Error cargando editar clases de un profesor', e);
+  }
+}
+
+// Funcion que contiene la logica de editarClases
+window.editarClases = function editarClases(id) {
+  let nuevasClases = [];
+  let responsables = $('input[name="clases"]').map(function () {
+    return $(this).val();
+  }).get();
+  for (let res in responsables) {
+    if (!/^(\s*\w+.*)/.test(responsables[res])) {
+
+    }
+    else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
+      return;
+    }
+    else {
+      nuevasClases.push(responsables[res]);
+    }
+  }
+  let profesor = window.buscarEntidad(id);
+
+  // 1. Compruebo que todos los ids de Clases existen
+  // 2. Añado el id del usuario a la lista de alumnos del responsable
+  // 
+  for (let i = 0; i < nuevasClases.length; i++) {
+    let idClase = nuevasClases[i];
+    // 1.
+    if (Gb.resolve(idClase) == undefined) {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "El responsable " + idClase + " no existe"));
+      return;
+    }
+  }
+  //profesor.classes = nuevasClases;
+  Gb.rm(profesor.uid).then(d => {
+    debugger;
+    if (d != undefined) {
+      // La contraseña hay que inventarsela pork no viene en el resolve()
+      profesor = new Gb.User(profesor.uid, profesor.type, profesor.first_name, profesor.last_name, profesor.tels, nuevasClases, profesor.students, "Hola1");
+
+      Gb.addUser(profesor).then(d => {
+        debugger;
+        if (d != undefined) {
+          Gb.globalState;
+          debugger;
+          window.loadProfesores("OK", "Se han actualizado las clases del profesor: " + profesor.uid);
+        }
+      });
+    }
+  });
+}
+
+function createEditarClases(elemento) {
+  let html = [
+    '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">',
+    '<a class="navbar-brand d-flex" onclick="window.loadAdminMenu(' + "null" + ')">',
+    '<h1 class="d-inline align-self-start text-white">Garabato </h1>',
+    '<h3 class="d-inline align-self-end pl-1 text-white"> Admin</h2>',
+    '</a>',
+    '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"',
+    'aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">',
+    '<span class="navbar-toggler-icon"></span>',
+    '</button>',
+    '<!--Las diferentes opciones de la barra de menu-->',
+    '<div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">',
+    '<div class="navbar-nav ml-auto mr-auto">',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadProfesores(' + "null" + ')">Profesores</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadAlumnos(' + "null" + ')">Alumnos</a>',
+    '<a class="nav-item nav-link  active" role="button" onclick="window.loadResponsables(' + "null" + ')">Responsables</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadClases(' + "null" + ')">Clases</a>',
+    '<a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes(' + "null" + ')">Mensajes</a>',
+    '</div>',
+    '<!--Boton para cerrar sesion-->',
+    '<div class="navbar-nav">',
+    '<button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>',
+    '</div>',
+    '</div>',
+    '</nav>',
+    '<div class="container justify-content-center align-items-center">',
+    '<div class="row justify-content-center align-items-center">',
+    '<div class="col-md-8">',
+    '<h2 class="display-4 text-center mt-3">Editar las clases del profesor: ', elemento.uid, '</h2>',
+    '</div>',
+    '</div>',
+    '<div class="justify-content-center">',
+    '<div class="pl-5 pr-4 pt-3">',
+    '<div class="row pt-2 align-items-center justify-content-center">',
+    '<div class="col-md-2">',
+    '<label for="inputDNI">Teléfonos:</label>',
+    '</div>',
+    '<div class="col-md-6">'
+  ]
+  if (elemento.classes.length > 0) {
+    html.push('<input type="text" class="form-control" name="clases" placeholder="Clase" value="', elemento.classes[0], '">')
+  } else {
+    html.push('<input type="text" class="form-control" name="clases" placeholder="Clase">')
+  }
+  html.push('</div>',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroClase()">Añadir Clase</button>',
+    '</div>',
+    '<div class="col-md-9" id="contenedorResponsables">')
+  for (let i = 1; i < elemento.classes.length; ++i) {
+    html.push(
+      '<div class="pt-2">',
+      '<input type="text" class="form-control" name="clases" placeholder="Clase" value="', elemento.classes[i], '">',
+      '</div>')
+  }
+  html.push(
+    '</div>',
+    '</div>',
+    '</div>',
+    '</div>',
+    '<!-- avisos -->',
+    '<div class="row mt-3 justify-content-center">',
+    '<div id="aviso" class="col-md-8"></div>',
+    '</div>',
+    '<!-- botonera -->',
+    '<div class="row text-left mt-3 justify-content-center">',
+    '<div class="col-md-4 text-left">',
+    '<button id="boton-cancelar" class="btn" onclick="window.loadProfesores()">',
+    '<div class="img">',
+    '<img class="img-rounded" src="imagenes/arrow.png" height="50" width="50" alt="">',
+    '</div>',
+    '</button>',
+    '</div>',
+    '<div class="col-md-4 text-right">',
+    '<button id="boton-guardar" class="btn" onclick="window.editarClases(\'' + elemento.uid, '\')">',
     '<div class="img">',
     '<img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">',
     '</div>',
@@ -3764,6 +3925,14 @@ window.addCuadroResponsable = function addCuadroResponsable() {
   let nuevo = [
     '<div class="pt-2">',
     '<input type="text" class="form-control" name="responsables" placeholder="Responsable">',
+    '</div>',
+  ]
+  $("#contenedorResponsables").append($(nuevo.join('')));
+}
+window.addCuadroClase = function addCuadroClase() {
+  let nuevo = [
+    '<div class="pt-2">',
+    '<input type="text" class="form-control" name="clases" placeholder="Clase">',
     '</div>',
   ]
   $("#contenedorResponsables").append($(nuevo.join('')));
