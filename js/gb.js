@@ -250,7 +250,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else {}
+      } else { }
 
     });
   } catch (e) {
@@ -346,7 +346,6 @@ window.loadClases = function loadClases(tipo, mensaje) {
   try {
     // Para distinguir si hemos llegado por click en la barra de navegacion o por otra funcion
     if (tipo == null) {
-      //debugger;
       // Para salvar datos que se han quedado sin guardar
       saveDatas();
     }
@@ -1211,7 +1210,6 @@ window.loadEditarTelefonosResponsable = function loadEditarTelefonosResponsable(
 }
 
 window.editarTelefonos = function editarTelefonos(tipo, id) {
-  //debugger;
   let listaTelefonos = [];
   let telefonos = $('input[name="telefonos"]').map(function () {
     return $(this).val();
@@ -1351,112 +1349,96 @@ window.loadEditarResponsables = function loadEditarResponsables(id) {
 
 window.editarResponsables = function editarResponsables(id) {
   let listaResponsables2 = [];
-  /*let listaGuardar = [];
-  let listaBorrar = [];*/
   let responsables = $('input[name="responsables"]').map(function () {
     return $(this).val();
   }).get();
   for (let res in responsables) {
     if (!/^(\s*\w+.*)/.test(responsables[res])) {
 
-    } 
+    }
     else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
       return;
-    } 
+    }
     else {
       listaResponsables2.push(responsables[res]);
     }
   }
   let alumno = window.buscarEntidad(id);
-  //let aux;
 
   // 1. Compruebo que todos los ids de Responsables existen
   // 2. Añado el id del usuario a la lista de alumnos del responsable
   // 3. 
-  for(let i = 0; i < listaResponsables2.length; i++){
+  for (let i = 0; i < listaResponsables2.length; i++) {
     let idResponsable = listaResponsables2[i];
     // 1.
-    if(Gb.resolve(idResponsable) == undefined){
+    if (Gb.resolve(idResponsable) == undefined) {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "El responsable " + idResponsable + " no existe"));
       return;
     }
     // 2.
-    if(!alumno.guardians.includes(idResponsable)){
+    if (!alumno.guardians.includes(idResponsable)) {
+      debugger;
       let responsable = Gb.resolve(idResponsable);
       responsable.students.push(id);
       // Guardo los cambios en el responsable
-      Gb.set(responsable);
+      Gb.set(responsable).then(d => {
+        console.log("Se metio con id: " + idResponsable);
+      });
     }
   }
-
   // Me recorro el array de responsables antiguos para eliminar al alumno
   // de la lista de alumnos a los responsables que no esten en la nueva lista
-  for(let i = 0; i < alumno.guardians.length; i++){
+  for (let i = 0; i < alumno.guardians.length; i++) {
     let idResponsableViejo = alumno.guardians[i];
-    if(!listaResponsables2.includes(idResponsableViejo)){
+    if (!listaResponsables2.includes(idResponsableViejo)) {
       let responsableViejo = Gb.resolve(idResponsableViejo);
       // Me recorro el array de responsable viejo para encontrar el id del alumno actual
       // y borrarlo de su lista
-      for(let j = 0; j < responsableViejo.students.length; j++){
-        if(responsableViejo.students[i] == id){
+      for (let j = 0; j < responsableViejo.students.length; j++) {
+        if (responsableViejo.students[i] == id) {
           responsableViejo.students.splice(j, 1);
         }
       }
       // Guardo los cambios
-      Gb.set(responsableViejo);
+      Gb.set(responsableViejo).then(d => {
+        console.log("Se metio con id: " + idResponsableViejo);
+      });
     }
   }
-
   // Machaco la nueva lista de responsables del alumno actual
-  alumno.guardians = listaResponsables2;
-  // Guardo los datos de alumno
-  Gb.set(alumno).then(async d => {
-    if(d != undefined) {
-      debugger;
-      window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + alumno.sid)
-    } else {
-      window.loadAlumnos("KO", "No se han actualizado los responsables del alumno: " + alumno.sid)
-    }
-  });
+  alumno.guardians = [];
 
-  //Me recorro los responsables que tenía el alumno
-  /*for (let res in elemento.guardians) {
-    //Si entre los que queremos actualizar sigue el responsable
-    if (listaResponsables2.includes(elemento.guardians[res])) listaGuardar.push(elemento.guardians[res]);
-    else {
-      //Si no, es que lo queremos borrar
-      //aux = window.buscarEntidad(elemento.guardians[res]);
-      listaBorrar.push(elemento.guardians[res]);
-    }
-  }
-  //Me recorro los nuevos alumnos
-  for (let res in listaResponsables2) {
-    //Si no estaba en los anteriores es que estás añadiendole un nuevo responsable al alumno
-    if (!elemento.guardians.includes(listaResponsables2[res])) {
-      aux = Gb.resolve(listaResponsables2[res]);
-      //Buscamos si el responsable existe, si existe lo metemos
-      if (aux != undefined) listaGuardar.push(listaResponsables2[res]);
-      else {
-        $("#aviso").empty();
-        $("#aviso").append(sendAlert("KO", "El responsable " + listaResponsables2[res] + " no existe"));
-        return;
-      }
-    }
-  }*/
-  /*elemento.guardians = listaGuardar; //Lista de responsables a guardar
-  //Después hay que modificar los estudiantes de cada responsable
-  Gb.set(responsable).then(async d => {
+  // Modifico la lista de guardians para que me deje borrar al alumno
+  // Elimino al alumno
+  // Creo un alumno con los mismo datos, lo añado a la variable globalState
+  // Modifico la lista de responsables y la guardo con el alumno
+  Gb.set(alumno).then(d => {
     if (d != undefined) {
       debugger;
-      window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + elemento.sid)
-    } else {
-      window.loadAlumnos("KO", "No se han actualizado los responsables del alumno: " + elemento.sid)
+      Gb.rm(alumno.sid).then(d => {
+        debugger;
+        if (d != undefined) {
+          let nuevoAlumno = new Gb.Student(alumno.sid, alumno.firstName, alumno.lastName, alumno.cid, listaResponsables2);
+          //alumno.guardians = listaResponsables2;
+          Gb.addStudent(nuevoAlumno).then(d => {
+            debugger;
+            if (d != undefined) {
+              Gb.set(nuevoAlumno).then(d => {
+                if (d != undefined) {
+                  console.log("Aqui");
+                  window.loadAlumnos("OK", "Se han actualizado los responsables del alumno: " + alumno.sid);
+                }
+              });
+            }
+          });
+        }
+      });
     }
-  });*/
 
+  });
 }
 
 function createEditarResponsables(elemento) {
@@ -2293,18 +2275,18 @@ function sortByDate(m1, m2) {
     if (date1.getMonth() == date2.getMonth()) {
       //Miramos dia
       if (date1.getDate() == date2.getDate()) {
-        if(date1.getHours() == date2.getHours()) {
-          if(date1.getMinutes() == date2.getMinutes()) {
-            if(date1.getSeconds() == date2.getSeconds()) return 0;
-            else if(date1.getSeconds() < date2.getSeconds()) return 1;
+        if (date1.getHours() == date2.getHours()) {
+          if (date1.getMinutes() == date2.getMinutes()) {
+            if (date1.getSeconds() == date2.getSeconds()) return 0;
+            else if (date1.getSeconds() < date2.getSeconds()) return 1;
             else return -1;
           }
-          else if(date1.getMinutes() < date2.getMinutes()) return 1;
+          else if (date1.getMinutes() < date2.getMinutes()) return 1;
           else return -1;
         }
-        else if(date1.getHours() < date2.getHours()) return 1;
+        else if (date1.getHours() < date2.getHours()) return 1;
         else return -1;
-      } 
+      }
       else if (date1.getDate() < date2.getDate()) return 1;
       else return -1;
     } else if (date1.getMonth() < date2.getMonth()) return 1;
@@ -2682,15 +2664,15 @@ function createGroupMessages(mensaje) {
 window.marcarFavorito = function marcarFavorito(id) {
   debugger;
   let mensaje = Gb.resolve(id);
-  if(mensaje.labels.includes(Gb.MessageLabels.FAV)){
-    var i = mensaje.labels.indexOf( Gb.MessageLabels.FAV );
-    mensaje.labels.splice( i, 1 );
+  if (mensaje.labels.includes(Gb.MessageLabels.FAV)) {
+    var i = mensaje.labels.indexOf(Gb.MessageLabels.FAV);
+    mensaje.labels.splice(i, 1);
   }
   else {
-      mensaje.labels.push(Gb.MessageLabels.FAV);
+    mensaje.labels.push(Gb.MessageLabels.FAV);
   }
   Gb.set(mensaje).then(d => {
-    if(d != undefined) {
+    if (d != undefined) {
       window.loadMessageFavoritos();
     }
   })
@@ -2698,15 +2680,15 @@ window.marcarFavorito = function marcarFavorito(id) {
 
 window.archivarMensaje = function archivarMensaje(id) {
   let mensaje = Gb.resolve(id);
-  if(mensaje.labels.includes(Gb.MessageLabels.ARCH)){
-    var i = mensaje.labels.indexOf( Gb.MessageLabels.ARCH );
-    mensaje.labels.splice( i, 1 );
+  if (mensaje.labels.includes(Gb.MessageLabels.ARCH)) {
+    var i = mensaje.labels.indexOf(Gb.MessageLabels.ARCH);
+    mensaje.labels.splice(i, 1);
   }
   else {
-      mensaje.labels.push(Gb.MessageLabels.ARCH);
+    mensaje.labels.push(Gb.MessageLabels.ARCH);
   }
   Gb.set(mensaje).then(d => {
-    if(d != undefined) {
+    if (d != undefined) {
       window.loadMessageArchivados();
     }
   })
@@ -2714,7 +2696,7 @@ window.archivarMensaje = function archivarMensaje(id) {
 
 window.eliminarMensaje = function eliminarMensaje(id) {
   Gb.rm(id).then(d => {
-    if(d != undefined) {
+    if (d != undefined) {
       window.loadMessageRecibidos();
     }
   })
