@@ -250,7 +250,7 @@ window.cerrarSesion = function cerrarSesion() {
         usuarioIniciado = "noIniciado";
         $("#contenido").empty();
         $("#contenido").append(createLogin());
-      } else { }
+      } else {}
 
     });
   } catch (e) {
@@ -568,6 +568,20 @@ function groupInputClass() {
   for (let c in Gb.globalState.classes) {
     html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
   }
+  html.push('<option selected="selected"></option>')
+  return (html.join(''));
+}
+
+function groupInputClassSelected(seleccionado) {
+  let html = [];
+  for (let c in Gb.globalState.classes) {
+    if (Gb.globalState.classes[c].cid != seleccionado) {
+      html.push('<option>', Gb.globalState.classes[c].cid, '</option>');
+    } else {
+      html.push('<option selected="selected">', Gb.globalState.classes[c].cid, '</option>');
+    }
+  }
+  html.push('<option></option>')
   return (html.join(''));
 }
 
@@ -1355,13 +1369,11 @@ window.editarResponsables = function editarResponsables(id) {
   for (let res in responsables) {
     if (!/^(\s*\w+.*)/.test(responsables[res])) {
 
-    }
-    else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
+    } else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
       $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
+      $("#aviso").append(sendAlert("KO", "El responsable " + responsables[res] + " no es válido"));
       return;
-    }
-    else {
+    } else {
       listaResponsables2.push(responsables[res]);
     }
   }
@@ -1773,7 +1785,7 @@ function createDesplegableAlumnos(alumnos) {
 // Logica de crear un nuevo profesor
 window.crearProfesor = function crearProfesor() {
   let listaTelefonos = [];
-  var clases = [];
+  var listaClases = [];
   if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test($("#inputID").val())) {
     $("#aviso").empty();
     $("#aviso").append(sendAlert("KO", "El ID no es válido"));
@@ -1816,14 +1828,11 @@ window.crearProfesor = function crearProfesor() {
     $("#aviso").append(sendAlert("KO", "El ID ya existe"));
     return;
   }
-  if ($("#class1").val() != "") {
-    clases.push($("#class1").val());
-    if ($("#class2").val() != "") {
-      clases.push($("#class2").val());
-    }
-    if ($("#class3").val() != "") {
-      clases.push($("#class3").val());
-    }
+  let clases = $('select[name="clases"]').map(function () {
+    return $(this).val();
+  }).get();
+  for (let clase in clases) {
+    if (!/^(\s*\w+.*)/.test(clases[clase])) {} else listaClases.push(clases[clase]);
   }
   let profesor = new Gb.User(
     $("#inputID").val(),
@@ -1831,7 +1840,7 @@ window.crearProfesor = function crearProfesor() {
     $("#inputNombre").val(),
     $("#inputApellidos").val(),
     listaTelefonos,
-    clases,
+    listaClases,
     [],
     $("#inputContra").val()
   );
@@ -1847,21 +1856,14 @@ window.crearProfesor = function crearProfesor() {
       $("#inputNombre").val("");
       $("#inputContra").val("");
       $("#inputApellidos").val("");
-      $("#class1").val("");
-      $("#class2").val("");
-      $("#class3").val("");
-      $("#telf1").val("");
-      $("#telf2").val("");
-      $("#telf3").val("");
+      $('select[name="clases"]').val("");
+      $('input[name="telefonos"]').val("");
     } else {
       $("#aviso").empty();
       $("#aviso").append(sendAlert("KO", "No se ha podido crear el profesor"));
     }
   });
 }
-
-
-
 
 window.loadProfesores = function loadProfesores(tipo, mensaje) {
   try {
@@ -2129,30 +2131,22 @@ function createAddProfesor() {
     '</div>',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
-    '<label for="inputClase">Clases:</label>',
+    '<label for="inputDNI">Clases:</label>',
     '</div>',
-    '<!--Enlace: https://stackoverflow.com/a/30525521-->',
-    '<div class="col-md-2">',
-    '<!--Campo para escribir el destinatario-->',
-    '<select id="class1" class="form-control">'
+    '<div class="col-md-6">',
+    '<select name="clases" class="form-control">'
   ]
   html.push(groupInputClass());
   html.push(
     '</select>',
     '</div>',
-    '<div class="col-md-2">',
-    '<select id="class2" class="form-control">',
-    '<option></option>')
-  html.push(groupInputClass());
-  html.push(
-    '</select>',
+    '<div class="col-md-8">',
+    '<div class="row">',
+    '<div class="col-md-3 pt-2">',
+    '<button type="button" class="btn btn-secondary" onclick="window.addCuadroClase()">Añadir Clase</button>',
     '</div>',
-    '<div class="col-md-2">',
-    '<select id="class3" class="form-control">',
-    '<option></option>')
-  html.push(groupInputClass());
-  html.push(
-    '</select>',
+    '<div class="col-md-9" id="contenedorClases"></div>',
+    '</div>',
     '</div>',
     '</div>',
     '<!--Botonera de telefonos-->',
@@ -2218,21 +2212,11 @@ window.loadEditarClases = function loadEditarClases(id) {
 // Funcion que contiene la logica de editarClases
 window.editarClases = function editarClases(id) {
   let nuevasClases = [];
-  let responsables = $('input[name="clases"]').map(function () {
+  let clases = $('select[name="clases"]').map(function () {
     return $(this).val();
   }).get();
-  for (let res in responsables) {
-    if (!/^(\s*\w+.*)/.test(responsables[res])) {
-
-    }
-    else if (!/^[a-zA-Z0-9_-ñáéíóú]+$/.test(responsables[res])) {
-      $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "El alumno " + responsables[res] + " no es válido"));
-      return;
-    }
-    else {
-      nuevasClases.push(responsables[res]);
-    }
+  for (let clase in clases) {
+    if (!/^(\s*\w+.*)/.test(clases[clase])) {} else nuevasClases.push(clases[clase]);
   }
   let profesor = window.buscarEntidad(id);
 
@@ -2244,7 +2228,7 @@ window.editarClases = function editarClases(id) {
     // 1.
     if (Gb.resolve(idClase) == undefined) {
       $("#aviso").empty();
-      $("#aviso").append(sendAlert("KO", "El responsable " + idClase + " no existe"));
+      $("#aviso").append(sendAlert("KO", "La clase " + idClase + " no existe"));
       return;
     }
   }
@@ -2303,14 +2287,18 @@ function createEditarClases(elemento) {
     '<div class="pl-5 pr-4 pt-3">',
     '<div class="row pt-2 align-items-center justify-content-center">',
     '<div class="col-md-2">',
-    '<label for="inputDNI">Teléfonos:</label>',
+    '<label for="inputDNI">Clases:</label>',
     '</div>',
     '<div class="col-md-6">'
   ]
   if (elemento.classes.length > 0) {
-    html.push('<input type="text" class="form-control" name="clases" placeholder="Clase" value="', elemento.classes[0], '">')
+    html.push('<select name="clases" class="form-control">');
+    html.push(groupInputClassSelected(elemento.classes[0]));
+    html.push('</select>');
   } else {
-    html.push('<input type="text" class="form-control" name="clases" placeholder="Clase">')
+    html.push('<select name="clases" class="form-control">')
+    html.push(groupInputClass());
+    html.push('</select>')
   }
   html.push('</div>',
     '<div class="col-md-8">',
@@ -2318,11 +2306,13 @@ function createEditarClases(elemento) {
     '<div class="col-md-3 pt-2">',
     '<button type="button" class="btn btn-secondary" onclick="window.addCuadroClase()">Añadir Clase</button>',
     '</div>',
-    '<div class="col-md-9" id="contenedorResponsables">')
+    '<div class="col-md-9" id="contenedorClases">')
   for (let i = 1; i < elemento.classes.length; ++i) {
     html.push(
       '<div class="pt-2">',
-      '<input type="text" class="form-control" name="clases" placeholder="Clase" value="', elemento.classes[i], '">',
+      '<select name="clases" class="form-control">');
+    html.push(groupInputClassSelected(elemento.classes[i]));
+    html.push('</select>',
       '</div>')
   }
   html.push(
@@ -2441,14 +2431,11 @@ function sortByDate(m1, m2) {
             if (date1.getSeconds() == date2.getSeconds()) return 0;
             else if (date1.getSeconds() < date2.getSeconds()) return 1;
             else return -1;
-          }
-          else if (date1.getMinutes() < date2.getMinutes()) return 1;
+          } else if (date1.getMinutes() < date2.getMinutes()) return 1;
           else return -1;
-        }
-        else if (date1.getHours() < date2.getHours()) return 1;
+        } else if (date1.getHours() < date2.getHours()) return 1;
         else return -1;
-      }
-      else if (date1.getDate() < date2.getDate()) return 1;
+      } else if (date1.getDate() < date2.getDate()) return 1;
       else return -1;
     } else if (date1.getMonth() < date2.getMonth()) return 1;
     else return -1;
@@ -2485,7 +2472,7 @@ window.escribirMensaje = function escribirMensaje() {
   let message = new Gb.Message(
     U.randomString(),
     new Date(),
-    "hola1",
+    usuarioIniciado.uid,
     [$("#inputTo").val()],
     [Gb.MessageLabels.SENT],
     $("#inputAsunto").val(),
@@ -2507,41 +2494,58 @@ window.escribirMensaje = function escribirMensaje() {
   });
 }
 
-window.responderMensaje = function responderMensaje() {
+window.responderMensaje = function responderMensaje(mensaje) {
   let message = new Gb.Message(
     U.randomString(),
-    U.randomString(),
+    new Date(),
+    usuarioIniciado.uid,
     undefined,
-    $("#inputTo").val(),
     [Gb.MessageLabels.SENT],
     $("#inputAsunto").val(),
-    $("#summernote").val()
+    $("#summernote").val(),
+    mensaje
   )
-  Gb.send(message); //Enviar el mensaje
-  let aviso = "Se ha enviado un mensaje con los siguientes datos:\n" +
-    "Destinatario: " + message.to + "\n" +
-    "Asunto: " + message.title + "\n" +
-    "Contenido: " + message.body;
-  alert(aviso);
+  Gb.send(message).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("OK", "El mensaje se ha enviado"));
+      $("#inputTo").val("");
+      $("#inputAsunto").val("");
+      $("#summernote").val("");
+    } else {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "No se ha podido mandar el mensaje"));
+    } //Enviar el mensaje
+  });
 }
 
 //Funcion para enviar un mensaje a una clase
 window.enviarMensajeAClase = function enviarMensajeAClase() {
+  debugger;
   let message = new Gb.Message(
     U.randomString(),
-    U.randomString(),
-    undefined,
-    $("#inputClaseMensaje").val(),
+    new Date(),
+    usuarioIniciado.uid,
+    [$("#inputClase").val()],
     [Gb.MessageLabels.SENT],
     $("#inputAsunto").val(),
-    $("#summernote").val()
+    $("#summernote").val(),
+    undefined
   )
-  Gb.send(message); //Enviar el mensaje
-  let aviso = "Se ha enviado un mensaje con los siguientes datos:\n" +
-    "Destinatario: " + message.to + "\n" +
-    "Asunto: " + message.title + "\n" +
-    "Contenido: " + message.body;
-  alert(aviso);
+  Gb.send(message).then(d => {
+    if (d !== undefined) {
+      // la operación ha funcionado (d ha vuelto como un gameState válido, y ya se ha llamado a updateState): aquí es donde actualizas la interfaz
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("OK", "El mensaje se ha enviado"));
+      $("#inputTo").val("");
+      $("#inputAsunto").val("");
+      $("#summernote").val("");
+    } else {
+      $("#aviso").empty();
+      $("#aviso").append(sendAlert("KO", "No se ha podido mandar el mensaje"));
+    } //Enviar el mensaje
+  });
 }
 
 window.loadMenuMensajes = function loadMenuMensajes() {
@@ -2747,7 +2751,7 @@ function createMensajesPorFecha(date) {
     html.push(
       '<!--Muestro el mensaje de aviso-->',
       '<div class="m-5 p-5 text-center">',
-      '¡No tienes mensajes, parguela!',
+      '¡No tienes mensajes!',
       '</div>');
   }
   return $(html.join(''));
@@ -2767,25 +2771,25 @@ function createGroupMessages(mensaje) {
       '<div class="col-6 d-flex flex-row justify-content-end flex-wrap">',
       '<a class="mr-2" href="#">')
     // Para distinguir entre mensajes leidos y no leidos                          
-    if (mensaje[m].labels.includes(Gb.MessageLabels.READ)) {
+    if (mensaje[m].labels.includes(Gb.MessageLabels.SENT)) {
+
+    } else if (mensaje[m].labels.includes(Gb.MessageLabels.READ)) {
       html.push(
         '<img class="iconos" src="imagenes/read.png" alt="">'
       );
-    } else if (mensaje[m].labels.includes(Gb.MessageLabels.SENT)) {
-
     } else {
       html.push(
         '<img class="iconos" src="imagenes/unread.png" alt="">'
       );
     }
+    html.push('</a>')
     if (mensaje[m].labels.includes(Gb.MessageLabels.RECVD)) {
-      html.push(
-        '</a>',
+      html.push(      
         '<a class="mr-2" onclick="window.loadResponderMensaje(', "'" + mensaje[m].msgid + "'", ')">',
         '<img class="iconos" src="imagenes/reply.png" alt="">',
-        '</a>',
-        '<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje[m].msgid, '\')">')
+        '</a>')
     }
+    html.push('<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje[m].msgid, '\')">')
     // Para disntinguir entre archivados y no archivados
     if (mensaje[m].labels.includes(Gb.MessageLabels.ARCH)) {
       html.push(
@@ -2828,8 +2832,7 @@ window.marcarFavorito = function marcarFavorito(id) {
   if (mensaje.labels.includes(Gb.MessageLabels.FAV)) {
     var i = mensaje.labels.indexOf(Gb.MessageLabels.FAV);
     mensaje.labels.splice(i, 1);
-  }
-  else {
+  } else {
     mensaje.labels.push(Gb.MessageLabels.FAV);
   }
   Gb.set(mensaje).then(d => {
@@ -2840,12 +2843,12 @@ window.marcarFavorito = function marcarFavorito(id) {
 }
 
 window.archivarMensaje = function archivarMensaje(id) {
+  debugger;
   let mensaje = Gb.resolve(id);
   if (mensaje.labels.includes(Gb.MessageLabels.ARCH)) {
     var i = mensaje.labels.indexOf(Gb.MessageLabels.ARCH);
     mensaje.labels.splice(i, 1);
-  }
-  else {
+  } else {
     mensaje.labels.push(Gb.MessageLabels.ARCH);
   }
   Gb.set(mensaje).then(d => {
@@ -2898,6 +2901,9 @@ window.loadMessageArchivados = function loadMessageArchivos() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes archivados', e);
   }
@@ -2939,6 +2945,9 @@ window.loadMessageFavoritos = function loadMessageFavoritos() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes favoritos', e);
   }
@@ -2985,6 +2994,9 @@ window.loadMessageRecibidos = function loadMessageRecibidos() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes recibidos', e);
   }
@@ -3022,6 +3034,9 @@ window.loadMessageLeidos = function loadMessageLeidos() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes leidos', e);
   }
@@ -3062,6 +3077,9 @@ window.loadMessageEnviados = function loadMessageEnviados() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes enviados', e);
   }
@@ -3100,6 +3118,9 @@ window.loadMessageNoLeidos = function loadMessageNoLeidos() {
     let mensajesAgrupados = groupByKeys(mensajesConDate);
     // Nos recorremos los mensajes agrupados
     $("#mensajes").append(createMensajesPorFecha(mensajesAgrupados));
+    // Parte de la derecha
+    $("#derecha").empty();
+    $("#derecha").append(createZonaMensajesDerechaNoLeidos());
   } catch (e) {
     console.log('Error al cargar los mensajes no leidos', e);
   }
@@ -3166,12 +3187,16 @@ function createZonaMensajesDerechaLeer(mensaje) {
     '</div>',
     '<div class="row pt-1">',
     '<!--Botonera con los botones de responder, archivar, favorito y eliminar-->',
-    '<div class="col-12 d-flex flex-row justify-content-end flex-wrap">',
-    '<a class="mr-2" href="#" onclick="window.loadResponderMensaje(\'', mensaje.msgid, '\')">',
+    '<div class="col-12 d-flex flex-row justify-content-end flex-wrap">'
+  ]
+  if (mensaje.labels.includes(Gb.MessageLabels.RECVD)) {
+    '<a class="mr-2" href="#" onclick="window.loadResponderMensaje(\'',
+    mensaje.msgid,
+    '\')">',
     '<img class="iconos" src="imagenes/reply.png" alt="">',
     '</a>'
-  ]
-  if (mensaje.labels.includes(Gb.MessageLabels.ARCH)) {
+  }
+  if (!mensaje.labels.includes(Gb.MessageLabels.ARCH)) {
     html.push(
       '<a class="mr-2" href="#" onclick="window.archivarMensaje(\'', mensaje.msgid, '\')">',
       '<img class="iconos" src="imagenes/no-archivados.png" alt="">',
@@ -3190,7 +3215,7 @@ function createZonaMensajesDerechaLeer(mensaje) {
   } else {
     html.push(
       '<a class="mr-2" href="#" onclick="window.marcarFavorito(\'', mensaje.msgid, '\')">',
-      '<img class="iconos" src="imagenes/favorito-desactivado" alt="">',
+      '<img class="iconos" src="imagenes/favorito-desactivado.png" alt="">',
       '</a>')
   }
   html.push(
@@ -3251,9 +3276,12 @@ function createZonaMensajesDerechaResponder(mensaje) {
     '});',
     '</script>',
     '</div>',
+    '<!-- aviso -->',
+    '<div class="col-12 col-xl-12" id="aviso">',
+    '</div>',
     '<!-- botón para enviar el formulario; justify-content-end no ha funcionado-->',
     '<div class="ml-auto pt-2 pb-2 pr-3">',
-    '<button type="submit" id="boton-enviar" class="btn btn-primary" onclick="window.responderMensaje()">Enviar</button>',
+    '<button type="submit" id="boton-enviar" class="btn btn-primary" onclick="window.responderMensaje(\'', mensaje.msgid, '\')">Enviar</button>',
     '</div>',
     '</div>'
   ];
@@ -3359,6 +3387,9 @@ function createZonaMensajesDerechaClase() {
     'minHeight: "calc(100vh - 25rem)"',
     '});',
     '</script>',
+    '</div>',
+    '<!-- aviso -->',
+    '<div class="col-12 col-xl-12" id="aviso">',
     '</div>',
     '<!-- botón para enviar el formulario; justify-content-end no ha funcionado-->',
     '<div class="ml-auto pt-2 pb-2 pr-3">',
@@ -3929,13 +3960,18 @@ window.addCuadroResponsable = function addCuadroResponsable() {
   ]
   $("#contenedorResponsables").append($(nuevo.join('')));
 }
+
 window.addCuadroClase = function addCuadroClase() {
   let nuevo = [
     '<div class="pt-2">',
-    '<input type="text" class="form-control" name="clases" placeholder="Clase">',
-    '</div>',
+    '<select name="clases" class="form-control">'
   ]
-  $("#contenedorResponsables").append($(nuevo.join('')));
+  nuevo.push(groupInputClass());
+  nuevo.push(
+    '</select>',
+    '</div>',
+  )
+  $("#contenedorClases").append($(nuevo.join('')));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -90,7 +90,7 @@ class Message {
     constructor(msgid, date, from, to, labels, title, body, parent) {
         this.msgid = msgid;
         this.date = date || new Date(),
-            this.from = from;
+        this.from = from;
         if (parent) {
             this.parent = parent; // msgid of parent, only if reply. If reply, no "to"
         } else {
