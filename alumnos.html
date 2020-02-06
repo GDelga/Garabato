@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Garabato: Alumnos</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Mis estilos-->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/misFunciones.js"></script>
+</head>
+
+<body>
+    <div id="contenido">
+        <!-- Editable table -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand d-flex" href="#">
+                <h1 class="d-inline align-self-start">Garabato </h1>
+                <h3 class="d-inline align-self-end pl-1"> Admin</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--Las diferentes opciones de la barra de menu-->
+            <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav ml-auto mr-auto">
+                    <a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>
+                    <a class="nav-item nav-link active" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>
+                    <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
+                </div>
+                <!--Boton para cerrar sesion-->
+                <div class="navbar-nav">
+                    <button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <h1 class="text-center font-weight-bold pt-1 mb-0 display-3 pb-0">Alumnos</h1>
+            <div class="card-body pt-0">
+                <div class="row d-flex justify-content-end">
+                    <button id="boton-add" class="btn">
+                        <div class="img">
+                            <img class="img-rounded" src="imagenes/add.png" height="50" width="50" alt="">
+                        </div>
+                    </button>
+                </div>
+                <div class="input-group mb-2">
+                    <input id="miBuscador" type="text" class="form-control" onkeyup="myTableFilter()"
+                        placeholder="Search">
+                    <div class="input-group-append">
+                        <select id="filtro" class="bg-info text-white text-center" name="OS">
+                            <option value="0">DNI</option>
+                            <option value="1">NOMBRE</option>
+                            <option value="2">APELLIDOS</option>
+                            <option value="3">CLASE</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <div id="miTabla" class="table-editable">
+                        <table class="table table-bordered table-responsive-md table-striped table-dark text-center"
+                            id="miTabla">
+                            <thead>
+                                <tr class="headerTabla">
+                                    <th class="text-center">DNI</th>
+                                    <th class="text-center">NOMBRE</th>
+                                    <th class="text-center">APELLIDOS</th>
+                                    <th class="text-center">CLASE</th>
+                                    <th class="text-center">RESPONSABLES</th>
+                                    <th class="text-center">ELIMINAR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pt-3-half" contenteditable="true">12345678A</td>
+                                    <td class="pt-3-half" contenteditable="true">Juana</td>
+                                    <td class="pt-3-half" contenteditable="true">Lopez</td>
+                                    <td class="pt-3-half" contenteditable="true">1A</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-xl-8">
+                                                <div class="card text-white bg-dark">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" data-toggle="collapse"
+                                                            href="#collapseOne" role="button"
+                                                            aria-controls="collapseOne">
+                                                            Ver Responsables
+                                                        </a>
+                                                    </div>
+                                                    <div class="collapse" id="collapseOne">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card text-white bg-info">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" role="button">
+                                                            Editar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-remove card text-white bg-danger">
+                                            <div class="card-header">
+                                                <a class="tituloSeccion" role="button">
+                                                    Remove
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt-3-half" contenteditable="true">12345678A</td>
+                                    <td class="pt-3-half" contenteditable="true">Ma</td>
+                                    <td class="pt-3-half" contenteditable="true">Kol</td>
+                                    <td class="pt-3-half" contenteditable="true">1A</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-xl-8">
+                                                <div class="card text-white bg-dark">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" data-toggle="collapse"
+                                                            href="#collapseOne" role="button"
+                                                            aria-controls="collapseOne">
+                                                            Ver Responsables
+                                                        </a>
+                                                    </div>
+                                                    <div class="collapse" id="collapseOne">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item bg-dark">
+                                                                <div class="row">
+                                                                    Juanjo
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-4">
+                                                <div class="card text-white bg-info">
+                                                    <div class="card-header">
+                                                        <a class="tituloSeccion" role="button">
+                                                            Editar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-remove card text-white bg-danger">
+                                            <div class="card-header">
+                                                <a class="tituloSeccion" role="button">
+                                                    Remove
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- botonera -->
+                <div class="row mt-3 d-flex justify-content-end">
+                    <div>
+                        <button id="boton-cancelar" class="btn">
+                            <div class="img">
+                                <img class="img-rounded" src="imagenes/cancelar.png" height="50" width="50" alt="">
+                            </div>
+                        </button>
+
+                        <button id="boton-exportar" class="btn" onclick="window.crearResponsable()">
+                            <div class="img">
+                                <img class="img-rounded" src="imagenes/guardar.png" height="50" width="50" alt="">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Editable table -->
+    <script>
+        const $tableID = $('#miTabla');
+        const $BTN = $('#boton-exportar');
+        const $EXPORT = $('#export');
+
+        $tableID.on('click', '.table-remove', function () {
+            debugger;
+            $(this).parents('tr').detach();
+        });
+
+        // A few jQuery helpers for exporting only
+        jQuery.fn.pop = [].pop;
+        jQuery.fn.shift = [].shift;
+
+        $BTN.on('click', () => {
+            debugger;
+            const $rows = $tableID.find('tr:not(:hidden)');
+            const headers = [];
+            const data = [];
+
+            // Get the headers (add special header logic here)
+            $($rows.shift()).find('th:not(:empty)').each(function () {
+
+                headers.push($(this).text().toLowerCase());
+            });
+
+            // Turn all existing rows into a loopable array
+            $rows.each(function () {
+                const $td = $(this).find('td');
+                const h = {};
+
+                // Use the headers from earlier to name our hash keys
+                headers.forEach((header, i) => {
+
+                    h[header] = $td.eq(i).text();
+                });
+
+                data.push(h);
+            });
+
+            // Output the result
+            $EXPORT.text(JSON.stringify(data));
+        });
+    </script>
+</body>

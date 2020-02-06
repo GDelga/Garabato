@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Garabato</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Mis estilos-->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <!--Barra de navegacion-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand d-flex" href="#">
+            <h1 class="d-inline align-self-start">Garabato </h1>
+            <h3 class="d-inline align-self-end pl-1"> Profesor</h2>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Las diferentes opciones de la barra de menu-->
+        <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto mr-auto">
+                <a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
+            </div>
+            <!--Boton para cerrar sesion-->
+            <div class="navbar-nav">
+                <button type="button" class="btn btn-danger text-size">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+    <!--Este grid-->
+    <div class=" lineas row d-flex justify-content-center align-items-center">
+        <!--Alumnos-->
+        <div class="col-lg-3 col-md-4 col-12">
+            <a role="button" onclick="window.loadAlumnos()" class="enlacesMenu">
+                <img src="imagenes/alumnos.png" alt="" class="img-fluid">
+                <h1 class="text-center">Alumnos</h1>
+            </a>
+        </div>
+        <!--Padres-->
+        <div class="d-none d-lg-block col-lg-1"></div>
+        <div class="col-lg-3 col-md-4 col-12">
+            <a role="button" onclick="window.loadResponsables()" class="enlacesMenu">
+                <img src="imagenes/padres.png" alt="" class="img-fluid">
+                <h1 class="text-center">Responsables</h1>
+            </a>
+        </div>
+        <!--Mensajes-->
+        <div class="d-none d-lg-block col-lg-1"></div>
+        <div class="col-lg-3 col-md-4 col-12">
+            <a role="button" onclick="window.loadMenuMensajes()" class="enlacesMenu">
+                <img src="imagenes/unread.png" alt="" class=" img-fluid">
+                <h1 class="text-center">Mensajes</h1>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

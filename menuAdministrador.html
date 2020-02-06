@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Garabato</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Mis estilos-->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+        </script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand d-flex" href="#">
+            <h1 class="d-inline align-self-start">Garabato </h1>
+            <h3 class="d-inline align-self-end pl-1"> Admin</h2>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Las diferentes opciones de la barra de menu-->
+        <div class="collapse navbar-collapse text-size text-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto mr-auto">
+                <a class="nav-item nav-link" role="button" onclick="window.loadProfesores()">Profesores</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadAlumnos()">Alumnos</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadResponsables()">Responsables</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadClases()">Clases</a>
+                <a class="nav-item nav-link" role="button" onclick="window.loadMenuMensajes()">Mensajes</a>
+            </div>
+            <!--Boton para cerrar sesion-->
+            <div class="navbar-nav">
+                <button type="button" class="btn btn-danger text-size" onclick="window.cerrarSesion()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+    <div class="lineas2 mt-5">
+        <div class=" row d-flex justify-content-center align-content-center">
+            <div class="col-lg-6 ">
+                <div class="row  d-flex justify-content-center align-content-center">
+                    <div class="d-none d-lg-block col-lg-1"></div>
+                    <div class="col-md-12 col-lg-4" onclick="window.loadProfesores()">
+                        <a role="button" class="enlacesMenu">
+                            <img src="imagenes/profesor.png" alt="" class="img-fluid">
+                            <h1 class="text-center">Profesores</h1>
+                        </a>
+                    </div>
+                    <div class="d-none d-lg-block col-lg-1"></div>
+                    <div class="col-md-12 col-lg-4" onclick="window.loadAlumnos()">
+                        <a role="button" class="enlacesMenu">
+                            <img src="imagenes/alumnos.png" alt="" class="img-fluid">
+                            <h1 class="text-center">Alumnos</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center align-content-center">
+                    <div class="col-lg-1 d-none d-lg-block"></div>
+                    <div class="col-md-12 col-lg-4" onclick="window.loadResponsables()">
+                        <a role="button" class="enlacesMenu">
+                            <img src="imagenes/padres.png" alt="" class="img-fluid">
+                            <h1 class="text-center">Responsables</h1>
+                        </a>
+                    </div>
+                    <div class="col-lg-1 d-none d-lg-block"></div>
+                    <div class="col-md-12 col-lg-4" onclick="window.loadClases()">
+                        <a role="button" class="enlacesMenu">
+                            <img src="imagenes/aula.png" alt="" class="img-fluid">
+                            <h1 class="text-center">Clases</h1>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-center align-items-center" onclick="window.loadMenuMensajes()">
+                <a role="button" class="enlacesMenu">
+                    <img src="imagenes/unread.png" alt="" class="img-fluid" width="350px">
+                    <h1 class="text-center">Mensajes</h1>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
